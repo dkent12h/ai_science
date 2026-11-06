@@ -32,8 +32,8 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .pill.solid:hover:not(:disabled){background:var(--acc);border-color:var(--acc)}
 
 /* 책 무대 */
-.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;touch-action:pan-y;user-select:none;-webkit-user-select:none}
-.book{position:relative;perspective:2600px}
+.stage{flex:1;min-height:0;display:flex;overflow:auto;touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
+.book{position:relative;perspective:2600px;margin:auto;flex:none}
 .leaf{position:absolute;top:0;height:100%;width:50%;overflow:hidden}
 .leaf.left{left:0}.leaf.right{left:50%}
 .book.one .leaf.right{left:0;width:100%}.book.one .leaf.left,.book.one .flip{display:none}
@@ -760,14 +760,16 @@ const book = $("#book"), L = $("#L"), R = $("#R"), F = $("#F"), Ff = $("#Ff"), F
 let two = true, cur = 0, busy = false;   // cur: 지금 보이는 첫 쪽(0부터)
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const ZOOM0 = window.devicePixelRatio || 1;   // 브라우저 확대(Ctrl+스크롤)를 책 크기에 반영
 function layout() {
+  const zm = Math.min(4, Math.max(.5, (window.devicePixelRatio || 1) / ZOOM0));
   const st = $("#stage").getBoundingClientRect();
-  const aw = st.width - 24, ah = st.height - 16;
+  const aw = st.width * zm - 24, ah = zm * innerHeight - (innerHeight - st.height) - 16;
   two = aw >= 860 && aw / ah > 1.15;
   const ratio = 0.78;
   let pw, ph;
-  if (two) { pw = Math.min(aw / 2, ah * ratio, 760); ph = pw / ratio; }
-  else { pw = Math.min(aw, 560); ph = Math.min(ah, pw / 0.62); }
+  if (two) { pw = Math.min(aw / 2, ah * ratio, 760 * zm); ph = pw / ratio; }
+  else { pw = Math.min(aw, 560 * zm); ph = Math.min(ah, pw / 0.62); }
   book.style.width = (two ? pw * 2 : pw) + "px";
   book.style.height = ph + "px";
   book.classList.toggle("one", !two);
