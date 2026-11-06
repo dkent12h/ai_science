@@ -62,7 +62,12 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .bl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.9)}
 .bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
 .bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c,var(--acc))}
-.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*2.6) calc(var(--u)*3);font:600 calc(var(--u)*2.7)/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.codewrap{position:relative}
+.cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.cpy:hover{background:rgba(255,255,255,.3)}
+.donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
+.donebtn.on{background:var(--c,var(--acc));color:#fff}
 .nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
 .nt li{position:relative;padding-left:calc(var(--u)*2.8)}
 .nt li::before{content:"※";position:absolute;left:0;color:var(--c,var(--acc));font-weight:800}
@@ -243,7 +248,7 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
 const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="마퀸 플러스 V2 로봇 자동차가 선을 따라 달리는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
 <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="125" fill="#7fb0ff" opacity=".18" filter="url(#g)"/><rect x="70" y="190" width="260" height="96" rx="22" fill="#1b1b22" stroke="#3a3a46" stroke-width="4"/><rect x="130" y="118" width="140" height="92" rx="12" fill="#10242e" stroke="#3ccfc2" stroke-width="4"/><circle cx="156" cy="138" r="4.6" fill="#33333d"/><circle cx="178" cy="138" r="4.6" fill="#33333d"/><circle cx="200" cy="138" r="4.6" fill="#33333d"/><circle cx="222" cy="138" r="4.6" fill="#33333d"/><circle cx="244" cy="138" r="4.6" fill="#33333d"/><circle cx="156" cy="153" r="4.6" fill="#ff3b30"/><circle cx="178" cy="153" r="4.6" fill="#33333d"/><circle cx="200" cy="153" r="4.6" fill="#33333d"/><circle cx="222" cy="153" r="4.6" fill="#33333d"/><circle cx="244" cy="153" r="4.6" fill="#ff3b30"/><circle cx="156" cy="168" r="4.6" fill="#33333d"/><circle cx="178" cy="168" r="4.6" fill="#33333d"/><circle cx="200" cy="168" r="4.6" fill="#33333d"/><circle cx="222" cy="168" r="4.6" fill="#33333d"/><circle cx="244" cy="168" r="4.6" fill="#33333d"/><circle cx="156" cy="183" r="4.6" fill="#33333d"/><circle cx="178" cy="183" r="4.6" fill="#ff3b30"/><circle cx="200" cy="183" r="4.6" fill="#33333d"/><circle cx="222" cy="183" r="4.6" fill="#ff3b30"/><circle cx="244" cy="183" r="4.6" fill="#33333d"/><circle cx="156" cy="198" r="4.6" fill="#33333d"/><circle cx="178" cy="198" r="4.6" fill="#33333d"/><circle cx="200" cy="198" r="4.6" fill="#ff3b30"/><circle cx="222" cy="198" r="4.6" fill="#33333d"/><circle cx="244" cy="198" r="4.6" fill="#33333d"/><circle cx="104" cy="214" r="9" fill="#ff3b30"/><circle cx="296" cy="214" r="9" fill="#2f6bff"/><circle cx="108" cy="290" r="34" fill="#22222a" stroke="#e8e9ee" stroke-width="6"/><circle cx="108" cy="290" r="10" fill="#e8e9ee"/><circle cx="292" cy="290" r="34" fill="#22222a" stroke="#e8e9ee" stroke-width="6"/><circle cx="292" cy="290" r="10" fill="#e8e9ee"/><rect x="170" y="238" width="60" height="26" rx="8" fill="#2b2b33" stroke="#7fb0ff" stroke-width="3"/><circle cx="188" cy="251" r="7" fill="#7fb0ff"/><circle cx="212" cy="251" r="7" fill="#7fb0ff"/><path d="M40 342H360" stroke="#e8e9ee" stroke-width="8" stroke-linecap="round" stroke-dasharray="34 18"/><path d="M66 100q-20 40 0 80M44 84q-34 56 0 112" fill="none" stroke="#9fdcff" stroke-width="5" stroke-linecap="round" opacity=".7"/></svg>`;
 const MEDIA = {"img": {}, "video": {}, "links": {}};
-const ILLU = {};
+const ILLU = {"4": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"마퀸 플러스 V2를 위에서 본 그림: 슬롯, 모터, 라인 센서 5개\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(200 118) rotate(0) scale(1.45)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><text x=\"200\" y=\"22\" font-size=\"15\" fill=\"#f59e0b\">앞</text><text x=\"92\" y=\"62\" font-size=\"13\">micro:bit 슬롯</text><text x=\"92\" y=\"120\" font-size=\"13\">모터 (왼쪽)</text><text x=\"310\" y=\"120\" font-size=\"13\">모터 (오른쪽)</text><text x=\"310\" y=\"62\" font-size=\"13\">RGB 불빛 · 부저</text><circle cx=\"145.6\" cy=\"200\" r=\"8.8\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"145.6\" y=\"224.0\" font-size=\"9.600000000000001\">L2</text><circle cx=\"172.8\" cy=\"200\" r=\"8.8\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"172.8\" y=\"224.0\" font-size=\"9.600000000000001\">L1</text><circle cx=\"200.0\" cy=\"200\" r=\"8.8\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"200.0\" y=\"224.0\" font-size=\"9.600000000000001\">M</text><circle cx=\"227.2\" cy=\"200\" r=\"8.8\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"227.2\" y=\"224.0\" font-size=\"9.600000000000001\">R1</text><circle cx=\"254.4\" cy=\"200\" r=\"8.8\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"254.4\" y=\"224.0\" font-size=\"9.600000000000001\">R2</text><text x=\"318\" y=\"206\" font-size=\"12\" fill=\"#6b6f80\">← 바닥 라인 센서 5개</text></svg>", "9": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"컴퓨터에서 만든 프로그램을 USB로 micro:bit에 내려받아 하트를 켜는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"40\" y=\"50\" width=\"120\" height=\"120\" rx=\"14\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"4\"/><circle cx=\"66\" cy=\"76\" r=\"6\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"76\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"100\" cy=\"76\" r=\"6\" fill=\"#33404a\"/><circle cx=\"117\" cy=\"76\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"134\" cy=\"76\" r=\"6\" fill=\"#33404a\"/><circle cx=\"66\" cy=\"93\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"83\" cy=\"93\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"100\" cy=\"93\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"117\" cy=\"93\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"134\" cy=\"93\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"66\" cy=\"110\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"83\" cy=\"110\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"100\" cy=\"110\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"117\" cy=\"110\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"134\" cy=\"110\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"66\" cy=\"127\" r=\"6\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"127\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"100\" cy=\"127\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"117\" cy=\"127\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"134\" cy=\"127\" r=\"6\" fill=\"#33404a\"/><circle cx=\"66\" cy=\"144\" r=\"6\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"144\" r=\"6\" fill=\"#33404a\"/><circle cx=\"100\" cy=\"144\" r=\"6\" fill=\"#ff3b30\"/><circle cx=\"117\" cy=\"144\" r=\"6\" fill=\"#33404a\"/><circle cx=\"134\" cy=\"144\" r=\"6\" fill=\"#33404a\"/><text x=\"100\" y=\"198\" font-size=\"15\">micro:bit</text><path d=\"M172 110L224.0 110.0\" stroke=\"#1e6bff\" stroke-width=\"5\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M218.1 114.8L228 110L218.1 105.2\" stroke=\"#1e6bff\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><text x=\"200\" y=\"96\" font-size=\"13\" fill=\"#1e6bff\">USB</text><rect x=\"238\" y=\"62\" width=\"130\" height=\"86\" rx=\"8\" fill=\"#fff\" stroke=\"#25252d\" stroke-width=\"4\"/><rect x=\"250\" y=\"74\" width=\"106\" height=\"62\" fill=\"#eaf1ff\"/><rect x=\"268\" y=\"156\" width=\"70\" height=\"8\" rx=\"3\" fill=\"#25252d\"/><text x=\"303\" y=\"112\" font-size=\"14\" fill=\"#1e6bff\">MakeCode</text><text x=\"303\" y=\"194\" font-size=\"15\">컴퓨터</text></svg>", "13": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"두 바퀴를 모두 앞으로 100의 속도로 돌리는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(130 135) rotate(0) scale(1.5)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><path d=\"M130 66L130.0 40.0\" stroke=\"#16a34a\" stroke-width=\"6\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M134.8 45.9L130 36L125.2 45.9\" stroke=\"#16a34a\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><text x=\"130\" y=\"26\" font-size=\"13\" fill=\"#16a34a\">앞으로</text><text x=\"300\" y=\"92\" font-size=\"16\">모터 블록</text><rect x=\"240\" y=\"102\" width=\"120\" height=\"30\" rx=\"15.0\" fill=\"#1e6bff\"/><text x=\"300.0\" y=\"122.04\" font-size=\"14\" fill=\"#fff\">바퀴: All</text><rect x=\"240\" y=\"138\" width=\"120\" height=\"30\" rx=\"15.0\" fill=\"#16a34a\"/><text x=\"300.0\" y=\"158.04\" font-size=\"14\" fill=\"#fff\">방향: Forward</text><rect x=\"240\" y=\"174\" width=\"120\" height=\"30\" rx=\"15.0\" fill=\"#f59e0b\"/><text x=\"300.0\" y=\"194.04\" font-size=\"14\" fill=\"#fff\">속도: 100</text></svg>", "17": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"왼쪽이 빠르고 오른쪽이 느려 원을 그리며 도는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><circle cx=\"190\" cy=\"130\" r=\"62\" fill=\"none\" stroke=\"#d9dbe3\" stroke-width=\"5\" stroke-dasharray=\"10 8\"/><g transform=\"translate(252 130) rotate(0) scale(0.9)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><text x=\"70\" y=\"40\" font-size=\"14\" fill=\"#16a34a\" text-anchor=\"start\">왼쪽 바퀴 255 (빠름)</text><text x=\"70\" y=\"62\" font-size=\"14\" fill=\"#ff3b30\" text-anchor=\"start\">오른쪽 바퀴 50 (느림)</text><text x=\"190\" y=\"224\" font-size=\"14\" fill=\"#25252d\">속도 차이로 오른쪽으로 원을 그려요</text></svg>", "21": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"빨강과 파랑 불이 번갈아 켜지는 경찰차 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(200 118) rotate(0) scale(1.4)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/><circle cx=\"-30\" cy=\"24\" r=\"5\" fill=\"#ff3b30\"/><circle cx=\"30\" cy=\"24\" r=\"5\" fill=\"#1e6bff\"/></g><path d=\"M114 80Q100 118 114 156\" stroke=\"#ff3b30\" stroke-width=\"4\" fill=\"none\" opacity=\"1.0\"/><path d=\"M98 76Q84 118 98 160\" stroke=\"#ff3b30\" stroke-width=\"4\" fill=\"none\" opacity=\"0.72\"/><path d=\"M82 72Q68 118 82 164\" stroke=\"#ff3b30\" stroke-width=\"4\" fill=\"none\" opacity=\"0.43999999999999995\"/><path d=\"M286 80Q300 118 286 156\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"1.0\"/><path d=\"M302 76Q316 118 302 160\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.72\"/><path d=\"M318 72Q332 118 318 164\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.43999999999999995\"/><text x=\"70\" y=\"36\" font-size=\"14\" fill=\"#ff3b30\">1번 불: 빨강</text><text x=\"330\" y=\"36\" font-size=\"14\" fill=\"#1e6bff\">2번 불: 파랑</text><text x=\"200\" y=\"226\" font-size=\"14\">빨강 ↔ 파랑 번갈아 + 사이렌 소리</text></svg>", "26": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"빛이 센서에 닿아 0에서 255 사이의 숫자로 바뀌는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><defs><linearGradient id=\"lg\"><stop offset=\"0\" stop-color=\"#222\"/><stop offset=\"1\" stop-color=\"#ffd54a\"/></linearGradient></defs><circle cx=\"80\" cy=\"70\" r=\"26\" fill=\"#f59e0b\"/><path d=\"M116 70L130 70\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M105 95L115 105\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M80 106L80 120\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M55 95L45 105\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M44 70L30 70\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M55 45L45 35\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M80 34L80 20\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M105 45L115 35\" stroke=\"#f59e0b\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M130 100L192.6 137.9\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M185.0 139.0L196 140L190.0 130.8\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><rect x=\"200\" y=\"112\" width=\"86\" height=\"64\" rx=\"10\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"3\"/><text x=\"243\" y=\"154\" font-size=\"13\" fill=\"#fff\">빛 센서</text><rect x=\"40\" y=\"196\" width=\"320\" height=\"16\" rx=\"8\" fill=\"#e7e9f0\"/><rect x=\"40\" y=\"196\" width=\"320\" height=\"16\" rx=\"8\" fill=\"url(#lg)\"/><text x=\"40\" y=\"236\" font-size=\"13\" fill=\"#25252d\" text-anchor=\"start\">0</text><text x=\"360\" y=\"236\" font-size=\"13\" fill=\"#25252d\" text-anchor=\"end\">255</text><text x=\"200\" y=\"236\" font-size=\"13\" fill=\"#6b6f80\">밝기 값</text><text x=\"330\" y=\"150\" font-size=\"14\" fill=\"#1e6bff\">→ 숫자</text></svg>", "30": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"밝으면 빛을 향해 달리고 어두우면 제자리에서 도는 나방 로봇 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><circle cx=\"320\" cy=\"60\" r=\"22\" fill=\"#f59e0b\"/><path d=\"M350 60L362 60\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M341 81L350 90\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M320 90L320 102\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M299 81L290 90\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M290 60L278 60\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M299 39L290 30\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M320 30L320 18\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M341 39L350 30\" stroke=\"#f59e0b\" stroke-width=\"4\" stroke-linecap=\"round\"/><text x=\"320\" y=\"112\" font-size=\"13\">손전등</text><g transform=\"translate(110 70) rotate(0) scale(0.7)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><path d=\"M150 70L260.0 66.1\" stroke=\"#16a34a\" stroke-width=\"4\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M254.3 71.1L264 66L253.9 61.6\" stroke=\"#16a34a\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><text x=\"200\" y=\"46\" font-size=\"13\" fill=\"#16a34a\">빛 > 100 : 밝기만큼 전진</text><g transform=\"translate(110 176) rotate(0) scale(0.7)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><path d=\"M160 150A40 40 0 1 1 158 190\" stroke=\"#ff3b30\" stroke-width=\"4\" fill=\"none\"/><text x=\"300\" y=\"172\" font-size=\"13\" fill=\"#ff3b30\">빛 ≤ 100</text><text x=\"300\" y=\"192\" font-size=\"13\" fill=\"#ff3b30\">제자리에서 돌며 찾기</text></svg>", "34": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"초음파가 물체에 부딪혀 돌아오는 시간으로 거리를 재는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(70 120) rotate(90) scale(0.95)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/></g><rect x=\"100\" y=\"104\" width=\"18\" height=\"32\" rx=\"4\" fill=\"#6b6f80\"/><circle cx=\"109\" cy=\"112\" r=\"4\" fill=\"#fff\"/><circle cx=\"109\" cy=\"128\" r=\"4\" fill=\"#fff\"/><path d=\"M128 96Q140 120 128 144\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"1.0\"/><path d=\"M150 91Q162 120 150 149\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.75\"/><path d=\"M172 86Q184 120 172 154\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.5\"/><rect x=\"320\" y=\"60\" width=\"16\" height=\"120\" rx=\"4\" fill=\"#25252d\"/><path d=\"M128 196L314.0 196.0\" stroke=\"#25252d\" stroke-width=\"3\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M308.1 200.8L318 196L308.1 191.2\" stroke=\"#25252d\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><path d=\"M318 196L134.0 196.0\" stroke=\"#25252d\" stroke-width=\"3\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M139.9 191.2L130 196L139.9 200.8\" stroke=\"#25252d\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><text x=\"224\" y=\"222\" font-size=\"14\" fill=\"#25252d\">걸린 시간 ÷ 2 × 소리 속도 = 거리(cm)</text></svg>", "38": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"거리 30과 50을 기준으로 달리기, 경고음, 멈춤으로 나뉘는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(60 122) rotate(90) scale(0.85)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><rect x=\"130\" y=\"70\" width=\"86\" height=\"100\" fill=\"#ff3b30\" opacity=\".18\"/><rect x=\"216\" y=\"70\" width=\"90\" height=\"100\" fill=\"#f59e0b\" opacity=\".2\"/><rect x=\"330\" y=\"60\" width=\"14\" height=\"120\" rx=\"4\" fill=\"#25252d\"/><text x=\"173\" y=\"126\" font-size=\"14\" fill=\"#ff3b30\">30 미만</text><text x=\"173\" y=\"146\" font-size=\"14\" fill=\"#ff3b30\">멈춤</text><text x=\"261\" y=\"126\" font-size=\"14\" fill=\"#b45309\">30~50</text><text x=\"261\" y=\"146\" font-size=\"14\" fill=\"#b45309\">경고음</text><text x=\"100\" y=\"56\" font-size=\"13\" fill=\"#16a34a\">50 이상: 달리기</text><path d=\"M130 190H330\" stroke=\"#25252d\" stroke-width=\"3\"/><text x=\"130\" y=\"214\" font-size=\"12\" fill=\"#25252d\" text-anchor=\"middle\">30cm</text><text x=\"216\" y=\"214\" font-size=\"12\">50cm</text><text x=\"330\" y=\"214\" font-size=\"12\">장애물</text></svg>", "43": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"검은 선 위에서 센서 5개가 선을 보는지에 따라 방향을 정하는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"170\" y=\"10\" width=\"60\" height=\"150\" fill=\"#1b1b22\"/><g transform=\"translate(200 110) rotate(0) scale(0.8)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><circle cx=\"138.8\" cy=\"192\" r=\"9.9\" fill=\"#fff\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"138.8\" y=\"219.0\" font-size=\"10.8\">L2</text><circle cx=\"169.4\" cy=\"192\" r=\"9.9\" fill=\"#fff\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"169.4\" y=\"219.0\" font-size=\"10.8\">L1</text><circle cx=\"200.0\" cy=\"192\" r=\"9.9\" fill=\"#16a34a\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"200.0\" y=\"219.0\" font-size=\"10.8\">M</text><circle cx=\"230.6\" cy=\"192\" r=\"9.9\" fill=\"#fff\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"230.6\" y=\"219.0\" font-size=\"10.8\">R1</text><circle cx=\"261.2\" cy=\"192\" r=\"9.9\" fill=\"#fff\" stroke=\"#25252d\" stroke-width=\"2.5\"/><text x=\"261.2\" y=\"219.0\" font-size=\"10.8\">R2</text><text x=\"70\" y=\"60\" font-size=\"13\" fill=\"#16a34a\" text-anchor=\"middle\">M이 선을 보면</text><text x=\"70\" y=\"78\" font-size=\"14\" fill=\"#16a34a\">직진</text><text x=\"330\" y=\"60\" font-size=\"13\" fill=\"#b45309\">R1만 보면</text><text x=\"330\" y=\"78\" font-size=\"14\" fill=\"#b45309\">오른쪽으로</text><text x=\"330\" y=\"100\" font-size=\"13\" fill=\"#1e6bff\">L1만 보면</text><text x=\"330\" y=\"118\" font-size=\"14\" fill=\"#1e6bff\">왼쪽으로</text><text x=\"200\" y=\"236\" font-size=\"12\" fill=\"#6b6f80\">초록 = 검은 선을 본 센서</text></svg>", "48": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"십자 교차로에서 바깥 센서 L2와 R2가 함께 선을 보면 교차로로 판단하는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><path d=\"M200 20V220M60 120H340\" stroke=\"#1b1b22\" stroke-width=\"22\"/><g transform=\"translate(200 170) rotate(0) scale(0.6)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><rect x=\"60\" y=\"18\" width=\"128\" height=\"28\" rx=\"14.0\" fill=\"#ff3b30\"/><text x=\"124.0\" y=\"36.68\" font-size=\"13\" fill=\"#fff\">L2·R2 둘 다 선 →</text><text x=\"124\" y=\"64\" font-size=\"13\" fill=\"#ff3b30\">교차로 · 막다른 길</text><text x=\"300\" y=\"60\" font-size=\"13\" fill=\"#b45309\">L1·R1 둘 다 못 보면</text><text x=\"300\" y=\"78\" font-size=\"13\" fill=\"#b45309\">→ 제자리에서 돌아 찾기</text></svg>", "53": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"리모컨 버튼의 키 값 17, 20, 22, 25로 앞·왼쪽·오른쪽·뒤를 정하는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"40\" y=\"16\" width=\"100\" height=\"200\" rx=\"22\" fill=\"#2b2d38\"/><circle cx=\"90\" cy=\"42\" r=\"12\" fill=\"#ff3b30\"/><rect x=\"54\" y=\"70\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"66\" y=\"87\" font-size=\"13\" fill=\"#fff\">1</text><rect x=\"84\" y=\"70\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#16a34a\"/><text x=\"96\" y=\"87\" font-size=\"13\" fill=\"#fff\">2</text><rect x=\"114\" y=\"70\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"126\" y=\"87\" font-size=\"13\" fill=\"#fff\">3</text><rect x=\"54\" y=\"104\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"66\" y=\"121\" font-size=\"13\" fill=\"#fff\">4</text><rect x=\"84\" y=\"104\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"96\" y=\"121\" font-size=\"13\" fill=\"#fff\">5</text><rect x=\"114\" y=\"104\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"126\" y=\"121\" font-size=\"13\" fill=\"#fff\">6</text><rect x=\"54\" y=\"138\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"66\" y=\"155\" font-size=\"13\" fill=\"#fff\">7</text><rect x=\"84\" y=\"138\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"96\" y=\"155\" font-size=\"13\" fill=\"#fff\">8</text><rect x=\"114\" y=\"138\" width=\"24\" height=\"24\" rx=\"6\" fill=\"#4a4d5c\"/><text x=\"126\" y=\"155\" font-size=\"13\" fill=\"#fff\">9</text><path d=\"M150 112L204.0 112.0\" stroke=\"#1e6bff\" stroke-width=\"5\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M198.1 116.8L208 112L198.1 107.2\" stroke=\"#1e6bff\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><text x=\"179\" y=\"98\" font-size=\"13\" fill=\"#1e6bff\">IR</text><rect x=\"216\" y=\"40\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#16a34a\"/><text x=\"291.0\" y=\"63.04\" font-size=\"14\" fill=\"#fff\">2번 → 17  앞으로</text><rect x=\"216\" y=\"86\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#1e6bff\"/><text x=\"291.0\" y=\"109.04\" font-size=\"14\" fill=\"#fff\">4번 → 20  왼쪽</text><rect x=\"216\" y=\"132\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#b45309\"/><text x=\"291.0\" y=\"155.04\" font-size=\"14\" fill=\"#fff\">6번 → 22  오른쪽</text><rect x=\"216\" y=\"178\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#ff3b30\"/><text x=\"291.0\" y=\"201.04\" font-size=\"14\" fill=\"#fff\">8번 → 25  뒤로</text></svg>", "58": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"조종용 micro:bit를 기울이면 무선 신호로 마퀸이 움직이는 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"rotate(-18 90 110)\"><rect x=\"40\" y=\"70\" width=\"100\" height=\"80\" rx=\"10\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"3\"/><circle cx=\"66\" cy=\"92\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"92\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"100\" cy=\"92\" r=\"4.5\" fill=\"#f59e0b\"/><circle cx=\"117\" cy=\"92\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"134\" cy=\"92\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"66\" cy=\"107\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"107\" r=\"4.5\" fill=\"#f59e0b\"/><circle cx=\"100\" cy=\"107\" r=\"4.5\" fill=\"#f59e0b\"/><circle cx=\"117\" cy=\"107\" r=\"4.5\" fill=\"#f59e0b\"/><circle cx=\"134\" cy=\"107\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"66\" cy=\"122\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"122\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"100\" cy=\"122\" r=\"4.5\" fill=\"#f59e0b\"/><circle cx=\"117\" cy=\"122\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"134\" cy=\"122\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"66\" cy=\"137\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"83\" cy=\"137\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"100\" cy=\"137\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"117\" cy=\"137\" r=\"4.5\" fill=\"#33404a\"/><circle cx=\"134\" cy=\"137\" r=\"4.5\" fill=\"#33404a\"/></g><text x=\"90\" y=\"184\" font-size=\"13\">조종 micro:bit (기울이기)</text><path d=\"M160 80Q178 110 160 140\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"1.0\"/><path d=\"M178 86Q196 110 178 134\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.72\"/><path d=\"M196 92Q214 110 196 128\" stroke=\"#1e6bff\" stroke-width=\"4\" fill=\"none\" opacity=\"0.43999999999999995\"/><text x=\"190\" y=\"64\" font-size=\"13\" fill=\"#1e6bff\">라디오 그룹 1</text><g transform=\"translate(310 110) rotate(0) scale(0.85)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><text x=\"310\" y=\"184\" font-size=\"13\">마퀸 + 수신 micro:bit</text><text x=\"200\" y=\"224\" font-size=\"13\" fill=\"#6b6f80\">위1 · 아래2 · 왼쪽3 · 오른쪽4 숫자를 보내요</text></svg>", "63": "<svg viewBox=\"0 0 400 240\" role=\"img\" aria-label=\"불꽃 센서 값에 따라 출동, 소화, 임무 완료로 나뉘는 소방 로봇 그림\" font-family=\"inherit\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#25252d\"><g transform=\"translate(70 130) rotate(90) scale(0.8)\"><rect x=\"-46\" y=\"-34\" width=\"92\" height=\"68\" rx=\"12\" fill=\"#2b2d38\"/><rect x=\"-30\" y=\"-24\" width=\"60\" height=\"30\" rx=\"5\" fill=\"#10242e\" stroke=\"#3ccfc2\" stroke-width=\"2\"/><circle cx=\"-20\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"-10\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"-16\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"20\" cy=\"-16\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"0\" cy=\"-7\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"10\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"-7\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-20\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"-10\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><circle cx=\"0\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"10\" cy=\"2\" r=\"2.6\" fill=\"#3a3c48\"/><circle cx=\"20\" cy=\"2\" r=\"2.6\" fill=\"#ff3b30\"/><rect x=\"-52\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><rect x=\"46\" y=\"-24\" width=\"8\" height=\"48\" rx=\"3\" fill=\"#6b6f80\"/><path d=\"M-12 -34L0 -46L12 -34Z\" fill=\"#f59e0b\"/></g><rect x=\"108\" y=\"116\" width=\"16\" height=\"28\" rx=\"4\" fill=\"#ff3b30\"/><text x=\"86\" y=\"214\" font-size=\"12\">불꽃 센서 ↑</text><path d=\"M150 120Q160 90 150 66Q176 84 174 112Q190 94 186 76Q214 100 204 132Q190 150 164 148Q144 142 150 120Z\" fill=\"#f59e0b\" stroke=\"#ff3b30\" stroke-width=\"3\"/><rect x=\"236\" y=\"22\" width=\"132\" height=\"54\" rx=\"8\" fill=\"#2b2d38\"/><text x=\"302\" y=\"44\" font-size=\"13\" fill=\"#7dffb0\">Flame Val: 120</text><text x=\"302\" y=\"64\" font-size=\"11\" fill=\"#aab\">OLED 화면</text><rect x=\"224\" y=\"92\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#16a34a\"/><text x=\"299.0\" y=\"114.32\" font-size=\"12\" fill=\"#fff\">10~100 출동 · 사이렌</text><rect x=\"224\" y=\"136\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#ff3b30\"/><text x=\"299.0\" y=\"158.32\" font-size=\"12\" fill=\"#fff\">100 초과 정지 · 서보 180°</text><rect x=\"224\" y=\"180\" width=\"150\" height=\"36\" rx=\"18.0\" fill=\"#1e6bff\"/><text x=\"299.0\" y=\"202.32\" font-size=\"12\" fill=\"#fff\">10 미만 임무 완료 · 90°</text><text x=\"300\" y=\"226\" font-size=\"12\" fill=\"#6b6f80\">서보 모터가 호스처럼 움직여요</text></svg>"};
 const PARTS = {};
 const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1장 · 첫 시작, 하트 켜기", "c": "#ff8a1f"}, {"n": "2장 · 마퀸, 움직여 보자!", "c": "#16a34a"}, {"n": "3장 · 걷는 이모티콘", "c": "#1e6bff"}, {"n": "4장 · 도시의 수호자, 경찰차", "c": "#d946ef"}, {"n": "5장 · 빛 감지 로봇", "c": "#0d9488"}, {"n": "6장 · 나방 로봇", "c": "#ff3b30"}, {"n": "7장 · 작은 거리 측정 전문가", "c": "#f59e0b"}, {"n": "8장 · 자동 브레이크 로봇", "c": "#8b5cf6"}, {"n": "9장 · 라인트레이싱 로봇", "c": "#06b6d4"}, {"n": "10장 · 교차로 탐험", "c": "#e11d48"}, {"n": "11장 · 적외선 리모컨 로봇", "c": "#65a30d"}, {"n": "12장 · 모션 센싱 로봇", "c": "#2563eb"}, {"n": "13장 · 소방 로봇", "c": "#ea580c"}, {"n": "마무리", "c": "#7c4dff"}];
 const QUIZ = {};
@@ -309,6 +314,8 @@ F 상상한 확장 아이디어|여기에 적어 보세요
 @toc 도입 생각
 ---
 text|1|1장 · 첫 시작, 하트 켜기|첫 시작, 하트 켜기|
+~ 20분
+~ 기초 입문
 : micro:bit가 로봇의 두뇌임을 알고, LED 화면에 첫 그림을 띄워 봅니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit, 마이크로 5핀 USB 케이블
 - 배울 내용 — micro:bit의 역할 · MakeCode 블록 끌어다 놓기 · USB로 프로그램 내려받기
@@ -328,9 +335,12 @@ text|1|1장 · 첫 시작, 하트 켜기|생각해보기|
 : micro:bit에는 LED 화면 말고도 버튼 2개, 기울기·나침반·온도·빛 센서가 있습니다. 마퀸에 끼우면 어떤 것을 주행에 쓸 수 있을까요?
 * 내려받는 동안에는 USB 케이블을 뽑지 마세요. 끝난 뒤에 분리해서 마퀸에 끼웁니다.
 F 쓸 수 있을 것 같은 센서와 아이디어|여기에 적어 보세요
+V chap01
 @toc 1장 생각해보기
 ---
 text|2|2장 · 마퀸, 움직여 보자!|마퀸, 움직여 보자!|
+~ 25분
+~ 모터 주행
 : 모터 블록으로 두 바퀴를 한꺼번에 앞으로 굴려 봅니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit, 배터리
 - 배울 내용 — 초기화(init) 블록의 자리 · 모터 블록의 방향·속도·바퀴 고르기 · 무한 반복
@@ -354,9 +364,12 @@ text|2|2장 · 마퀸, 움직여 보자!|생각해보기|
 : 속도 100으로 뒤로 가게 하려면 블록의 무엇을 바꾸면 될까요?
 * 방향 칸을 앞으로(Forward)에서 뒤로(Backward)로 바꾸면 바로 후진합니다.
 F 후진을 시험한 결과|여기에 적어 보세요
+V chap02
 @toc 2장 생각해보기
 ---
 text|3|3장 · 걷는 이모티콘|걷는 이모티콘|
+~ 30분
+~ 모터 주행
 : 왼쪽·오른쪽 바퀴의 속도를 다르게 해서 원을 그리며 달리고, 화면에 표정을 보여 줍니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit
 - 배울 내용 — 두 바퀴의 속도 차이로 방향 바꾸기(차동 조향) · 기다리기 블록 · 모터 멈추기
@@ -385,9 +398,12 @@ text|3|3장 · 걷는 이모티콘|생각해보기|
 : 두 바퀴를 같은 속도로, 하나는 앞으로 하나는 뒤로 돌리면 마퀸은 어떻게 움직일까요? (제자리에서 도는 회전)
 * 한 바퀴에 걸리는 시간은 바닥 재질과 배터리 상태에 따라 달라지니 조금씩 고쳐 가며 맞추세요.
 F 한 바퀴에 걸린 시간(ms)|여기에 적어 보세요
+V chap03
 @toc 3장 생각해보기
 ---
 text|4|4장 · 도시의 수호자, 경찰차|도시의 수호자, 경찰차|
+~ 25분
+~ 출력 제어
 : 불빛과 소리를 더해 출동하는 경찰차를 만듭니다.
 - 준비물 — 마퀸 플러스 V2(바닥 RGB LED 4개, 부저), micro:bit
 - 배울 내용 — 모터 · 불빛 · 소리를 한 프로그램에서 함께 쓰기
@@ -399,7 +415,7 @@ text|4|4장 · 도시의 수호자, 경찰차|따라 하기|
 3. 잠깐 기다린 뒤 두 색을 맞바꾸고 다른 높이의 소리를 냅니다. 이것이 반복되며 경광등이 됩니다.
 @toc 4장 따라하기
 ---
-text|4|4장 · 도시의 수호자, 경찰차|코드|
+text|4|4장 · 도시의 수호자, 경찰차|코드 (1/2)|
 C DFRobotMaqueenPlus_v20.init()
 C basic.forever(function () {
 C     DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.AllMotor, MyEnumDir.Forward, 255)
@@ -409,19 +425,25 @@ C     DFRobotMaqueenPlus_v20.setRGBLight(MyEnumRGBLight.RGBLight2, MyEnumRGBColo
 C     music.playTone(880, music.beat(BeatFraction.Half))
 C     basic.pause(300)
 C     DFRobotMaqueenPlus_v20.setRGBLight(MyEnumRGBLight.RGBLight1, MyEnumRGBColor.Blue)
+@toc 4장 코드 (1/2)
+---
+text|4|4장 · 도시의 수호자, 경찰차|코드 (2/2)|
 C     DFRobotMaqueenPlus_v20.setRGBLight(MyEnumRGBLight.RGBLight2, MyEnumRGBColor.Red)
 C     music.playTone(659, music.beat(BeatFraction.Half))
 C     basic.pause(300)
 C })
-@toc 4장 코드
+@toc 4장 코드 (2/2)
 ---
 text|4|4장 · 도시의 수호자, 경찰차|생각해보기|
 : 음표 블록으로 구급차(삐-뽀-삐-뽀)나 소방차 사이렌을 직접 작곡해 봅시다.
 * 마퀸 바닥에는 RGB LED가 4개 있어 차 아래를 환하게 밝히는 효과를 낼 수 있습니다.
 F 작곡한 사이렌 (음 높이 · 박자)|여기에 적어 보세요
+V chap04
 @toc 4장 생각해보기
 ---
 text|5|5장 · 빛 감지 로봇|빛 감지 로봇|
+~ 20분
+~ 센서 인식
 : micro:bit의 빛 센서로 주변 밝기를 읽어 화면에 숫자로 보여 줍니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit
 - 배울 내용 — 밝기 값 읽기(0~255) · ‘숫자 보이기’ 블록
@@ -443,9 +465,12 @@ text|5|5장 · 빛 감지 로봇|생각해보기|
 : 주변이 어두워지면 헤드라이트가 저절로 켜지는 ‘자동 라이트’는 어떻게 코딩할까요?
 * 빛 센서 값은 0(아주 어두움)에서 255(아주 밝음) 사이의 정수입니다.
 F 장소별 밝기 기록|여기에 적어 보세요
+V chap05
 @toc 5장 생각해보기
 ---
 text|6|6장 · 나방 로봇|나방 로봇|
+~ 35분
+~ 센서 인식
 : 빛이 밝으면 그 밝기만큼 달려가고, 어두우면 제자리에서 돌며 빛을 찾는 로봇입니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit, 손전등(또는 스마트폰 플래시)
 - 배울 내용 — 조건 블록(만약~이라면~아니면) · 순서도로 먼저 생각하기 · 센서 값을 모터 속도로 쓰기
@@ -475,9 +500,12 @@ text|6|6장 · 나방 로봇|생각해보기|
 : 친구들과 손전등으로 마퀸을 이끌어 장애물 코스를 완주하는 시합을 해 봅시다. 너무 빠르면 빛을 놓치니 속도 조절이 요령입니다.
 * 교실 조명에 따라 기준값 100을 70~130 사이에서 바꿔 보면 더 잘 반응합니다.
 F 시합 결과와 기준값|여기에 적어 보세요
+V chap06
 @toc 6장 생각해보기
 ---
 text|7|7장 · 작은 거리 측정 전문가|작은 거리 측정 전문가|
+~ 25분
+~ 센서 인식
 : 초음파가 무엇인지 알고, 마퀸으로 앞 물체까지의 거리를 cm로 재 봅니다.
 - 준비물 — 마퀸 플러스 V2, 초음파 센서(앞쪽 4핀 소켓에 연결), micro:bit
 - 배울 내용 — 초음파: 사람이 듣지 못하는 높은 소리 · 돌아오는 시간으로 거리 구하기 · 센서 값 화면 표시
@@ -500,9 +528,12 @@ text|7|7장 · 작은 거리 측정 전문가|생각해보기|
 : 초음파 센서를 위로 향하게 세우면 사람의 키를 재는 ‘스마트 키 측정기’를 만들 수 있을까요?
 * 커튼·스펀지처럼 소리를 흡수하는 표면은 오차가 생기니 단단하고 평평한 물체를 겨냥하세요.
 F 키 재는 방법 구상|여기에 적어 보세요
+V chap07
 @toc 7장 생각해보기
 ---
 text|8|8장 · 자동 브레이크 로봇|자동 브레이크 로봇|
+~ 30분
+~ 응용 프로젝트
 : 장애물에 가까워지면 경고음을 내고, 더 가까우면 멈추는 로봇입니다.
 - 준비물 — 마퀸 플러스 V2(부저), 초음파 센서, micro:bit
 - 배울 내용 — 변수에 센서 값 저장하기 · 조건문 여러 개 함께 쓰기 · 단계별 제어
@@ -525,11 +556,11 @@ C         DFRobotMaqueenPlus_v20.controlMotorStop(MyEnumMotor.AllMotor)
 C     } else {
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.AllMotor, MyEnumDir.Forward, 100)
 C     }
+C     // 50cm 이내: 주의 경고음 출력
+C     if (distance < 50) {
 @toc 8장 코드 (1/2)
 ---
 text|8|8장 · 자동 브레이크 로봇|코드 (2/2)|
-C     // 50cm 이내: 주의 경고음 출력
-C     if (distance < 50) {
 C         music.playTone(523, music.beat(BeatFraction.Sixteenth))
 C     }
 C })
@@ -539,9 +570,12 @@ text|8|8장 · 자동 브레이크 로봇|생각해보기|
 : 멈추는 대신 뒤로 물러났다가 방향을 바꿔 다른 길로 가는 회피 로봇을 만들려면 어떤 코드를 더해야 할까요?
 * 속도가 빠르면 센서가 감지해도 미끄러져 부딪힐 수 있어요. 80~120 정도가 알맞습니다.
 F 나의 순서도 메모|여기에 적어 보세요
+V chap08
 @toc 8장 생각해보기
 ---
 text|9|9장 · 라인트레이싱 로봇|라인트레이싱 로봇|
+~ 40분
+~ 센서 인식
 : 바닥의 검은 선을 따라가는 로봇을 만들어 라인 센서와 ‘그리고(and)’ 논리를 배웁니다.
 - 준비물 — 마퀸 플러스 V2(바닥 라인 센서 5개), 검은 절연 테이프로 만든 길, micro:bit
 - 배울 내용 — 검은색은 빛을 흡수하고 흰색은 반사 · 센서 L1·M·R1 조합으로 방향 정하기 · 센서 보정
@@ -565,10 +599,10 @@ C     // R1 센서가 선을 밟으면 우회전
 C     else if (DFRobotMaqueenPlus_v20.readLineTrackerStatus(MyEnumLineSensor.SensorR1) == 1) {
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.LeftMotor, MyEnumDir.Forward, 120)
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.RightMotor, MyEnumDir.Forward, 30)
-C     }
 @toc 9장 코드 (1/2)
 ---
 text|9|9장 · 라인트레이싱 로봇|코드 (2/2)|
+C     }
 C     // L1 센서가 선을 밟으면 좌회전
 C     else if (DFRobotMaqueenPlus_v20.readLineTrackerStatus(MyEnumLineSensor.SensorL1) == 1) {
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.LeftMotor, MyEnumDir.Forward, 30)
@@ -581,9 +615,12 @@ text|9|9장 · 라인트레이싱 로봇|생각해보기|
 : 바닥의 센서 5개를 모두 쓰면 책상 끝(낭떠러지)에서 멈추는 ‘추락 방지 청소 로봇’을 만들 수 있을까요?
 * 속도를 너무 올리면 코너에서 선을 벗어나요. 80~120에서 시작하세요.
 F 나의 설계 메모|여기에 적어 보세요
+V chap09
 @toc 9장 생각해보기
 ---
 text|10|10장 · 교차로 탐험|교차로 탐험|
+~ 40분
+~ 응용 프로젝트
 : 바깥쪽 센서까지 총동원해 교차로와 막다른 길을 알아차리는 로봇입니다.
 - 준비물 — 마퀸 플러스 V2(라인 센서 5개), 교차로가 그려진 길 지도, micro:bit
 - 배울 내용 — 센서 5개의 정보 합치기 · 길을 잃었을 때 제자리에서 돌아 찾기 · 교차로·끝 알아차리기
@@ -606,10 +643,10 @@ C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.LeftMotor, MyEnumDir.F
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.RightMotor, MyEnumDir.Backward, 120)
 C         basic.pause(400)
 C     } else {
+C         // 일반 라인 트레이싱 실행
 @toc 10장 코드 (1/2)
 ---
 text|10|10장 · 교차로 탐험|코드 (2/2)|
-C         // 일반 라인 트레이싱 실행
 C         // ... 기본 라인 트레이서 블록
 C     }
 C })
@@ -619,9 +656,12 @@ text|10|10장 · 교차로 탐험|생각해보기|
 : 오른쪽으로 돌 때는 오른쪽 불을, 되돌아갈 때는 양쪽 불을 깜빡이는 방향지시등을 달아 봅시다.
 * 돌고 있는 동안(기다리는 동안)에는 센서를 잠시 보지 않아야 같은 교차로에서 계속 도는 일을 막을 수 있어요.
 F 불빛 규칙 정리|여기에 적어 보세요
+V chap10
 @toc 10장 생각해보기
 ---
 text|11|11장 · 적외선 리모컨 로봇|적외선 리모컨 로봇|
+~ 35분
+~ 원격 제어
 : 리모컨 버튼으로 마퀸을 조종하며 함수로 프로그램을 정리합니다.
 - 준비물 — 마퀸 플러스 V2(IR 수신부 내장), IR 리모컨, micro:bit
 - 배울 내용 — 버튼마다 다른 숫자 값(키 값) · 받은 값으로 갈래 나누기 · 함수로 동작 묶기
@@ -633,7 +673,7 @@ text|11|11장 · 적외선 리모컨 로봇|따라 하기|
 3. 리모컨 신호를 받으면 그 값(message)을 검사해 알맞은 함수를 부릅니다.
 @toc 11장 따라하기
 ---
-text|11|11장 · 적외선 리모컨 로봇|코드|
+text|11|11장 · 적외선 리모컨 로봇|코드 (1/2)|
 C let message = 0
 C function Move_Forward() {
 C     DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.AllMotor, MyEnumDir.Forward, 150)
@@ -645,17 +685,23 @@ C }
 C // IR 신호 수신 이벤트
 C DFRobotMaqueenPlus_v20.IR_CallbackUser(function ({message: msg}) {
 C     if (msg == 17) { Move_Forward() }
+@toc 11장 코드 (1/2)
+---
+text|11|11장 · 적외선 리모컨 로봇|코드 (2/2)|
 C     else if (msg == 20) { Turn_Left() }
 C })
-@toc 11장 코드
+@toc 11장 코드 (2/2)
 ---
 text|11|11장 · 적외선 리모컨 로봇|생각해보기|
 : 한 번 명령하면 전원을 끌 때까지 달려요. 빨간 전원 버튼의 키 값을 확인해 눌렀을 때 멈추는 ‘멈추기’ 함수를 만들어 봅시다.
 * 강한 햇빛 아래에서는 적외선이 간섭받을 수 있어요. 실내에서 실습하세요.
 F 빨간 버튼의 키 값|여기에 적어 보세요
+V chap11
 @toc 11장 생각해보기
 ---
 text|12|12장 · 모션 센싱 로봇|모션 센싱 로봇|
+~ 45분
+~ 원격 제어
 : 조종용 micro:bit를 기울이면 무선으로 신호를 보내 마퀸이 따라 움직입니다.
 - 준비물 — 마퀸 플러스 V2, micro:bit 2개(송신용 · 마퀸에 끼울 수신용)
 - 배울 내용 — 무선(라디오) 통신: 같은 그룹 번호끼리만 통함 · 기울기 감지 · 송신/수신 두 프로그램 만들기
@@ -698,9 +744,12 @@ text|12|12장 · 모션 센싱 로봇|생각해보기|
 : 더 많이 기울일수록 더 빨리 달리는 ‘아날로그 핸들’은 어떻게 만들까요?
 * 여러 팀이 한 방에서 할 때는 팀마다 다른 그룹 번호(1, 2, 3…)를 써야 신호가 섞이지 않습니다.
 F 나의 아이디어|여기에 적어 보세요
+V chap12
 @toc 12장 생각해보기
 ---
 text|13|13장 · 소방 로봇|소방 로봇|
+~ 50분
+~ 응용 프로젝트
 : 출동 → 불 끄기 → 임무 완료의 세 단계를 불꽃 센서 값으로 나누어 실행합니다.
 - 준비물 — 마퀸 플러스 V2, 불꽃 센서(P0), 서보 모터(S1), I2C OLED 화면
 - 배울 내용 — 불꽃 센서의 아날로그 값 읽기 · 서보 모터 각도(0~180°) 정하기 · OLED 화면에 값 보이기 · 값의 범위로 단계 나누기
@@ -724,11 +773,11 @@ C     OLED.clear()
 C     OLED.writeString("Flame Val: ")
 C     OLED.writeNum(i)
 C     
+C     if (i >= 10 && i <= 100) {
+C         // 출동: 전진 및 사이렌
 @toc 13장 코드 (1/3)
 ---
 text|13|13장 · 소방 로봇|코드 (2/3)|
-C     if (i >= 10 && i <= 100) {
-C         // 출동: 전진 및 사이렌
 C         DFRobotMaqueenPlus_v20.controlMotor(MyEnumMotor.AllMotor, MyEnumDir.Forward, 100)
 C         music.playTone(880, music.beat(BeatFraction.Quarter))
 C     } else if (i > 100) {
@@ -736,11 +785,11 @@ C         // 소화: 정지 및 서보 분사 동작
 C         DFRobotMaqueenPlus_v20.controlMotorStop(MyEnumMotor.AllMotor)
 C         DFRobotMaqueenPlus_v20.servo(MyEnumServo.S1, 180)
 C     } else {
+C         // 임무 완료: 대기 상태
+C         DFRobotMaqueenPlus_v20.controlMotorStop(MyEnumMotor.AllMotor)
 @toc 13장 코드 (2/3)
 ---
 text|13|13장 · 소방 로봇|코드 (3/3)|
-C         // 임무 완료: 대기 상태
-C         DFRobotMaqueenPlus_v20.controlMotorStop(MyEnumMotor.AllMotor)
 C         DFRobotMaqueenPlus_v20.servo(MyEnumServo.S1, 90)
 C     }
 C })
@@ -750,6 +799,7 @@ text|13|13장 · 소방 로봇|생각해보기|
 : 불꽃 센서 대신 가스 센서(MQ-2 등)를 달면 어떤 로봇으로 바꿀 수 있을까요?
 * 불꽃 센서는 방화 처리가 되어 있지 않아요. 촛불·라이터 불꽃과 15cm 이상 떨어지고, 어른과 함께 시험하세요.
 F 안전 점검(누가 · 어디서 · 몇 cm)|여기에 적어 보세요
+V chap13
 @toc 13장 생각해보기
 ---
 text|14|마무리|핵심 질문|
@@ -767,6 +817,11 @@ L OLED 확장|https://github.com/DFRobot/pxt-OLED
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const FK = "dkbook:" + location.pathname;   // 입력칸 저장 키 (이 브라우저에만 저장)
 const typing = t => t && t.closest && t.closest("textarea,input");
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cpy")) { const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
+  if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
+});
 document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
 const $ = s => document.querySelector(s);
 /* ---------- 적응형 퀴즈 ---------- */
@@ -856,7 +911,7 @@ function pageHTML(i) {
     const qid = (p.lines.find(l => l.startsWith("QZ ")) || "").slice(3);
     return `<div class="page quiz" style="--c:${c}"><div class="eb">${esc(p.eb)}</div><h2 class="ttl qt">${esc(p.title)}</h2><div class="body">${quizHTML(qid, n)}</div>${foot}</div>`;
   }
-  let code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
+  let done = "", code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
   p.lines.forEach(l => {
     let m;
     if (l.startsWith("F ")) {
@@ -870,6 +925,7 @@ function pageHTML(i) {
     else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
     else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
     else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
     else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
     else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
     else if ((m = l.match(/^(\d+)\. (.*)$/))) nums += `<li><span class="n">${m[1]}</span><span>${esc(m[2])}</span></li>`;
@@ -884,7 +940,7 @@ function pageHTML(i) {
   const longTitle = p.title.length > 26 && p.lines.length > 0;
   title = `<h2 class="ttl" ${p.lines.length===0 ? `style="font-size:calc(var(--u)*8.2);margin-top:calc(var(--u)*10)"` : longTitle ? `style="font-size:calc(var(--u)*4.2)"` : ""}>${esc(p.title)}</h2>`;
   return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
-    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<pre class="code">${esc(code)}</pre>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
+    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<div class="codewrap"><button class="cpy" type="button">복사</button><pre class="code">${esc(code)}</pre></div>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${done}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
 }
 function fillQR(root) {
   root.querySelectorAll(".qr").forEach(el => {
