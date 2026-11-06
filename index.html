@@ -51,6 +51,7 @@ h1{margin:0;font-size:clamp(92px,19vw,300px);line-height:.8;letter-spacing:-.06e
 .row .no{font-weight:800;font-size:clamp(15px,1.4vw,20px);color:var(--muted);align-self:start;padding-top:.5em}
 .row .tag{display:block;margin-bottom:10px;font-size:clamp(13px,1.1vw,16px);font-weight:800;color:var(--c)}
 .row .name{display:block;font-weight:800;font-size:clamp(34px,5.2vw,92px);line-height:1.02;letter-spacing:-.045em;text-wrap:balance;transition:transform .45s cubic-bezier(.2,.8,.2,1),color .3s}
+.row .progs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;max-width:44ch}.row .progs i{font-style:normal;font-size:clamp(12px,1vw,14px);font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--c);background:transparent}
 .row .desc{display:block;margin-top:14px;max-width:36ch;text-wrap:pretty;font-size:clamp(15px,1.3vw,19px);line-height:1.6;font-weight:500;color:var(--muted)}
 .row .go{width:clamp(48px,5vw,72px);height:clamp(48px,5vw,72px);border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:clamp(20px,2vw,30px);transition:background .3s,color .3s,border-color .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
 .row:hover .name,.row:focus-visible .name{transform:translateX(16px);color:var(--c)}
@@ -132,93 +133,58 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 
     <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/experiments/" data-pattern="check" data-acc="#0d9488" style="--c:#0d9488">
       <span class="no">01</span>
-      <span><span class="tag">디지털교재 5종</span><span class="name">피지컬컴퓨팅 과학실험</span><span class="desc">빛의 합성, 물의 증발, 전기전도성, 구름 발생, 자극과 반응 실험 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 5종</span><span class="name">피지컬컴퓨팅 과학실험</span><span class="desc">빛의 합성, 물의 증발, 전기전도성, 구름 발생, 자극과 반응 실험 교재입니다.</span><span class="progs"><i>micro:bit</i><i>MakeCode</i><i>센서 · 모듈</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/light/" data-pattern="heart" data-acc="#ff3b30" style="--c:#ff3b30">
       <span class="no">02</span>
-      <span><span class="tag">논문 · 교재</span><span class="name">빛의 합성 실험</span><span class="desc">마이크로비트 RGB 빛의 합성 실험 장치와 디지털교재입니다.</span></span>
+      <span><span class="tag">논문 · 교재</span><span class="name">빛의 합성 실험</span><span class="desc">마이크로비트 RGB 빛의 합성 실험 장치와 디지털교재입니다.</span><span class="progs"><i>micro:bit</i><i>RGB LED</i><i>MakeCode</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/light-adaptive/" data-pattern="square" data-acc="#8b5cf6" style="--c:#8b5cf6">
       <span class="no">03</span>
-      <span><span class="tag">디지털교재 · 적응형 학습</span><span class="name">빛의 합성 적응형 학습</span><span class="desc">진단평가와 형성평가에서 고른 답에 따라 설명과 실험 영상이 달라지는 적응형 학습 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 · 적응형 학습</span><span class="name">빛의 합성 적응형 학습</span><span class="desc">진단평가와 형성평가에서 고른 답에 따라 설명과 실험 영상이 달라지는 적응형 학습 교재입니다.</span><span class="progs"><i>진단·형성평가</i><i>맞춤형 영상</i><i>RGB 합성</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/color-perception/" data-pattern="check" data-acc="#16a34a" style="--c:#16a34a">
       <span class="no">04</span>
-      <span><span class="tag">디지털교재 · 색의 인식</span><span class="name">AI 음성인식 활용 색의 인식 실험</span><span class="desc">아두이노 색 센서와 AI 음성인식으로 색을 인식하는 실험 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 · 색의 인식</span><span class="name">AI 음성인식 활용 색의 인식 실험</span><span class="desc">아두이노 색 센서와 AI 음성인식으로 색을 인식하는 실험 교재입니다.</span><span class="progs"><i>Arduino 색 센서</i><i>AI 음성인식</i><i>Google Drive 영상</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/science-ai/" data-pattern="arrow" data-acc="#d946ef" style="--c:#d946ef">
       <span class="no">05</span>
-      <span><span class="tag">디지털교재 · 연수 자료</span><span class="name">과학교육에서 AI 활용</span><span class="desc">피지컬 컴퓨팅, 이미지 AI, 데이터 분석, 생성형 AI 웹앱으로 과학수업에 AI를 활용하는 방법입니다.</span></span>
+      <span><span class="tag">디지털교재 · 연수 자료</span><span class="name">과학교육에서 AI 활용</span><span class="desc">피지컬 컴퓨팅, 이미지 AI, 데이터 분석, 생성형 AI 웹앱으로 과학수업에 AI를 활용하는 방법입니다.</span><span class="progs"><i>micro:bit · MakeCode</i><i>BME280</i><i>Teachable Machine</i><i>허스키렌즈 · 엔트리</i><i>엔트리 AI 회귀</i><i>Gemini Canvas</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/ai-ethics/" data-pattern="heart" data-acc="#ff3b30" style="--c:#ff3b30">
       <span class="no">06</span>
-      <span><span class="tag">디지털교재 · AI 윤리</span><span class="name">AI 윤리</span><span class="desc">트롤리 딜레마로 시작해 AI 판단 기준을 만들고, 윤리기준과 초등 토의 수업을 설계합니다.</span></span>
+      <span><span class="tag">디지털교재 · AI 윤리</span><span class="name">AI 윤리</span><span class="desc">트롤리 딜레마로 시작해 AI 판단 기준을 만들고, 윤리기준과 초등 토의 수업을 설계합니다.</span><span class="progs"><i>트롤리 딜레마</i><i>MIT 모럴 머신</i><i>모둠 토의</i><i>AI 윤리기준</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/physical-ai/" data-pattern="arrow" data-acc="#16a34a" style="--c:#16a34a">
       <span class="no">07</span>
-      <span><span class="tag">디지털교재 · 피지컬 AI</span><span class="name">피지컬 AI 프로젝트</span><span class="desc">동작 인식, 마퀸 로봇, 허스키렌즈로 AI가 인식한 결과를 행동으로 바꾸는 프로젝트 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 · 피지컬 AI</span><span class="name">피지컬 AI 프로젝트</span><span class="desc">동작 인식, 마퀸 로봇, 허스키렌즈로 AI가 인식한 결과를 행동으로 바꾸는 프로젝트 교재입니다.</span><span class="progs"><i>micro:bit</i><i>마퀸 로봇</i><i>허스키렌즈</i><i>동작 인식</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/data-ai/" data-pattern="square" data-acc="#7c4dff" style="--c:#7c4dff">
       <span class="no">08</span>
-      <span><span class="tag">디지털교재 · 데이터와 AI</span><span class="name">데이터와 AI 학습</span><span class="desc">Orange3로 붓꽃 분류와 전복 회귀 모델을 학습시키고 CA·MAE로 평가하는 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 · 데이터와 AI</span><span class="name">데이터와 AI 학습</span><span class="desc">Orange3로 붓꽃 분류와 전복 회귀 모델을 학습시키고 CA·MAE로 평가하는 교재입니다.</span><span class="progs"><i>Orange3</i><i>Tree · kNN</i><i>선형회귀</i><i>Iris · Abalone</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/ai-basic/" data-pattern="smile" data-acc="#1e6bff" style="--c:#1e6bff">
       <span class="no">09</span>
-      <span><span class="tag">디지털교재 · AI 기초</span><span class="name">초등 AI 기초 실습</span><span class="desc">AI for Oceans, 티처블 머신, 엔트리, 마이크로비트로 따라 하는 4차시 AI 기초 실습 교재입니다.</span></span>
+      <span><span class="tag">디지털교재 · AI 기초</span><span class="name">초등 AI 기초 실습</span><span class="desc">AI for Oceans, 티처블 머신, 엔트리, 마이크로비트로 따라 하는 4차시 AI 기초 실습 교재입니다.</span><span class="progs"><i>AI for Oceans</i><i>Teachable Machine</i><i>엔트리</i><i>micro:bit</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
-    <div class="row rv soon" data-pattern="check" data-acc="#1e90ff" style="--c:#1e90ff">
-      <span class="no">10</span>
-      <span><span class="tag">교수·학습 자료</span><span class="name">AI 윤리 · 리터러시 자료</span><span class="desc">초·중·고 인공지능 윤리교육 교수·학습자료와 AI 리터러시 수업 자료를 모읍니다.</span></span>
-      <span class="go" aria-hidden="true">준비 중</span>
-    </div>
-
-    <div class="row rv soon" data-pattern="smile" data-acc="#0d9488" style="--c:#0d9488">
-      <span class="no">11</span>
-      <span><span class="tag">수업 실천</span><span class="name">AI 융합 수업</span><span class="desc">AIEDAP·선도학교에서 실천한 AI 융합 수업 사례와 모형을 정리합니다.</span></span>
-      <span class="go" aria-hidden="true">준비 중</span>
-    </div>
-
-    <div class="row rv soon" data-pattern="square" data-acc="#2f6bff" style="--c:#2f6bff">
-      <span class="no">12</span>
-      <span><span class="tag">연구 · 장치 개발</span><span class="name">AI 과학실험장치</span><span class="desc">세종과학전람회 동상 작품 — 인공지능을 이용한 과학실험장치 개발 연구를 소개합니다.</span></span>
-      <span class="go" aria-hidden="true">준비 중</span>
-    </div>
-
-    <div class="row rv soon" data-pattern="arrow" data-acc="#f59e0b" style="--c:#f59e0b">
-      <span class="no">13</span>
-      <span><span class="tag">연수 · 강의</span><span class="name">AI 연수 자료</span><span class="desc">교사·학부모 대상 AI·디지털 교육 연수 자료를 공유합니다.</span></span>
-      <span class="go" aria-hidden="true">준비 중</span>
-    </div>
-
-    <div class="row rv soon" data-pattern="square" data-acc="#d946ef" style="--c:#d946ef">
-      <span class="no">14</span>
-      <span><span class="tag">키트</span><span class="name">과학실험 키트</span><span class="desc">마이크로비트 기반 과학실험 장치를 키트로 구성하는 계획을 정리합니다.</span></span>
-      <span class="go" aria-hidden="true">준비 중</span>
-    </div>
-
-    <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/profile/" data-pattern="smile" data-acc="#ff3b30" style="--c:#ff3b30">
-      <span class="no">15</span>
-      <span><span class="tag">About</span><span class="name">DK 소개 · 경력</span><span class="desc">AI·디지털교육 연구, 수상, 강의, 과학교육 경력을 소개합니다.</span></span>
-      <span class="go" aria-hidden="true">→</span>
-    </a>
   </section>
 
   <div class="marquee" aria-hidden="true">
