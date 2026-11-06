@@ -65,6 +65,7 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
 .codewrap{position:relative}
 .cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.lk em{font-style:normal;font-size:.7em;font-weight:700;background:#111;color:#fff;border-radius:99px;padding:.15em .7em;margin-left:.4em;vertical-align:middle}
 .cpy:hover{background:rgba(255,255,255,.3)}
 .donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
 .donebtn.on{background:var(--c,var(--acc));color:#fff}
@@ -1173,6 +1174,7 @@ document.addEventListener("click", e => {
   if (t && t.classList && t.classList.contains("cpy")) { const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
   if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
 });
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.cplk"); if (!a) return; e.preventDefault(); const txt = a.dataset.copy, em = a.querySelector("em"); const ok = () => { em.textContent = "복사됨 ✓"; setTimeout(() => em.textContent = "주소 복사", 1600); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (y) {} t.remove(); ok(); } });
 document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
 const $ = s => document.querySelector(s);
 /* ---------- 적응형 퀴즈 ---------- */
@@ -1275,7 +1277,7 @@ function pageHTML(i) {
     else if (l.startsWith("+ ")) { const [lab, url] = l.slice(2).split("|"); chips += chipHTML(lab, n, url); }
     else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
     else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
-    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += /github\.com/.test(url) ? `<a href="#" class="cplk" data-copy="${esc(url)}"><b>${esc(lab)} <em>주소 복사</em></b><span>${esc(url)}</span></a>` : `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
     else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
     else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
     else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
