@@ -875,7 +875,7 @@ function chipHTML(label, n, urlOverride) {
 function mediaHTML(n, skipImg) {
   let h = "";
   if (ILLU[n]) h += `<figure class="fig svg${ILLU[n].indexOf("data-dark") > 0 ? " dark" : ""}">${ILLU[n]}</figure>`;
-  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async"></figure>`; });
+  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"></figure>`; });
   const v = MEDIA.video[n];
   if (v) {
     const m = String(v).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
