@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>허스키렌즈 2 × 마이크로비트 · DK AI Science</title>
+<meta name="description" content="허스키렌즈 2와 마이크로비트로 배우는 얼굴·색·물체·태그·QR 인식 12장">
+<meta name="theme-color" content="#eeeef1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#7c4dff;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;overflow:hidden;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;display:flex;flex-direction:column}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+
+/* 위쪽 줄 */
+header{flex:none;height:64px;display:flex;justify-content:space-between;align-items:center;padding:0 clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:14px;background:transparent;color:var(--ink);transition:background .25s,color .25s}
+.pill:hover:not(:disabled){background:var(--ink);color:#fff}
+.pill:disabled{opacity:.35;cursor:default}
+.pill.solid{background:var(--ink);color:#fff}
+.pill.solid:hover:not(:disabled){background:var(--acc);border-color:var(--acc)}
+
+/* 책 무대 */
+.stage{flex:1;min-height:0;display:flex;overflow:auto;touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
+.book{position:relative;perspective:2600px;margin:auto;flex:none}
+.leaf{position:absolute;top:0;height:100%;width:50%;overflow:hidden}
+.leaf.left{left:0}.leaf.right{left:50%}
+.book.one .leaf.right{left:0;width:100%}.book.one .leaf.left,.book.one .flip{display:none}
+.page{position:absolute;inset:0;background:rgba(255,255,255,.82);border:1.5px solid var(--line);padding:calc(var(--u)*5.2) calc(var(--u)*6) calc(var(--u)*7.2);display:flex;flex-direction:column;overflow:hidden;
+  font-size:calc(var(--u)*3.15);line-height:1.55}
+.leaf.left .page,.face.l .page{border-radius:calc(var(--u)*4) 0 0 calc(var(--u)*4);border-right-color:rgba(11,11,16,.08)}
+.leaf.right .page,.face.r .page{border-radius:0 calc(var(--u)*4) calc(var(--u)*4) 0;border-left-color:rgba(11,11,16,.08)}
+.book.one .leaf.right .page{border-radius:calc(var(--u)*4)}
+.leaf.left .page::after,.face.l .page::after{content:"";position:absolute;top:0;right:0;bottom:0;width:calc(var(--u)*7);background:linear-gradient(90deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.leaf.right .page::after,.face.r .page::after{content:"";position:absolute;top:0;left:0;bottom:0;width:calc(var(--u)*7);background:linear-gradient(270deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.book.one .leaf.right .page::after{display:none}
+.book{filter:drop-shadow(0 30px 40px rgba(30,20,70,.18))}
+.flip{position:absolute;top:0;height:100%;width:50%;transform-style:preserve-3d;display:none;will-change:transform}
+.flip.on{display:block}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face.back{transform:rotateY(180deg)}
+.pfoot{position:absolute;left:calc(var(--u)*6);right:calc(var(--u)*6);bottom:calc(var(--u)*3);display:flex;justify-content:space-between;font-size:calc(var(--u)*2.3);font-weight:700;color:var(--muted)}
+.leaf.left .pfoot,.face.l .pfoot{flex-direction:row}
+.leaf.right .pfoot,.face.r .pfoot{flex-direction:row-reverse}
+
+/* 페이지 내용 */
+.eb{font-size:calc(var(--u)*2.6);font-weight:800;color:var(--c,var(--acc));letter-spacing:.01em;margin:0 0 calc(var(--u)*1.6)}
+.ttl{margin:0;font-size:calc(var(--u)*5.4);line-height:1.12;letter-spacing:-.045em;font-weight:800;text-wrap:balance}
+.body{margin-top:calc(var(--u)*3.4);display:flex;flex-direction:column;gap:calc(var(--u)*2.1);min-height:0;flex:1}
+.body p{margin:0}
+.bl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.9)}
+.bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
+.bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c,var(--acc))}
+.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.codewrap{position:relative}
+.cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.lk em{font-style:normal;font-size:.7em;font-weight:700;background:#111;color:#fff;border-radius:99px;padding:.15em .7em;margin-left:.4em;vertical-align:middle}
+.cpy.mk{right:calc(var(--u)*11.5);text-decoration:none;display:inline-block}
+.cpy:hover{background:rgba(255,255,255,.3)}
+.donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
+.donebtn.on{background:var(--c,var(--acc));color:#fff}
+.nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
+.nt li{position:relative;padding-left:calc(var(--u)*2.8)}
+.nt li::before{content:"※";position:absolute;left:0;color:var(--c,var(--acc));font-weight:800}
+.stm{font-size:calc(var(--u)*4.1);line-height:1.38;font-weight:700;letter-spacing:-.03em}
+.nums{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*2.6)}
+.nums li{display:flex;gap:calc(var(--u)*2.8);align-items:flex-start;font-weight:500;font-size:calc(var(--u)*3.25)}
+.nums .n{flex:none;width:calc(var(--u)*6.4);height:calc(var(--u)*6.4);border-radius:50%;background:var(--c,var(--acc));color:#fff;display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*3.2);margin-top:calc(var(--u)*-.4)}
+.stepno{width:calc(var(--u)*11);height:calc(var(--u)*11);border-radius:50%;background:var(--c,var(--acc));color:#fff;display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*5.6);letter-spacing:-.04em;margin-bottom:calc(var(--u)*3)}
+.parts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.2);counter-reset:p;align-content:start}
+.parts li{counter-increment:p;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:calc(var(--u)*1.6);padding:calc(var(--u)*2.2) calc(var(--u)*2) calc(var(--u)*2.4);border:1.5px solid var(--line);border-radius:calc(var(--u)*3);font-size:calc(var(--u)*3.3);line-height:1.3;font-weight:700;background:rgba(255,255,255,.8);text-align:center;word-break:keep-all}
+.parts li::before{content:counter(p);position:absolute;left:calc(var(--u)*1.8);top:calc(var(--u)*1.8);width:calc(var(--u)*5.2);height:calc(var(--u)*5.2);border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*2.8);font-weight:800;z-index:1}
+.parts .th{order:-1;margin:0;display:flex;gap:calc(var(--u)*1.4);justify-content:center;align-items:center;width:100%;height:calc(var(--u)*24)}
+.parts .th img{height:100%;width:auto;max-width:100%;min-width:0;object-fit:contain;border-radius:calc(var(--u)*1.6);background:#fff}
+.parts .th img:only-child{max-width:100%}
+.parts .th:has(img+img) img{max-width:48%}
+.parts.many .th,.parts.five .th{height:calc(var(--u)*17)}
+.parts.dense{gap:calc(var(--u)*1.2)}
+.parts.dense li{gap:calc(var(--u)*.6);padding:calc(var(--u)*1.2) calc(var(--u)*1.2) calc(var(--u)*1.2);font-size:calc(var(--u)*2.9)}
+.parts.dense li::before{width:calc(var(--u)*4.2);height:calc(var(--u)*4.2);font-size:calc(var(--u)*2.4);left:calc(var(--u)*1.2);top:calc(var(--u)*1.2)}
+.parts.dense .th{height:calc(var(--u)*9.5)}
+.chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*1)}
+.chip{display:inline-flex;align-items:center;gap:calc(var(--u)*1.2);border:1.5px solid var(--c,var(--acc));color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.3) calc(var(--u)*3.2);font-weight:800;font-size:calc(var(--u)*2.9);text-decoration:none;background:transparent}
+a.chip{background:var(--c,var(--acc));color:#fff}
+.tag{align-self:flex-start;font-size:calc(var(--u)*2.5);font-weight:800;background:rgba(11,11,16,.07);border-radius:999px;padding:calc(var(--u)*.7) calc(var(--u)*2.4)}
+.lk{display:flex;flex-direction:column;gap:calc(var(--u)*2)}
+.lk a{display:block;border:1.5px solid var(--ink);border-radius:calc(var(--u)*3);padding:calc(var(--u)*2.6) calc(var(--u)*3.2);text-decoration:none;transition:background .25s,color .25s}
+.lk a:hover{background:var(--ink);color:#fff}
+.lk b{display:block;font-size:calc(var(--u)*3.4)}
+.lk span{display:block;font-size:calc(var(--u)*2.3);font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;opacity:.7;margin-top:calc(var(--u)*.6)}
+.qr{width:calc(var(--u)*24);height:calc(var(--u)*24);padding:calc(var(--u)*2);background:#fff;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.4)}
+.qr svg{width:100%;height:100%;display:block}
+.fig{margin:0;border-radius:calc(var(--u)*2.6);overflow:hidden;border:1.5px solid var(--line);background:#fff}
+.fig img,.fig video,.fig iframe{display:block;width:100%;height:auto;border:0;aspect-ratio:16/9;object-fit:contain}
+.body{flex:1}
+.fig{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;background:transparent;border:0}
+.fig img{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:auto;object-fit:contain;border-radius:calc(var(--u)*2);border:1.5px solid var(--line);background:#fff}
+.fig.svg{flex:1 1 0;min-height:0;background:#fff;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*2.4);margin-top:calc(var(--u)*1)}
+.fig.svg svg{width:100%;height:100%;display:block}
+.fig.svg.dark{flex:1 1 0;min-height:0;background:transparent;border:0;padding:0;display:flex;align-items:center;justify-content:center}
+.fig.svg.dark svg{height:100%;width:auto;max-width:100%;max-height:100%}
+.fig.vid{flex:none;width:100%;border:0}
+.fig.vid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:calc(var(--u)*2.4);background:#000}
+.play{position:relative;display:block;width:100%;padding:0;border:0;border-radius:calc(var(--u)*2.4);overflow:hidden;background:#111;aspect-ratio:16/9}
+.play img{width:100%;height:100%;max-height:none;object-fit:cover;border:0;border-radius:0;display:block;opacity:.85}
+.tri{position:absolute;left:50%;top:50%;width:calc(var(--u)*13);height:calc(var(--u)*13);margin:calc(var(--u)*-6.5) 0 0 calc(var(--u)*-6.5);border-radius:50%;background:var(--c,#ff3b30);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.tri::after{content:"";position:absolute;left:38%;top:28%;border-style:solid;border-width:calc(var(--u)*3.6) 0 calc(var(--u)*3.6) calc(var(--u)*5.6);border-color:transparent transparent transparent #fff}
+a.tag{text-decoration:none;color:var(--ink)}
+.page.divider .fig{flex:none;margin-bottom:calc(var(--u)*4)}
+.page.divider .fig img{max-height:calc(var(--u)*50)}
+.big{font-size:calc(var(--u)*10.5);font-weight:800;letter-spacing:-.06em;line-height:1.02;text-wrap:balance}
+.para{font-size:calc(var(--u)*3.45);line-height:1.72;font-weight:500;color:#25252d;text-wrap:pretty}
+.para.s{font-size:calc(var(--u)*3);line-height:1.62}
+.fields{display:flex;flex-direction:column;gap:calc(var(--u)*2);flex:1 1 0;min-height:0}
+.ff{display:flex;flex-direction:column;gap:calc(var(--u)*1.1);flex:1 1 0;min-height:0}
+.ff span{font-weight:800;font-size:calc(var(--u)*2.9);color:var(--c,var(--acc))}
+.ff textarea{flex:1;min-height:calc(var(--u)*8);width:100%;resize:none;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.2);padding:calc(var(--u)*1.8) calc(var(--u)*2.4);font:inherit;font-size:calc(var(--u)*3.1);line-height:1.5;background:#fff;color:var(--ink);user-select:text;-webkit-user-select:text}
+.ff textarea:focus{outline:2px solid var(--c,var(--acc));outline-offset:1px}
+
+/* 표지 · 장 표지 */
+.page.cover{background:#0b0b10;color:#fff;border-color:#0b0b10}
+.page.cover .pfoot{color:rgba(255,255,255,.55)}
+.page.cover::after{display:none}
+.rgb{flex:1;min-height:0;margin:calc(var(--u)*2) 0;display:grid;grid-template-columns:repeat(5,1fr);gap:6%;align-content:center;padding:0 12%}
+.rgb i{display:none}
+.rgb::before{content:"";display:none}
+.rgb.cvart{display:block;padding:0}.rgb.cvart svg{width:100%;height:100%;display:block}
+.led{aspect-ratio:1;border-radius:50%;background:#2a2a33}
+.led.on{background:var(--c,#ff3b30);box-shadow:0 0 calc(var(--u)*3) var(--c,#ff3b30)}
+.cv-t{font-size:calc(var(--u)*6.1);font-weight:800;letter-spacing:-.06em;line-height:1}
+.cv-s{font-size:calc(var(--u)*3.6);font-weight:700;opacity:.7;margin-top:calc(var(--u)*1.6)}
+.cv-e{font-size:calc(var(--u)*2.8);font-weight:700;opacity:.65;margin-bottom:calc(var(--u)*2)}
+.page.divider{justify-content:flex-end}
+.page.divider .no{font-size:calc(var(--u)*3.2);font-weight:800;color:var(--c);margin-bottom:calc(var(--u)*2)}
+.page.divider .bar{width:calc(var(--u)*14);height:calc(var(--u)*1.6);border-radius:99px;background:var(--c);margin-bottom:calc(var(--u)*4)}
+.page.blank{background:transparent;border-color:transparent;box-shadow:none}
+.page.blank::after{display:none}
+.endp{justify-content:center;align-items:flex-start;gap:calc(var(--u)*3)}
+
+/* 아래 조작줄 */
+.ctrl{flex:none;display:flex;align-items:center;justify-content:center;gap:12px;padding:10px clamp(12px,3vw,40px) calc(14px + env(safe-area-inset-bottom));min-height:68px}
+.prog{flex:1;max-width:560px;display:flex;flex-direction:column;gap:4px;align-items:center}
+.prog small{font-weight:800;font-size:13px;color:var(--muted);letter-spacing:.02em}
+input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
+
+/* 목차 (왼쪽 서랍) */
+.toc{position:fixed;inset:0;z-index:50;display:none;background:rgba(11,11,16,.32)}
+.toc.on{display:block}
+.toc-in{position:absolute;left:0;top:0;bottom:0;width:min(460px,92vw);background:#f4f4f8;overflow:auto;padding:22px clamp(18px,3vw,32px) 40px;box-shadow:12px 0 50px rgba(0,0,0,.22);animation:drawer .28s cubic-bezier(.3,.7,.2,1)}
+@keyframes drawer{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+.toc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.toc h3{font-size:clamp(30px,4vw,42px);letter-spacing:-.05em;margin:0;font-weight:800}
+.toc .ch{border-bottom:1.5px solid var(--line)}
+.toc .chap{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:17px 6px;font-size:clamp(22px,2.3vw,27px);font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.toc .chap::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.toc .chap .rg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700}
+.toc .chap .chev{width:10px;height:10px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg);margin:-4px 4px 0 8px;transition:transform .2s;flex:none}
+.toc .ch.open .chap .chev{transform:rotate(225deg);margin-top:4px}
+.toc .chap:hover{background:rgba(11,11,16,.05)}
+.toc .ch ol{display:none;border-top:0;margin:0 0 12px 26px}
+.toc .ch.open ol{display:block}
+.toc ol{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--line)}
+.toc li button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 10px;font-size:clamp(15px,1.4vw,16.5px);font-weight:600;letter-spacing:-.03em;color:var(--ink);border-radius:0}
+.toc li button:hover{background:rgba(11,11,16,.05)}
+.toc li button.cur{background:var(--c);color:#fff;border-radius:10px}
+.toc li button.cur .pg{color:rgba(255,255,255,.85)}
+.toc li .pg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;flex:none}
+.tocbtn{position:fixed;left:clamp(10px,2vw,28px);top:50%;transform:translateY(-50%);z-index:20;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--ink);background:rgba(255,255,255,.85);display:grid;place-items:center;color:var(--ink);transition:background .25s,color .25s;box-shadow:0 8px 24px rgba(30,20,70,.14)}
+.tocbtn:hover{background:var(--ink);color:#fff}
+.tocbtn svg{width:24px;height:24px}
+@media (max-width:900px){.tocbtn{top:auto;bottom:12px;left:10px;transform:none;width:46px;height:46px}.ctrl{padding-left:64px}}
+@media (prefers-reduced-motion:reduce){.flip{transition:none!important}}
+
+/* 적응형 퀴즈 */
+.page.quiz .qt{font-size:calc(var(--u)*3.9);line-height:1.35;margin:calc(var(--u)*1) 0 calc(var(--u)*1.2)}.page.quiz .body{min-height:0;display:flex;flex-direction:column}
+.qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:calc(var(--u)*1.4)}
+.qmeta .rd{font-weight:800;font-size:calc(var(--u)*2.7);color:var(--c)}
+.qmeta .dots i{display:inline-block;width:calc(var(--u)*2);height:calc(var(--u)*2);border-radius:50%;background:var(--line);margin-left:calc(var(--u)*.9)}
+.qmeta .dots i.on{background:var(--c)}.qmeta .dots i.done{background:var(--c);opacity:.35}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*1.5)}.opts.one{grid-template-columns:1fr}
+.opt{font:inherit;font-weight:700;font-size:calc(var(--u)*3.3);padding:calc(var(--u)*2.1) calc(var(--u)*2.4);border:1.5px solid var(--line);border-radius:calc(var(--u)*2.2);background:#fff;color:var(--ink);text-align:left;cursor:pointer;transition:border-color .2s,color .2s}
+.opts.one .opt{font-size:calc(var(--u)*3.1);padding:calc(var(--u)*1.7) calc(var(--u)*2.4)}
+.opt:hover{border-color:var(--c);color:var(--c)}
+.chosen{font-size:calc(var(--u)*2.7);color:var(--muted);margin-bottom:calc(var(--u)*1.4)}.chosen b{color:var(--ink)}
+.fbk{flex:0 1 auto;min-height:0;overflow-y:auto;border:1.5px solid var(--line);border-left:calc(var(--u)*1.2) solid var(--k);border-radius:calc(var(--u)*2);background:#fff;padding:calc(var(--u)*1.6) calc(var(--u)*2.2);display:flex;flex-direction:column;gap:calc(var(--u)*.9)}
+.fbk.ok{--k:#16a34a}.fbk.no{--k:#e4174b}
+.fbk .vd{font-weight:800;font-size:calc(var(--u)*3.1);color:var(--k)}.fbk .vd small{font-weight:600;font-size:calc(var(--u)*2.4);color:var(--muted);margin-left:calc(var(--u)*1.2)}
+.fbk p{margin:0;font-size:calc(var(--u)*2.55);line-height:1.45;font-weight:500;color:#25252d}
+.vrow{display:flex;gap:calc(var(--u)*2);align-items:center}
+.vrow .play{flex:none;width:calc(var(--u)*23);position:relative;border:0;padding:0;background:#000;border-radius:calc(var(--u)*1.6);overflow:hidden;aspect-ratio:16/9;cursor:pointer}
+.vrow .play img{display:block;width:100%;height:100%;object-fit:cover;opacity:.85}
+.vrow .tri{position:absolute;left:50%;top:50%;width:calc(var(--u)*7);height:calc(var(--u)*7);margin:calc(var(--u)*-3.5) 0 0 calc(var(--u)*-3.5);border-radius:50%;background:rgba(255,255,255,.92)}
+.vrow .tri::after{content:"";position:absolute;left:calc(var(--u)*2.8);top:calc(var(--u)*1.9);border-left:calc(var(--u)*2.4) solid #0b0b10;border-top:calc(var(--u)*1.6) solid transparent;border-bottom:calc(var(--u)*1.6) solid transparent}
+.vrow p{font-size:calc(var(--u)*2.4)!important;color:#33333d}
+.kbox{background:color-mix(in srgb,var(--c) 10%,#fff);border-radius:calc(var(--u)*1.8);padding:calc(var(--u)*1.6) calc(var(--u)*2.2);display:flex;flex-direction:column;gap:calc(var(--u)*.6)}
+.kbox p{font-weight:700}
+.qact{display:flex;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*1.4);flex-wrap:wrap;flex:none}
+.qact button{font:inherit;font-weight:800;font-size:calc(var(--u)*2.7);padding:calc(var(--u)*1.2) calc(var(--u)*2.8);border-radius:999px;border:1.5px solid var(--c);color:var(--c);background:#fff;cursor:pointer}
+.qact button.go{background:var(--c);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="../" aria-label="DK AI Science 처음으로">
+    <span class="mini" aria-hidden="true"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span>
+    DK AI Science
+  </a>
+  <button class="pill" id="btnToc" type="button">목차</button>
+</header>
+
+<div class="stage" id="stage">
+  <div class="book" id="book">
+    <div class="leaf left" id="L"></div>
+    <div class="leaf right" id="R"></div>
+    <div class="flip" id="F"><div class="face front" id="Ff"></div><div class="face back" id="Fb"></div></div>
+  </div>
+</div>
+
+<div class="ctrl">
+  <button class="pill" id="prev" type="button" aria-label="이전 페이지">← 이전</button>
+  <div class="prog"><small id="pos">1 / 1</small><input type="range" id="rng" min="1" max="1" value="1" aria-label="페이지 이동"></div>
+  <button class="pill solid" id="next" type="button" aria-label="다음 페이지">다음 →</button>
+</div>
+
+<button class="tocbtn" id="tocOpen" type="button" aria-label="목차 열기" title="목차"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+<div class="toc" id="toc" role="dialog" aria-label="목차">
+  <div class="toc-in"><div class="toc-hd"><h3>목차</h3><button class="pill" id="tocX" type="button">닫기 ✕</button></div><div id="tocList"></div></div>
+</div>
+
+<script>var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});</script>
+<script>
+"use strict";
+/* ============================================================
+   사진·영상·링크 넣는 곳 (페이지 번호 기준, 비워 두면 표시되지 않습니다)
+   MEDIA.img[페이지번호]   = "img/12.jpg"   (또는 여러 장: ["img/12a.jpg","img/12b.jpg"])
+   MEDIA.video[페이지번호] = "https://www.youtube.com/watch?v=..." 또는 "video/12.mp4"
+   MEDIA.links[페이지번호] = { "활동지": "https://...", "AR 보기": "https://..." }
+   ============================================================ */
+const CODE_LINK = "https://makecode.microbit.org/";
+const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="허스키렌즈가 얼굴을 인식해 마이크로비트로 결과를 보내는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="125" fill="#7fb0ff" opacity=".18" filter="url(#g)"/><rect x="90" y="110" width="220" height="170" rx="22" fill="#1b1b22" stroke="#3a3a46" stroke-width="5"/><rect x="108" y="128" width="184" height="104" rx="12" fill="#10242e" stroke="#3ccfc2" stroke-width="3"/><path d="M140 150h26M140 150v26M260 150h-26M260 150v26M140 210h26M140 210v-26M260 210h-26M260 210v-26" stroke="#ffe83a" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="200" cy="178" r="22" fill="#f6d6b8"/><circle cx="192" cy="174" r="3.4" fill="#222"/><circle cx="208" cy="174" r="3.4" fill="#222"/><path d="M191 186Q200 193 209 186" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/><text x="200" y="224" text-anchor="middle" font-family="Arial" font-weight="800" font-size="13" fill="#3ccfc2">ID1</text><circle cx="200" cy="256" r="16" fill="#0b0b10" stroke="#e8e9ee" stroke-width="4"/><circle cx="200" cy="256" r="7" fill="#ff8a1f"/><rect x="130" y="312" width="140" height="56" rx="10" fill="#22222a" stroke="#7fb0ff" stroke-width="3"/><circle cx="160" cy="330" r="4.5" fill="#ff3b30"/><circle cx="180" cy="330" r="4.5" fill="#33333d"/><circle cx="200" cy="330" r="4.5" fill="#ff3b30"/><circle cx="220" cy="330" r="4.5" fill="#33333d"/><circle cx="240" cy="330" r="4.5" fill="#ff3b30"/><circle cx="160" cy="348" r="4.5" fill="#33333d"/><circle cx="180" cy="348" r="4.5" fill="#ff3b30"/><circle cx="200" cy="348" r="4.5" fill="#33333d"/><circle cx="220" cy="348" r="4.5" fill="#ff3b30"/><circle cx="240" cy="348" r="4.5" fill="#33333d"/><path d="M200 280V312" stroke="#9fdcff" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/></svg>`;
+const MEDIA = {"img": {"6": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/d3bada2b7932566df0d34c95352c7f9e_0x0.png.webp"], "7": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/88c7ec1ab35324ad2920667f10b0fdbb_0x0.png.webp", "https://dfimg.dfrobot.com/63158dbfaa9508d63a425e17/wikien/b06a3f2906c464c1769e899373124dda_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/9e84516f73769ed03ff4d62ebe4cf020_0x0.png.webp"], "10": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/8cb95995d91c31d760c6e6a9d9862fe5_0x0.png.webp"], "12": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/8cb95995d91c31d760c6e6a9d9862fe5_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/e2d6d15a3b3637a253b7c37b496ae44c_0x0.png.webp"], "14": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/4cbbdb9b595cd0786a0c4ba6be2e0085_0x0.png.webp"], "16": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/8cb95995d91c31d760c6e6a9d9862fe5_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/e2d6d15a3b3637a253b7c37b496ae44c_0x0.png.webp"], "18": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/4cbbdb9b595cd0786a0c4ba6be2e0085_0x0.png.webp"], "20": ["https://dfimg.dfrobot.com/111d2d45d7e74a08b5dea68467a8dc64/wikien/8ef6473103cd1cfcdce68ad84089b0c9_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/07bf6ca9d1bf2eb5092c044310198b47_0x0.png.webp"], "22": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/6ec9ba9fb35a913beb7b85094a58505e_0x0.png.webp"], "24": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/3c66b0f680be0b211ff73d4af5bacfe9_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/963771bb7958951f4839616f3df8fa4c_0x0.png.webp"], "26": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/1bd0398359cf59cb5703f771f9f3420b_0x0.png.webp"], "28": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/ec67cee1abcc38c2ef0e1e4377ffe055_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/2531451ad01de8281b6971f8ac8bb436_0x0.png.webp"], "30": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/1f6acc3366451c207a3299685d6e5f77_0x0.png.webp"], "32": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/546793b1c9b1f711fd118946cdafaa58_0x0.png.webp"], "36": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/665ad2f940ebc804f628315a65318385_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/4a5fb2d1416f697cb904703c32c2960e_0x0.png.webp"], "38": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/cef727cfa8a5291617368251da308af3_0x0.png.webp"], "40": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/ae9eb190eb4a68564354a35fa6682932_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/d73f3df47c60edb77fc0548c2839ad07_0x0.png.webp"], "42": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/632bd9dd3708b6936491b771b5613ae0_0x0.png.webp"], "44": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/e042fb16bdc136aec45ea4254b218544_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/398a27a00a641a027468e526c846a415_0x0.png.webp"], "46": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/ce2fcc628bc9e696b24e23a21d2cca99_0x0.png.webp"], "48": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/665ad2f940ebc804f628315a65318385_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/4a5fb2d1416f697cb904703c32c2960e_0x0.png.webp"], "50": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/cef727cfa8a5291617368251da308af3_0x0.png.webp"], "56": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/3c66b0f680be0b211ff73d4af5bacfe9_0x0.png.webp", "https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/963771bb7958951f4839616f3df8fa4c_0x0.png.webp"], "58": ["https://dfimg.dfrobot.com/60191ece025a892c98c6b90b/wikien/1bd0398359cf59cb5703f771f9f3420b_0x0.png.webp"]}, "video": {}, "links": {}};
+const ILLU = {};
+const PARTS = {};
+const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "기초 1 · 연결하기", "c": "#ff8a1f"}, {"n": "기초 2 · 확장 추가", "c": "#16a34a"}, {"n": "기초 3 · 통신 방식", "c": "#1e6bff"}, {"n": "기초 4 · 첫 프로그램", "c": "#d946ef"}, {"n": "응용 1 · 음악 마법 거울", "c": "#ff8a1f"}, {"n": "응용 2 · 얼굴 인식 출입 통제", "c": "#16a34a"}, {"n": "응용 3 · 알록달록 피아노", "c": "#1e6bff"}, {"n": "응용 4 · 길고양이·강아지 급식기", "c": "#d946ef"}, {"n": "응용 5 · 물체 추적기", "c": "#0d9488"}, {"n": "응용 6 · 셀프 계산대", "c": "#ff3b30"}, {"n": "응용 7 · 에너지 수확", "c": "#f59e0b"}, {"n": "응용 8 · 스마트 버스 요금기", "c": "#8b5cf6"}, {"n": "응용 9 · 안전모 알림이", "c": "#06b6d4"}, {"n": "응용 10 · 2진수 해독기", "c": "#e11d48"}, {"n": "응용 11 · 허스키렌즈 2 카메라", "c": "#65a30d"}, {"n": "응용 12 · 비상차로 감시견", "c": "#2563eb"}, {"n": "마무리", "c": "#7c4dff"}];
+const QUIZ = {};
+const DATA = `
+cover|0||허스키렌즈 2 × 마이크로비트|
+: 허스키렌즈 2와 마이크로비트로 배우는 연결, 코딩, 12가지 AI 이미지 인식
+@toc 표지
+---
+text|0|이 책은|학습 순서 ①|
+: 먼저 기초에서 허스키렌즈 2와 마이크로비트를 연결하고, 응용에서 열두 가지 작품을 만듭니다.
+- 기초 1 — 연결하기
+- 기초 2 — MakeCode 확장(huskylensv2) 추가
+- 기초 3 — 통신 방식 설정
+- 기초 4 — 첫 프로그램(얼굴 인식)
+@toc 학습 순서
+---
+text|0|이 책은|학습 순서 ② 응용|
+1. 음악 마법 거울
+2. 얼굴 인식 출입 통제
+3. 알록달록 피아노
+4. 길고양이·강아지 급식기
+5. 물체 추적기
+6. 셀프 계산대
+@toc 학습 순서 응용 ①
+---
+text|0|이 책은|학습 순서 ③ 응용|
+7. 에너지 수확
+8. 스마트 버스 요금기
+9. 안전모 알림이
+10. 2진수 해독기
+11. 허스키렌즈 2 카메라
+12. 비상차로 감시견
+@toc 학습 순서 응용 ②
+---
+text|0|준비하기|시작하기 전에|
+* 허스키렌즈 2를 처음 쓴다면 먼저 “허스키렌즈 2 탐구”로 알고리즘 사용법을 익혀 두면 좋아요.
+1. 준비물: 허스키렌즈 2, micro:bit, micro:bit 확장 보드(Essential Sensor IO Extender), 4핀 I2C/UART 케이블, USB-C 케이블 2개
+2. 컴퓨터에서 MakeCode(makecode.microbit.org)를 엽니다.
+3. 허스키렌즈 2의 펌웨어가 최신인지 확인합니다.
+* 허스키렌즈 1과 달리 2는 640×480 화면, 터치스크린, A 버튼 하나로 학습하고, 블록 이름도 다릅니다.
+@toc 시작하기 전에
+---
+text|1|기초 1 · 연결하기|허스키렌즈 2와 micro:bit 연결|
+1. micro:bit를 확장 보드에 끼우고, USB-C 케이블로 확장 보드를 컴퓨터에 연결합니다.
+2. 4핀 케이블을 허스키렌즈 2의 I2C/UART 단자에 꽂고, 반대쪽을 확장 보드의 “5V Huskylens” 단자에 꽂습니다.
+3. 허스키렌즈 2는 전원을 많이 쓰므로 다른 USB-C 케이블로 허스키렌즈 2 전원 단자와 컴퓨터(또는 전원 어댑터)를 연결합니다.
+* 사용 전에 허스키렌즈 2 펌웨어를 최신 버전으로 업데이트하세요.
+@toc 연결하기
+---
+text|2|기초 2 · 확장 추가|MakeCode에 huskylensv2 확장 넣기|
+1. MakeCode 웹에서 새 프로젝트를 만듭니다.
+2. 블록 목록 아래 “확장”을 누릅니다.
+3. 검색창에 huskylensv2를 입력합니다.
+4. 나온 확장을 눌러 추가합니다.
+5. 블록 목록에 허스키렌즈 2 묶음이 생긴 것을 확인합니다.
+* 허스키렌즈 1 확장(huskylens)과 다른 확장입니다. 이름에 v2가 붙은 것을 고르세요.
+@toc 확장 추가
+---
+text|3|기초 3 · 통신 방식|통신 방식 I2C로 맞추기|
+: 허스키렌즈 2의 통신 방식이 micro:bit와 같아야 합니다.
+1. 허스키렌즈 2의 설정(System Settings)에서 통신을 I2C로 맞춥니다.
+2. 프로그램 맨 처음에 “initialize I2C until success” 블록을 둡니다. 연결될 때까지 micro:bit 화면에 X 표시가 나옵니다.
+3. 연결되면 “switch algorithm” 블록으로 쓸 알고리즘을 고릅니다.
+* 이 블록 두 개가 모든 프로그램의 맨 앞에 옵니다.
+@toc 통신 방식
+---
+text|4|기초 4 · 첫 프로그램|얼굴을 알아보면 웃는 얼굴|
+: 배운 얼굴(ID 1)을 알아보면 웃는 얼굴, 아니면 우는 얼굴을 보여 줍니다.
+1. 허스키렌즈 2에서 얼굴 하나를 배웁니다(“허스키렌즈 2 탐구” 1장).
+2. 아래 프로그램을 만들어 micro:bit에 내려받습니다.
+3. 배운 얼굴이면 웃는 얼굴이 나옵니다.
+4. 다른 얼굴이면 우는 얼굴, 얼굴이 없으면 화면이 꺼집니다.
+@toc 첫 프로그램
+---
+text|4|기초 4 · 첫 프로그램|첫 프로그램 코드|
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmFaceRecognition)
+C basic.forever(function () {
+C     huskylens2.getResultFaceRecognition()
+C     if (huskylens2.availableFaceRecognition()) {
+C         if (huskylens2.cachedCenterResult(huskylens2.BasePropertyId.Id) == 1) {
+C             basic.showIcon(IconNames.Happy)
+C         } else {
+C             basic.showIcon(IconNames.Sad)
+C         }
+C     } else {
+C         basic.clearScreen()
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요.
+@toc 첫 프로그램 코드
+---
+text|5|응용 1 · 음악 마법 거울|음악 마법 거울|
+: 허스키렌즈 2가 아는 얼굴과 모르는 얼굴을 구별해, 화면 표정과 음악으로 반응하게 만듭니다.
+- 준비물 — 허스키렌즈 2(I2C로 설정, USB로 따로 전원 공급), micro:bit, 확장 보드와 부저(스위치 켜기)
+- 배울 내용 — 얼굴 인식 4단계: 얼굴 찾기 → 얼굴 맞추기(정렬) → 얼굴 코드 만들기 → 얼굴 비교하기 · 표정·각도·조명에 따라 얼굴이 달라 보임
+@toc 응용 1 음악 마법 거울
+---
+text|5|응용 1 · 음악 마법 거울|프로그램 만들기|
+1. 허스키렌즈 2의 화면 메뉴을 돌려 ‘얼굴 인식’ 모드로 맞춥니다.
+2. 화면 가운데 ‘+’를 얼굴에 맞추고 A 버튼을 짧게 누릅니다. 학습한 얼굴에는 파란 틀과 ‘Face: ID1’이 나타납니다.
+3. 버튼을 길게 누르면 여러 각도의 얼굴을 더 배웁니다.
+4. 과제 1: 학습한 ID가 보이면 웃는 얼굴, 아니면 우는 얼굴을 LED에 보여 줍니다.
+5. 과제 2: 음표 블록으로 학습한 얼굴에는 캐럴 한 소절을, 낯선 얼굴에는 다른 동요를 부저로 연주합니다.
+@toc 응용 1 프로그램
+---
+text|5|응용 1 · 음악 마법 거울|코드|
+C // 음악 마법 거울 (허스키렌즈 2 버전) — 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것입니다.
+C function jingleBells() {
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 500)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 500)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.C, 375)
+C     music.playTone(Note.D, 125)
+C     music.playTone(Note.E, 500)
+C }
+C function littleStar() {
+C     music.playTone(Note.C, 250)
+C     music.playTone(Note.C, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.A, 250)
+C     music.playTone(Note.A, 250)
+C     music.playTone(Note.G, 500)
+C }
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmFaceRecognition)
+C basic.forever(function () {
+C     huskylens2.getResultFaceRecognition()
+C     if (huskylens2.availableFaceRecognition()) {
+C         // 화면 가운데에 가장 가까운 얼굴의 ID (배운 얼굴은 1, 모르는 얼굴은 0)
+C         if (huskylens2.cachedCenterResult(huskylens2.BasePropertyId.Id) == 1) {
+C             basic.showIcon(IconNames.Happy)
+C             jingleBells()
+C         } else {
+C             basic.showIcon(IconNames.Sad)
+C             littleStar()
+C         }
+C     } else {
+C         basic.clearScreen()
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 1 코드
+---
+text|5|응용 1 · 음악 마법 거울|해 보기|
+: 일상에서 얼굴 인식이 쓰이는 곳을 더 찾아 적어 봅시다. 부저 경보는 다음 장의 출입 통제로 이어집니다.
+F 얼굴 인식이 쓰이는 곳|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 1 해 보기
+---
+text|6|응용 2 · 얼굴 인식 출입 통제|얼굴 인식 출입 통제|
+: 가족 얼굴이면 문을 열고, 낯선 얼굴이면 경보를 울리는 출입 통제 장치를 만듭니다.
+- 준비물 — 허스키렌즈, micro:bit, 확장 보드, 연결 케이블, USB 케이블, 컴퓨터(MakeCode), P0에 연결한 서보(문 역할)
+- 배울 내용 — 열쇠·카드보다 편리하고 안전한 얼굴 인식 · ‘여러 얼굴 학습’ 켜기 · 학습 순서대로 ID1, ID2… 부여(틀 색이 서로 다름)
+@toc 응용 2 얼굴 인식 출입 통제
+---
+text|6|응용 2 · 얼굴 인식 출입 통제|프로그램 만들기|
+1. 허스키렌즈 2를 얼굴 인식 모드로 하고 ‘여러 얼굴 학습’을 켭니다.
+2. 가족 얼굴을 차례로 배웁니다. 배운 순서대로 ID가 붙습니다.
+3. 과제 1: 감지한 얼굴이 배운 ID이면 LED에 √, 모르는 얼굴이면 ×를 보여 줍니다.
+4. 과제 2: 가족이면 서보를 돌려 문을 열고 5초 뒤 자동으로 닫습니다. 낯선 사람이면 × 표시만 하고 서보는 움직이지 않습니다.
+5. 서보 각도는 10°~170° 안에서 쓰는 것이 부품을 지키는 데 좋습니다.
+@toc 응용 2 프로그램
+---
+text|6|응용 2 · 얼굴 인식 출입 통제|코드|
+C // 얼굴 인식 출입 통제 (허스키렌즈 2 버전) — 서보 값 30(닫힘)·150(열림)과 5초 대기는 원본 그대로입니다.
+C function autoDoor() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(5000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmFaceRecognition)
+C pins.analogWritePin(AnalogPin.P0, 30)
+C basic.forever(function () {
+C     huskylens2.getResultFaceRecognition()
+C     if (huskylens2.availableFaceRecognition()) {
+C         // 배운 얼굴(ID 1~4)이면 문을 열고, 아니면(ID 0) 경보
+C         let id = huskylens2.cachedCenterResult(huskylens2.BasePropertyId.Id)
+C         if (id >= 1 && id <= 4) {
+C             basic.showIcon(IconNames.Yes)
+C             basic.pause(100)
+C             autoDoor()
+C         } else {
+C             basic.showIcon(IconNames.No)
+C             music.playTone(Note.C5, 300)
+C         }
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 2 코드
+---
+text|6|응용 2 · 얼굴 인식 출입 통제|해 보기|
+: 얼굴 인식을 우리 학교 관리에 쓴다면 어떤 문제를 풀 수 있을까요? 허스키렌즈 2는 어디에 둘까요?
+F 우리 학교 적용 아이디어|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 2 해 보기
+---
+text|7|응용 3 · 알록달록 피아노|알록달록 피아노|
+: 색 블록을 알아보고 색마다 다른 음을 연주하는 피아노를 만듭니다.
+- 준비물 — 허스키렌즈, micro:bit, 확장 보드, 연결 케이블, USB 케이블, 컴퓨터(MakeCode)
+- 배울 내용 — 색 인식은 밝기·색상·채도를 배운 값과 비교 · 주변 밝기에 따라 달라지므로 같은 조명에서 학습·인식 · 여러 색을 배우면 순서대로 ID
+@toc 응용 3 알록달록 피아노
+---
+text|7|응용 3 · 알록달록 피아노|프로그램 만들기|
+1. 허스키렌즈 2를 ‘색 인식’ 모드로 바꾸고 화면 메뉴을 길게 눌러 ‘여러 색 학습’을 켠 뒤 저장합니다.
+2. 가운데 ‘+’를 각 색 블록에 맞추고 A 버튼을 눌러 색마다 ID를 만듭니다.
+3. 과제 1: 인식한 색의 ID 숫자를 LED에 보여 줍니다.
+4. 과제 2: ID마다 음 블록을 연결합니다(예: ID1 빨강은 ‘도’). 색 블록을 보여 주면 그 음이 연주됩니다.
+@toc 응용 3 프로그램
+---
+text|7|응용 3 · 알록달록 피아노|코드|
+C // 알록달록 피아노 (허스키렌즈 2 버전) — 새로 만든 프로그램입니다.
+C // 색마다 배운 순서대로 ID가 붙고, ID마다 한 음이 나옵니다. (ID 1~7 = 도 레 미 파 솔 라 시)
+C let notes = [Note.C, Note.D, Note.E, Note.F, Note.G, Note.A, Note.B]
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmColorRecognition)
+C basic.forever(function () {
+C     huskylens2.getResultColorRecognition()
+C     if (huskylens2.availableColorRecognition()) {
+C         let id = huskylens2.cachedCenterColorResult(huskylens2.BasePropertyId.Id)
+C         basic.showNumber(id)
+C         if (id >= 1 && id <= 7) {
+C             music.playTone(notes[id - 1], 300)
+C         }
+C     } else {
+C         basic.clearScreen()
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 3 코드
+---
+text|7|응용 3 · 알록달록 피아노|해 보기|
+: 비슷한 색이 같은 색으로 읽히면 ‘인식 틀 문턱값’을 조절해 봅시다. 낮추면 민감해지지만 정확도는 떨어집니다. 건반 수를 늘리려면 A·B 버튼으로 음의 높이를 바꿔 봅시다.
+F 잘 안 맞는 색과 해결 방법|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 3 해 보기
+---
+text|8|응용 4 · 길고양이·강아지 급식기|길고양이·강아지 급식기|
+: 고양이와 강아지를 구별해 알맞은 사료를 내보내는 급식기를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit, 사료 문을 여닫는 서보, 연결선
+- 배울 내용 — 이미지 인식: 사진을 찍고 → 정리하고 → 특징을 뽑아 → 견본과 비교 · 허스키렌즈 2에는 기본 물체 20가지(고양이·강아지 포함) · 품종이나 개별 동물은 구별하지 못함
+@toc 응용 4 길고양이·강아지 급식기
+---
+text|8|응용 4 · 길고양이·강아지 급식기|프로그램 만들기|
+1. 미리 ‘여러 물체 학습’을 켭니다.
+2. 고양이와 강아지를 각각 배웁니다. 배운 순서대로 ID가 붙고 틀 색이 달라집니다.
+3. 과제 1: 결과를 읽어 LED에 고양이 또는 강아지 그림을 보여 줍니다.
+4. 과제 2: 고양이면 서보로 고양이 사료를, 강아지면 강아지 사료를 내보냅니다. 기다리는 시간을 다르게 해 양을 조절합니다.
+5. 다 내보내면 하트 그림을 보여 줍니다.
+@toc 응용 4 프로그램
+---
+text|8|응용 4 · 길고양이·강아지 급식기|코드|
+C // 길고양이·강아지 급식기 (허스키렌즈 2 버전)
+C // 사료 내보내는 두 함수는 원본에 없어 채운 부분입니다. 서보 값 30(닫힘)·150(열림).
+C // 허스키렌즈 2의 ‘물체 인식’은 기본 모델이라 고양이·강아지를 이미 알고 있어, 배울 때 ID 1=고양이, 2=강아지가 되게 순서를 맞추세요.
+C function dispenseCatFood() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(1000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C function dispenseDogFood() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(2000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmObjectRecognition)
+C pins.analogWritePin(AnalogPin.P0, 30)
+C basic.forever(function () {
+C     huskylens2.getResultObjectRecognition()
+C     if (huskylens2.availableObjectRecognition()) {
+C         let id = huskylens2.cachedCenterObjectResult(huskylens2.BasePropertyId.Id)
+C         if (id == 1) {
+C             basic.showString("cat")
+C             basic.pause(500)
+C             dispenseCatFood()
+C             basic.showIcon(IconNames.Heart)
+C         } else if (id == 2) {
+C             basic.showString("dog")
+C             basic.pause(500)
+C             dispenseDogFood()
+C             basic.showIcon(IconNames.Heart)
+C         }
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 4 코드
+---
+text|8|응용 4 · 길고양이·강아지 급식기|해 보기|
+: 같은 동물이 계속 보일 때 사료가 반복해서 나오지 않게 하려면 어떻게 할까요? 하루 방문 횟수를 기록해 사료를 나누는 아이디어도 생각해 봅시다.
+F 반복 급식을 막는 방법|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 4 해 보기
+---
+text|9|응용 5 · 물체 추적기|물체 추적기|
+: 배운 물체를 따라가며 위치를 알려 주고, 물체가 사라지면 진동으로 알리는 추적기를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit V2, 진동 모듈
+- 배울 내용 — 물체 추적은 색이나 얼굴만이 아니라 물체 전체의 특징을 따라감 · 허스키렌즈 2 화면은 320×240이라 가운데가 (160, 120)
+@toc 응용 5 물체 추적기
+---
+text|9|응용 5 · 물체 추적기|프로그램 만들기|
+1. 추적할 물체를 노란 가운데 틀에 맞춥니다.
+2. A 버튼을 길게 누른 채 물체를 여러 각도·거리로 움직입니다. 화면에 ‘Learning: ID1’이 보입니다.
+3. 잘 따라오면 버튼을 놓습니다. 노란 틀이 안 보이면 이미 배운 물체이니 지우고 다시 배웁니다.
+4. 화면 메뉴 메뉴에서 ‘학습 켜기’를 꺼서 더 이상 배우지 않게 합니다.
+5. 과제 1: 추적하는 물체의 X, Y 값을 읽어 위치를 알아봅니다. X와 Y가 -1이면 물체를 놓친 것입니다.
+6. 과제 2: X와 Y가 모두 -1이면 진동 모듈을 켜고, 아니면 끕니다. PWM으로 진동 세기를 조절할 수도 있습니다.
+@toc 응용 5 프로그램
+---
+text|9|응용 5 · 물체 추적기|코드|
+C // 물체 추적기 (허스키렌즈 2 버전) — 화면은 640×480이라 가운데는 (320, 240)입니다.
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmObjectTracking)
+C basic.forever(function () {
+C     huskylens2.getResultObjectTracking()
+C     huskylens2.clearText()
+C     if (huskylens2.availableObjectTracking()) {
+C         // 따라가는 물체가 보이면 위치를 화면에 쓰고 진동 모듈(P1)을 켭니다.
+C         huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font28, 20, 20, "X=" + huskylens2.cachedObjectTrackingResult(huskylens2.BasePropertyId.XCenter))
+C         huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font28, 20, 60, "Y=" + huskylens2.cachedObjectTrackingResult(huskylens2.BasePropertyId.YCenter))
+C         pins.digitalWritePin(DigitalPin.P1, 1)
+C     } else {
+C         // 물체가 사라지면 진동 모듈 끄기
+C         pins.digitalWritePin(DigitalPin.P1, 0)
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 5 코드
+---
+text|9|응용 5 · 물체 추적기|해 보기|
+: 목표의 위치를 화면에 표시해 봅시다. 물체가 가까울수록 진동이 세지고 멀어질수록 약해지게 PWM을 써 보면 어떨까요?
+F 나의 확장 아이디어|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 5 해 보기
+---
+text|10|응용 6 · 셀프 계산대|셀프 계산대|
+: 상품 태그를 알아보고 가격을 더해 계산서를 만드는 무인 계산대를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit V2, 확장 보드(부저, P1의 스위치 LED), 바코드 대신 쓸 종이 카드(흰 종이를 깔면 인식이 좋아짐)
+- 배울 내용 — 바코드는 막대와 빈 곳의 무늬로 정보를 담음 · 이 프로젝트는 허스키렌즈 2의 태그 인식을 바코드 대신 사용
+@toc 응용 6 셀프 계산대
+---
+text|10|응용 6 · 셀프 계산대|프로그램 만들기|
+1. A 버튼으로 과일, 사탕, 장난감 세 가지 태그를 차례로 배웁니다. ID와 틀 색이 순서대로 붙습니다.
+2. 과제 1: 인식한 태그의 ID를 읽어 가격을 보여 줍니다(과일 7, 사탕 4, 장난감 15). 성공하면 부저가 ‘도’를 한 번 울립니다.
+3. 과제 2: 스위치를 켜(1) 계산을 시작하면 인식한 상품이 표시되고, 끄면(0) 합계를 보여 줍니다.
+4. 끝낸 뒤 스캔한 상품은 다음 손님이 새로 시작할 때까지 보이지 않습니다.
+@toc 응용 6 프로그램
+---
+text|10|응용 6 · 셀프 계산대|코드|
+C // 셀프 계산대 (허스키렌즈 2 버전) — 버튼(P1)을 누르는 동안 물건을 읽고, 떼면 합계를 보여 줍니다.
+C // 원본은 바코드 블록이었고, 여기서는 허스키렌즈 2의 ‘바코드 인식’을 그대로 씁니다. (ID 1=과일 7, ID 2=사탕 4, ID 3=장난감 15)
+C let totalPrice = 0
+C let prices = [7, 4, 15]
+C function endScan() {
+C     huskylens2.clearText()
+C     huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font36, 40, 60, "Total price " + totalPrice)
+C     basic.pause(5000)
+C     huskylens2.clearText()
+C     totalPrice = 0
+C }
+C function startScanning() {
+C     huskylens2.getResultBarcodeRecognition()
+C     if (huskylens2.availableBarcodeRecognition()) {
+C         let id = huskylens2.cachedCenterBarcodeResult(huskylens2.BasePropertyContentId.Id)
+C         if (id >= 1 && id <= 3) {
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             huskylens2.clearText()
+C             huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font36, 40, 60, "price " + prices[id - 1])
+C             totalPrice += prices[id - 1]
+C             basic.pause(1000)
+C         }
+C     }
+C }
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmBarcodeRecognition)
+C huskylens2.clearText()
+C basic.forever(function () {
+C     if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+C         startScanning()
+C     } else {
+C         endScan()
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 6 코드
+---
+text|10|응용 6 · 셀프 계산대|해 보기|
+: 인쇄한 바코드로 알맞은 사물함이 열리는 사물함 시스템을 허스키렌즈 2로 어떻게 만들까요?
+F 사물함 시스템 설계|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 6 해 보기
+---
+text|11|응용 7 · 에너지 수확|에너지 수확|
+: 태그를 읽을 때마다 에너지가 모이는 작은 게임을 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit, AprilTag 카드, 부저
+- 배울 내용 — 태그 인식: 모서리 찾기 → 사각형 찾기 → 해독하기 · AprilTag는 번호와 함께 3차원 위치·방향도 알아낼 수 있음 · 인식할 때마다 0~9 무작위 숫자
+@toc 응용 7 에너지 수확
+---
+text|11|응용 7 · 에너지 수확|프로그램 만들기|
+1. 허스키렌즈 2를 ‘태그 인식’ 모드로 하고, ‘+’를 태그에 맞춰 A 버튼을 누릅니다. 배운 순서대로 ID가 붙습니다.
+2. 과제 1: 배운 태그를 인식하면 0~9 사이 무작위 숫자를 LED에 보여 줍니다. 같은 태그도 다른 숫자가 나올 수 있습니다.
+3. 과제 2: 나온 숫자를 계속 더해 허스키렌즈 2 화면에 합계를 보여 줍니다.
+4. 합계가 50 이상이 되면 하트를 보여 주고 부저로 ‘충전 완료’ 소리를 냅니다.
+5. A 버튼을 누르면 화면과 에너지가 지워져 새 판을 시작합니다.
+@toc 응용 7 프로그램
+---
+text|11|응용 7 · 에너지 수확|코드|
+C // 에너지 수확 (허스키렌즈 2 버전) — 태그를 인식할 때마다 0~9 무작위 에너지가 모이고, 50이 넘으면 이깁니다.
+C let energyValue = 0
+C let sumOfEnergy = 0
+C input.onButtonPressed(Button.A, function () {
+C     energyValue = 0
+C     sumOfEnergy = 0
+C     basic.clearScreen()
+C     huskylens2.clearText()
+C })
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmTagRecognition)
+C huskylens2.clearText()
+C basic.forever(function () {
+C     huskylens2.getResultTagRecognition()
+C     if (huskylens2.availableTagRecognition()) {
+C         music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C         energyValue = randint(0, 9)
+C         basic.showNumber(energyValue)
+C         sumOfEnergy += energyValue
+C         huskylens2.clearText()
+C         huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font32, 30, 30, "Sum of energy " + sumOfEnergy)
+C         basic.pause(500)
+C         if (sumOfEnergy >= 50) {
+C             basic.showIcon(IconNames.Heart)
+C             music.startMelody(music.builtInMelody(Melodies.PowerUp), MelodyOptions.Once)
+C         }
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 7 코드
+---
+text|11|응용 7 · 에너지 수확|해 보기|
+: 허스키렌즈 2를 더 적게 사용한 사람이 이기는 시합을 해 봅시다. 같으면 시간이 짧은 사람이 이깁니다.
+F 시합 기록|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 7 해 보기
+---
+text|12|응용 8 · 스마트 버스 요금기|스마트 버스 요금기|
+: QR 코드 교통카드를 읽고 요금을 차감하는 버스 요금기를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit, 확장 보드, 음성 녹음 모듈, 스테레오 스피커(도전: 부저)
+- 배울 내용 — QR 코드는 검은 칸과 흰 칸으로 2진수 정보를 담음 · 세 모서리의 큰 네모가 어느 방향에서도 읽게 도와 줌
+@toc 응용 8 스마트 버스 요금기
+---
+text|12|응용 8 · 스마트 버스 요금기|프로그램 만들기|
+1. 허스키렌즈 2를 ‘QR 코드 인식’ 모드로 하고 ‘+’를 카드의 코드에 맞춰 A 버튼을 누릅니다. 순서대로 ID와 틀 색이 붙습니다.
+2. 배운 카드가 보이면 색 틀과 ID가 나타납니다.
+3. 과제 1: ID마다 요금을 정해 허스키렌즈 2 화면에 보여 줍니다(학생 카드 1위안, 일반 카드 1.5위안). ‘도’ 음이 알림으로 울립니다.
+4. 과제 2: 카드마다 잔액 20위안에서 시작합니다. 인식하면 요금을 빼고 요금과 잔액을 보여 준 뒤 ‘결제되었습니다, 타세요’ 음성을 들려 줍니다.
+5. 예시 프로그램은 학생 카드만 다룹니다. 일반 카드는 숙제입니다.
+@toc 응용 8 프로그램
+---
+text|12|응용 8 · 스마트 버스 요금기|코드|
+C // 스마트 버스 요금기 (허스키렌즈 2 버전) — QR 코드 카드를 읽고 요금을 깎아 보여 줍니다. (ID 1=0.5배, ID 2=0.75배)
+C let cost = 2
+C let spend = 0
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmQrCodeRecognition)
+C basic.forever(function () {
+C     huskylens2.getResultQRCodeRecognition()
+C     if (huskylens2.availableQRCodeRecognition()) {
+C         let id = huskylens2.cachedCenterQRCodeResult(huskylens2.BasePropertyContentId.Id)
+C         if (id == 1 || id == 2) {
+C             if (id == 1) {
+C                 spend = cost * 0.5
+C             } else {
+C                 spend = cost * 0.75
+C             }
+C             huskylens2.clearText()
+C             huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font32, 30, 30, "Payment of fees -" + spend)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C         }
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 8 코드
+---
+text|12|응용 8 · 스마트 버스 요금기|해 보기|
+: 카드 잔액이 모자랄 때 어떻게 알려 줄까요? 조건문과 부저, 또는 음성 모듈과 스피커로 설계해 봅시다.
+F 잔액 부족 알림 설계|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 8 해 보기
+---
+text|13|응용 9 · 안전모 알림이|안전모 알림이|
+: 작업자가 안전모를 썼는지 확인해 쓰지 않은 사람은 공사 현장에 들어가지 못하게 하는 장치를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit, (과제 2) RGB LED 띠와 서보
+- 배울 내용 — KNN(k-최근접 이웃): 새 자료를 저장된 예와 비교해 분류 · 허스키렌즈 2는 K=1(가장 가까운 하나) · 물체 분류는 화면 위치를 알려 주지 않음 · 여러 각도·거리에서 배우면 정확해짐
+@toc 응용 9 안전모 알림이
+---
+text|13|응용 9 · 안전모 알림이|프로그램 만들기|
+1. 허스키렌즈 2를 ‘물체 분류’ 모드로 합니다.
+2. A 버튼을 길게 눌러 세 가지를 배웁니다: 배경(ID1), 안전모 씀(ID2), 안전모 안 씀(ID3).
+3. MakeCode 프로그램에서 ID 이름을 알아보기 쉽게 바꿉니다.
+4. 과제 1: 읽은 ID에 따라 안전모를 썼는지 보여 줍니다.
+5. 과제 2: 과제 1의 인식을 그대로 쓰고, NeoPixel 확장으로 LED 띠를, 서보로 차단기를 ID마다 정해 제어합니다.
+@toc 응용 9 프로그램
+---
+text|13|응용 9 · 안전모 알림이|코드|
+C // 안전모 알림이 (허스키렌즈 2 버전)
+C // 허스키렌즈 2의 ‘물체 분류’는 분류 결과의 ID와 이름을 돌려줍니다. 배울 때 배경=ID1, 안전모 씀=ID2, 안전모 안 씀=ID3.
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmObjectClassification)
+C basic.forever(function () {
+C     huskylens2.getResultObjectClassification()
+C     huskylens2.clearText()
+C     if (huskylens2.availableObjectClassification()) {
+C         let id = huskylens2.cachedObjectClassificationResult(1, huskylens2.ObjectClassificationProperty.Id)
+C         if (id == 1) {
+C             huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font32, 30, 30, "background")
+C         } else if (id == 2) {
+C             huskylens2.showText(0x00FF00, huskylens2.FontSize.Font32, 30, 30, "wear safety helmet")
+C             basic.showIcon(IconNames.Yes)
+C         } else if (id == 3) {
+C             huskylens2.showText(0xFF0000, huskylens2.FontSize.Font32, 30, 30, "no helmet")
+C             basic.showIcon(IconNames.No)
+C             music.playTone(Note.C5, 300)
+C         }
+C     } else {
+C         huskylens2.showText(0xFFFF00, huskylens2.FontSize.Font32, 30, 30, "please learn")
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 9 코드
+---
+text|13|응용 9 · 안전모 알림이|해 보기|
+: 골판지로 안전모 인식 문을 만들어 봅시다. 또 K=3일 때와 K=6일 때 새로운 점이 어느 쪽으로 분류되는지 그림에서 따져 보세요.
+F K=3, K=6 분류 결과|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 9 해 보기
+---
+text|14|응용 10 · 2진수 해독기|2진수 해독기|
+: 허스키렌즈 2와 micro:bit로 2진수를 알아보고 10진수로 바꿉니다.
+- 준비물 — 허스키렌즈 2, micro:bit V2, 태그 카드 2장(ID1, ID2), 켜짐·꺼짐 유지 버튼
+- 배울 내용 — 2진수는 0과 1만 쓰고 자리마다 2의 거듭제곱 · 컴퓨터는 회로의 두 상태(켜짐·꺼짐) 때문에 2진수 사용 · 2진수→10진수는 각 자리 값을 더함(10000101 = 133) · 10진수→2진수는 2로 나눈 나머지를 아래에서 위로(25 = 11001)
+@toc 응용 10 2진수 해독기
+---
+text|14|응용 10 · 2진수 해독기|프로그램 만들기|
+1. 태그 카드 두 장을 배웁니다. ID1은 1, ID2는 0으로 약속합니다.
+2. 과제 1: ID1을 읽으면 1, ID2를 읽으면 0을 허스키렌즈 2 화면에 보여 줍니다. 새 숫자는 X 위치를 달리해 앞 숫자가 지워지지 않게 합니다. 버튼으로 인식 시작·끝을 정합니다.
+3. 과제 2: 세 가지 일을 함수로 나눕니다. 버튼이 켜진 동안 태그를 읽어 2진수를 모으고, 버튼을 다시 누르면 10진수로 바꾸고, 결과를 다음 줄에 보여 줍니다.
+4. 100101을 넣으면 37이 나와야 합니다.
+@toc 응용 10 프로그램
+---
+text|14|응용 10 · 2진수 해독기|코드|
+C // 2진수 해독기 (허스키렌즈 2 버전) — 태그 ID1 = 1, ID2 = 0 으로 읽어 2진수를 쌓습니다.
+C let X = 20
+C let Binary = ""
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmTagRecognition)
+C huskylens2.clearText()
+C basic.forever(function () {
+C     huskylens2.getResultTagRecognition()
+C     if (huskylens2.availableTagRecognition()) {
+C         let id = huskylens2.cachedCenterTagResult(huskylens2.BasePropertyContentId.Id)
+C         if (id == 1 || id == 2) {
+C             let bit = "0"
+C             if (id == 1) {
+C                 bit = "1"
+C             }
+C             huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font40, X, 30, bit)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C             X += 30
+C             Binary = "" + Binary + bit
+C         }
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 10 코드
+---
+text|14|응용 10 · 2진수 해독기|해 보기|
+: 친구에게 2진수 문제를 내 봅시다. 2진수와 문자를 짝지은 표를 만들어 글자로 읽어 보는 확장도 해 볼 수 있습니다.
+F 내가 낸 2진수 문제|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 10 해 보기
+---
+text|15|응용 11 · 허스키렌즈 2 카메라|허스키렌즈 2 카메라|
+: 허스키렌즈 2와 micro:bit로 사진을 찍는 카메라를 만들고, 바늘구멍 사진기 원리와 연결합니다.
+- 준비물 — 허스키렌즈 2, micro:bit V2(로고 터치·A 버튼·마이크·LED), 작은 진동 모듈, SD 카드와 리더(키트에 없음)
+- 배울 내용 — 바늘구멍 사진기: 작은 구멍으로 들어온 빛이 거꾸로 선 상을 맺음 · 허스키렌즈 2의 500만 화소 카메라 · 빛→전하→디지털→압축→SD 카드 저장
+@toc 응용 11 허스키렌즈 2 카메라
+---
+text|15|응용 11 · 허스키렌즈 2 카메라|프로그램 만들기|
+1. 터치 촬영: micro:bit 로고를 만지면 촬영하고, 가운데 ‘도’ 음으로 알립니다.
+2. 소리 촬영: 마이크 소리 크기가 100을 넘으면 허스키렌즈 2가 촬영하고 진동 모듈이 울립니다.
+3. 타이머 촬영: A 버튼을 누르면 3, 2, 1 카운트다운을 허스키렌즈 2 화면에 보여 주고 촬영합니다. 찍으면 LED에 하트가 나타납니다.
+@toc 응용 11 프로그램
+---
+text|15|응용 11 · 허스키렌즈 2 카메라|코드|
+C // 허스키렌즈 2 카메라 — 터치·소리·타이머 세 가지 촬영 방법
+C // 허스키렌즈 2는 ‘take photo’ 블록(멀티미디어)으로 촬영하며, 사진은 허스키렌즈 2에 저장됩니다.
+C huskylens2.I2CInit()
+C // 1) 터치 촬영: micro:bit 로고를 만지면 촬영하고 '도' 음으로 알립니다.
+C input.onLogoEvent(TouchButtonEvent.Touched, function () {
+C     huskylens2.takePhoto()
+C     music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C })
+C // 2) 소리 촬영: 소리가 크면 촬영하고 진동 모듈(P1)을 울립니다.
+C input.setSoundThreshold(SoundThreshold.Loud, 100)
+C input.onSound(DetectedSound.Loud, function () {
+C     huskylens2.takePhoto()
+C     pins.digitalWritePin(DigitalPin.P1, 1)
+C     basic.pause(300)
+C     pins.digitalWritePin(DigitalPin.P1, 0)
+C })
+C // 3) 타이머 촬영: A 버튼을 누르면 3, 2, 1 센 뒤 촬영하고 하트를 보여 줍니다.
+C input.onButtonPressed(Button.A, function () {
+C     for (let i = 3; i >= 1; i--) {
+C         huskylens2.clearText()
+C         huskylens2.showText(0xFFFFFF, huskylens2.FontSize.Font48, 300, 200, "" + i)
+C         basic.pause(1000)
+C     }
+C     huskylens2.clearText()
+C     huskylens2.takePhoto()
+C     basic.showIcon(IconNames.Heart)
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 11 코드
+---
+text|15|응용 11 · 허스키렌즈 2 카메라|해 보기|
+: 셔터 버튼 말고 사진 찍기를 시작하게 할 수 있는 장치에는 또 무엇이 있을까요? 강아지를 배워 강아지가 보일 때만 찍는 카메라도 생각해 봅시다.
+F 카메라를 켜는 새로운 방법|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 11 해 보기
+---
+text|16|응용 12 · 비상차로 감시견|비상차로 감시견|
+: 비상차로에 들어온 차를 찾아 사진을 찍고 비키라고 알리는 감시 장치를 만듭니다.
+- 준비물 — 허스키렌즈 2, micro:bit, SD 카드(키트에 없음), (과제 2) RGB 불빛과 경보. 차로 위에 카메라를 달고, 시험은 종이로 오린 차로로 합니다.
+- 배울 내용 — 물체 분류: 물체에 틀을 그리고 이름을 보여 줌 · ‘+’를 물체 틀에 맞추고 A 버튼을 짧게 누르면 틀이 파랗게 되고 ID1이 붙음 · 한 가지든 여러 가지든 배울 수 있음
+@toc 응용 12 비상차로 감시견
+---
+text|16|응용 12 · 비상차로 감시견|프로그램 만들기|
+1. 허스키렌즈 2로 차를 배웁니다. 배울 때까지 화면에는 ‘학습하세요’ 표시가 있습니다.
+2. 과제 1: 허스키렌즈 2가 감지한 차는 모두 불법 주차로 봅니다. 차를 인식하면 화면에 ‘촬영 중’을 (230, 10) 위치에 보여 주고 사진을 SD 카드에 저장합니다.
+3. 과제 2: 과제 1에 RGB 불빛 깜빡임과 경보음을 더해 차가 비켜 가도록 알리면서 사진도 찍습니다.
+@toc 응용 12 프로그램
+---
+text|16|응용 12 · 비상차로 감시견|코드|
+C // 비상차로 감시견 (허스키렌즈 2 버전) — 차가 보이면 사진을 찍습니다.
+C // 허스키렌즈 2의 ‘물체 인식’ 기본 모델에는 자동차가 들어 있어 따로 배우지 않아도 됩니다.
+C huskylens2.I2CInit()
+C huskylens2.switchAlgorithm(huskylens2.Algorithm.AlgorithmObjectRecognition)
+C huskylens2.clearText()
+C basic.forever(function () {
+C     huskylens2.getResultObjectRecognition()
+C     huskylens2.clearText()
+C     if (huskylens2.availableObjectRecognition()) {
+C         huskylens2.showText(0xFF0000, huskylens2.FontSize.Font32, 400, 20, "shooting")
+C         huskylens2.takePhoto()
+C         basic.pause(1000)
+C         huskylens2.clearText()
+C     } else {
+C         huskylens2.showText(0xFFFF00, huskylens2.FontSize.Font28, 30, 20, "no car")
+C         basic.pause(300)
+C     }
+C })
+* MakeCode에 huskylensv2 확장을 먼저 추가한 뒤 붙여 넣으세요. 원본 허스키렌즈 1 프로그램을 2용 블록으로 옮겨 채운 것이라 주석을 참고하세요.
+@toc 응용 12 코드
+---
+text|16|응용 12 · 비상차로 감시견|해 보기|
+: 골판지로 차로를 완성해 위에 허스키렌즈 2를 달고 차가 잘 감지되는지 확인해 봅시다.
+F 시험 결과 기록|여기에 적어 보세요
+L DFRobot 원본 레슨 보기(영어)|https://wiki.dfrobot.com/sen0638/docs/24853
+@toc 응용 12 해 보기
+---
+text|17|마무리|핵심 질문|
+: 카메라가 알아본 결과를 micro:bit는 어떻게 행동으로 바꿀까요?
+1. 모드 고르기(얼굴·색·물체·태그·QR)
+2. 배우기(ID 붙이기)
+3. 알아보기
+4. 행동하기(표시·소리·서보)
+* 배우고 · 알아보고 · 움직입니다
+@toc 마무리
+`;
+
+/* ---------- 쪽 만들기 ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const FK = "dkbook:" + location.pathname;   // 입력칸 저장 키 (이 브라우저에만 저장)
+const typing = t => t && t.closest && t.closest("textarea,input");
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cpy")) { const mk = t.classList.contains("mk"); const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { if (mk) return; t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
+  if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
+});
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.cplk"); if (!a) return; e.preventDefault(); const txt = a.dataset.copy, em = a.querySelector("em"); const ok = () => { em.textContent = "복사됨 ✓"; setTimeout(() => em.textContent = "주소 복사", 1600); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (y) {} t.remove(); ok(); } });
+document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
+const $ = s => document.querySelector(s);
+/* ---------- 적응형 퀴즈 ---------- */
+const QMEM = {};
+const qget = id => { let v = QMEM[id]; if (!v) { try { v = JSON.parse(localStorage.getItem(FK + ":q:" + id) || "null"); } catch (e) {} } return v || { r: 0, c: null }; };
+const qset = (id, v) => { QMEM[id] = v; try { localStorage.setItem(FK + ":q:" + id, JSON.stringify(v)); } catch (e) {} };
+function quizHTML(id, n) {
+  const Q = QUIZ[id], s = qget(id), rd = Q.rounds[s.r] || Q.rounds[0];
+  const dots = Q.rounds.map((_, i) => `<i class="${i < s.r ? "done" : i === s.r ? "on" : ""}"></i>`).join("");
+  let h = `<div class="qmeta"><span class="rd">${s.r + 1}차 도전</span><span class="dots">${dots}</span></div>`;
+  if (s.c === null || !rd.o[s.c]) {
+    return h + `<div class="opts${Q.cols === 1 ? " one" : ""}">${rd.o.map((o, i) => `<button type="button" class="opt" data-qa="pick" data-q="${id}" data-i="${i}">${esc(o.t)}</button>`).join("")}</div>`;
+  }
+  const o = rd.o[s.c], f = Q.fb[o.f], last = s.r >= Q.rounds.length - 1;
+  h += `<div class="fbk ${f.ok ? "ok" : "no"}"><div class="vd">${f.ok ? "정답입니다" : "정답이 아닙니다"}<small>내가 고른 답 · ${esc(o.t)}</small></div>`;
+  f.t.forEach(x => { h += `<p>${esc(x)}</p>`; });
+  f.v.forEach(v => { h += `<div class="vrow"><button type="button" class="play" data-yt="${v.yt}" aria-label="실험 영상 재생"><img src="https://i.ytimg.com/vi/${v.yt}/hqdefault.jpg" alt="" loading="lazy"><span class="tri"></span></button><p>${esc(v.t).replace(/\n/g, "<br>")}</p></div>`; });
+  if (f.k.length) h += `<div class="kbox">${f.k.map(x => `<p>${esc(x)}</p>`).join("")}</div>`;
+  h += `</div><div class="qact">`;
+  if (!f.ok && !last) h += `<button type="button" data-qa="retry" data-q="${id}">다시 풀어보기 (${s.r + 2}차)</button>`;
+  if (f.ok || last) h += `<button type="button" data-qa="reset" data-q="${id}">처음부터 다시</button>`;
+  if (f.ok || last) h += `<button type="button" class="go" data-go="${n + 1}">다음으로 →</button>`;
+  return h + `</div>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-qa]"); if (!b) return;
+  const id = b.dataset.q, s = qget(id), a = b.dataset.qa;
+  if (a === "pick") qset(id, { r: s.r, c: +b.dataset.i });
+  else if (a === "retry") qset(id, { r: s.r + 1, c: null });
+  else if (a === "reset") qset(id, { r: 0, c: null });
+  render();
+});
+
+
+const pages = DATA.trim().split(/\n---\n/).map(blk => {
+  const lines = blk.trim().split("\n");
+  const [kind, chap, eb, title, num] = lines.shift().split("|");
+  const pg = { kind, chap: +chap, eb, title, num, lines: [], toc: null };
+  lines.forEach(l => { if (l.startsWith("@toc ")) pg.toc = l.slice(5); else pg.lines.push(l); });
+  return pg;
+});
+pages.push({ kind: "end", chap: 0, eb: "", title: "", lines: [], toc: null });   // 뒤표지
+const N = pages.length;
+
+function chipHTML(label, n, urlOverride) {
+  const url = urlOverride || (label === "영상" ? MEDIA.video[n] : MEDIA.links[n] && MEDIA.links[n][label]);
+  const icon = label === "영상" ? "▶" : label.indexOf("AR") === 0 ? "◎" : label === "공유하기" ? "↗" : "✎";
+  return url ? `<a class="chip" href="${esc(url)}" target="_blank" rel="noopener">${icon} ${esc(label)}</a>` : `<span class="chip">${icon} ${esc(label)}</span>`;
+}
+function mediaHTML(n, skipImg) {
+  let h = "";
+  if (ILLU[n]) h += `<figure class="fig svg${ILLU[n].indexOf("data-dark") > 0 ? " dark" : ""}">${ILLU[n]}</figure>`;
+  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"></figure>`; });
+  const v = MEDIA.video[n];
+  if (v) {
+    const m = String(v).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+    h += m ? `<figure class="fig vid"><button type="button" class="play" data-yt="${m[1]}" aria-label="영상 재생"><img src="https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg" alt=""><span class="tri"></span></button></figure>`
+           : `<figure class="fig vid"><video src="${esc(v)}" controls playsinline></video></figure>`;
+  }
+  return h;
+}
+function partsHTML(n, bl) {
+  const imgs = MEDIA.img[n] || [], map = PARTS[n];
+  const items = bl.split("</li>").filter(Boolean).map(x => x + "</li>");
+  return items.map((li, k) => {
+    const th = map && map[k] ? map[k].map(j => `<img src="${esc(imgs[j])}" alt="">`).join("") : "";
+    return th ? li.replace("</li>", `<span class="th">${th}</span></li>`) : li;
+  }).join("");
+}
+function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=18)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
+function pageHTML(i) {
+  if (i < 0 || i >= N) return `<div class="page blank"></div>`;
+  const p = pages[i], n = i + 1, ch = CHAPS[p.chap], c = ch.c;
+  const foot = `<div class="pfoot"><span>${esc(p.kind === "cover" || p.kind === "end" ? "" : ch.n)}</span><span>${n}</span></div>`;
+  if (p.kind === "cover") {
+    return `<div class="page cover" style="--c:${c}"><div class="cv-e">${esc(p.eb)}</div><div class="rgb cvart">${COVER}</div>
+      <div class="cv-t">${esc(p.title)}</div><div class="cv-s">${esc(p.lines[0] ? p.lines[0].slice(2) : "")}</div></div>`;
+  }
+  if (p.kind === "end") {
+    return `<div class="page endp" style="--c:${c}"><div class="mini" style="width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.4);gap:calc(var(--u)*.9);padding:calc(var(--u)*2)"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div>
+      <div class="ttl" style="font-size:calc(var(--u)*4.4)">허스키렌즈 2 × 마이크로비트</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
+  }
+  if (p.kind === "divider") {
+    const body = p.lines.map(l => /^[:\-*] /.test(l) ? `<p>${esc(l.slice(2))}</p>` : "").join("");
+    return `<div class="page divider" style="--c:${c}">${mediaHTML(n)}<div class="no">${esc(p.eb)}</div><div class="bar"></div><div class="big">${esc(p.title)}</div>${body ? `<div class="body" style="margin-top:calc(var(--u)*3)">${body}</div>` : ""}${foot}</div>`;
+  }
+  if (p.kind === "quiz") {
+    const qid = (p.lines.find(l => l.startsWith("QZ ")) || "").slice(3);
+    return `<div class="page quiz" style="--c:${c}"><div class="eb">${esc(p.eb)}</div><h2 class="ttl qt">${esc(p.title)}</h2><div class="body">${quizHTML(qid, n)}</div>${foot}</div>`;
+  }
+  let done = "", code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
+  p.lines.forEach(l => {
+    let m;
+    if (l.startsWith("F ")) {
+      const [lab, ph] = l.slice(2).split("|"), key = FK + ":" + n + ":" + (fi++);
+      let v = ""; try { v = localStorage.getItem(key) || ""; } catch (e) {}
+      fields += `<label class="ff"><span>${esc(lab)}</span><textarea data-k="${esc(key)}" placeholder="${esc(ph || "")}">${esc(v)}</textarea></label>`;
+    }
+    else if (l.startsWith("- ")) bl += `<li>${esc(l.slice(2))}</li>`;
+    else if (l.startsWith("* ")) nt += `<li>${esc(l.slice(2))}</li>`;
+    else if (l.startsWith("+ ")) { const [lab, url] = l.slice(2).split("|"); chips += chipHTML(lab, n, url); }
+    else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
+    else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
+    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += /github\.com/.test(url) ? `<a href="#" class="cplk" data-copy="${esc(url)}"><b>${esc(lab)} <em>주소 복사</em></b><span>${esc(url)}</span></a>` : `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
+    else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
+    else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
+    else if ((m = l.match(/^(\d+)\. (.*)$/))) nums += `<li><span class="n">${m[1]}</span><span>${esc(m[2])}</span></li>`;
+  });
+  let title;
+  if (p.kind === "step") {
+    const sz = p.title.length > 150 ? 3.1 : p.title.length > 100 ? 3.6 : 0;
+    title = `<div class="stepno">${esc(p.num)}</div><div class="stm"${sz ? ` style="font-size:calc(var(--u)*${sz})"` : ""}>${esc(p.title)}</div>`;
+    return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
+      <div class="body">${bl ? `<ul class="bl">${bl}</ul>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${mediaHTML(n)}</div>${foot}</div>`;
+  }
+  const longTitle = p.title.length > 26 && p.lines.length > 0;
+  title = `<h2 class="ttl" ${p.lines.length===0 ? `style="font-size:calc(var(--u)*8.2);margin-top:calc(var(--u)*10)"` : longTitle ? `style="font-size:calc(var(--u)*4.2)"` : ""}>${esc(p.title)}</h2>`;
+  return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
+    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<div class="codewrap">${typeof CODE_LINK !== "undefined" ? `<a class="cpy mk" href="${CODE_LINK}" target="_blank" rel="noopener">MakeCode ↗</a>` : ""}<button class="cpy" type="button">복사</button><pre class="code"${codeStyle(code)}>${esc(code)}</pre></div>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${done}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
+}
+function fillQR(root) {
+  root.querySelectorAll(".qr").forEach(el => {
+    try { const q = qrcode(0, "M"); q.addData(el.dataset.url); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) {}
+  });
+}
+function put(el, i, side) {   // side: 'l' | 'r'
+  el.innerHTML = pageHTML(i);
+  fillQR(el);
+  const f = el.querySelector(".pfoot"); void f;
+}
+
+/* ---------- 책 크기 · 보기 방식 ---------- */
+const book = $("#book"), L = $("#L"), R = $("#R"), F = $("#F"), Ff = $("#Ff"), Fb = $("#Fb");
+let two = true, cur = 0, busy = false;   // cur: 지금 보이는 첫 쪽(0부터)
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const ZOOM0 = window.devicePixelRatio || 1;   // 브라우저 확대(Ctrl+스크롤)를 책 크기에 반영
+function layout() {
+  const zm = Math.min(4, Math.max(.5, (window.devicePixelRatio || 1) / ZOOM0));
+  const st = $("#stage").getBoundingClientRect();
+  const aw = st.width * zm - 24, ah = zm * innerHeight - (innerHeight - st.height) - 16;
+  two = aw >= 860 && aw / ah > 1.15;
+  const ratio = 0.78;
+  let pw, ph;
+  if (two) { pw = Math.min(aw / 2, ah * ratio, 760 * zm); ph = pw / ratio; }
+  else { pw = Math.min(aw, 560 * zm); ph = Math.min(ah, pw / 0.62); }
+  book.style.width = (two ? pw * 2 : pw) + "px";
+  book.style.height = ph + "px";
+  book.classList.toggle("one", !two);
+  book.style.setProperty("--u", (pw / 100) + "px");
+  document.documentElement.style.setProperty("--u", (pw / 100) + "px");
+  if (two && cur % 2) cur -= 1;
+  render();
+}
+function render() {
+  if (two) { put(L, cur); put(R, cur + 1); }
+  else { put(R, cur); }
+  ui();
+}
+function step() { return two ? 2 : 1; }
+function ui() {
+  const last = Math.min(cur + step(), N);
+  $("#pos").textContent = two ? `${cur + 1}–${last} / ${N}` : `${cur + 1} / ${N}`;
+  $("#rng").max = N; $("#rng").value = cur + 1;
+  $("#prev").disabled = cur <= 0;
+  $("#next").disabled = cur + step() >= N;
+  const h = "#p" + (cur + 1);
+  if (location.hash !== h) history.replaceState(null, "", h);
+}
+
+/* ---------- 넘기기 ---------- */
+function go(target) {
+  if (busy) return;
+  target = Math.max(0, Math.min(N - 1, target));
+  if (two) target -= target % 2;
+  if (target === cur) return;
+  const forward = target > cur;
+  if (!two || reduce || Math.abs(target - cur) > 2 && false) { cur = target; render(); return; }
+  busy = true;
+  F.classList.add("on");
+  if (forward) {
+    // 아래에 새 오른쪽 쪽, 넘어가는 장: 앞면=예전 오른쪽, 뒷면=새 왼쪽
+    put(R, target + 1);
+    Ff.className = "face front r"; Fb.className = "face back l";
+    put(Ff, cur + 1); put(Fb, target);
+    F.style.left = "50%"; F.style.transformOrigin = "left center";
+  } else {
+    put(L, target);
+    Ff.className = "face front l"; Fb.className = "face back r";
+    put(Ff, cur); put(Fb, target + 1);
+    F.style.left = "0"; F.style.transformOrigin = "right center";
+  }
+  F.style.transition = "none"; F.style.transform = "rotateY(0deg)";
+  void F.offsetWidth;
+  F.style.transition = "transform .75s cubic-bezier(.45,.05,.25,1)";
+  F.style.transform = `rotateY(${forward ? -180 : 180}deg)`;
+  const done = () => {
+    F.removeEventListener("transitionend", done);
+    cur = target; render();
+    F.classList.remove("on"); F.style.transition = "none"; F.style.transform = "rotateY(0deg)";
+    busy = false;
+  };
+  F.addEventListener("transitionend", done);
+}
+const next = () => go(cur + step()), prev = () => go(cur - step());
+
+$("#next").onclick = next; $("#prev").onclick = prev;
+$("#rng").oninput = e => go(+e.target.value - 1);
+addEventListener("keydown", e => {
+  if (typing(e.target)) return;
+  if ($("#toc").classList.contains("on")) { if (e.key === "Escape") closeToc(); return; }
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); next(); }
+  else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); prev(); }
+  else if (e.key === "Home") go(0); else if (e.key === "End") go(N - 1);
+});
+let sx = null, sy = null;
+$("#stage").addEventListener("pointerdown", e => { if (typing(e.target)) { sx = null; return; } sx = e.clientX; sy = e.clientY; });
+$("#stage").addEventListener("pointerup", e => {
+  if (sx == null) return;
+  const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) (dx < 0 ? next : prev)();
+});
+document.addEventListener("click", e => {
+  const pl = e.target.closest(".play");
+  if (pl) {
+    if (!/^https?:$/.test(location.protocol)) { window.open(`https://www.youtube.com/watch?v=${pl.dataset.yt}`, "_blank", "noopener"); return; }
+    const f = document.createElement("iframe"); f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin"); f.src = `https://www.youtube-nocookie.com/embed/${pl.dataset.yt}?autoplay=1&rel=0&playsinline=1`; f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin"); f.title = "영상"; f.allow = "autoplay; encrypted-media; picture-in-picture"; f.allowFullscreen = true; pl.replaceWith(f); return; }
+  const g = e.target.closest("[data-go]"); if (g) { e.preventDefault(); go(+g.dataset.go - 1); }
+});
+
+/* ---------- 목차 ---------- */
+const tocEl = $("#toc");
+function tocLabel(p, prevKind) {
+  if (p.toc) return [p.toc, true];
+  const k = p.kind;
+  if (k === "parts") return ["필요한 부품", false];
+  if (k === "video") return [/코딩/.test(p.eb) ? "코딩 영상 시청" : p.eb.indexOf("영상") === 0 ? p.title : "회로 영상 시청", false];
+  if (k === "step" && prevKind !== "step") return ["회로 만들기 · 순서대로 따라하기", false];
+  if (k === "done") return ["완성된 회로", false];
+  if (k === "code" && prevKind !== "code") return ["코딩 순서", false];
+  if (k === "run") return [p.title, false];
+  if (k === "text" && /^개념 정리하기/.test(p.eb)) return [p.title, false];
+  if (k === "text" && /^(과학적 상황|학습문제|확인하기|평가하기|공유하기|유의사항|실험 순서|실험 방법|실험 영상|실험 장치의 조건|코딩 살펴보기|회로 구성 및 *코딩하기|주요 부품 설명|추가 코딩 설명|사용될 코딩 설명)/.test(p.title)) return [p.title, false];
+  return null;
+}
+function buildToc() {
+  const groups = [];
+  pages.forEach((p, i) => {
+    if (p.kind === "end") return;
+    const lab = i === 0 ? ["표지", true] : tocLabel(p, i ? pages[i - 1].kind : "");
+    let g = groups[groups.length - 1];
+    if (!g || g.chap !== p.chap || p.kind === "divider") { g = { chap: p.chap, from: i, to: i, items: [] }; groups.push(g); }
+    g.to = i;
+    if (lab && p.kind !== "divider") g.items.push({ i, t: lab[0] });
+  });
+  $("#tocList").innerHTML = groups.map(g => {
+    const c = CHAPS[g.chap].c;
+    return `<section class="ch" style="--c:${c}" data-from="${g.from}" data-to="${g.to}"><button type="button" class="chap" aria-expanded="false">${esc(CHAPS[g.chap].n)}<span class="rg">${g.from + 1}–${g.to + 1}쪽</span><i class="chev"></i></button><ol>${g.items.map(it => `<li><button type="button" data-i="${it.i}">${esc(it.t)}<span class="pg">${it.i + 1}쪽</span></button></li>`).join("")}</ol></section>`;
+  }).join("");
+}
+function markToc() {
+  const bs = [...document.querySelectorAll("#tocList button[data-i]")];
+  let best = null;
+  bs.forEach(b => { b.classList.remove("cur"); if (+b.dataset.i <= cur + (two ? 1 : 0)) best = b; });
+  if (best) best.classList.add("cur");
+  document.querySelectorAll("#tocList .ch").forEach(sec => {
+    const on = best && sec.contains(best);
+    sec.classList.toggle("open", !!on);
+    sec.querySelector(".chap").setAttribute("aria-expanded", on ? "true" : "false");
+  });
+  return best;
+}
+function openToc() { tocEl.classList.add("on"); const b = markToc(); if (b) b.scrollIntoView({ block: "center" }); }
+function closeToc() { tocEl.classList.remove("on"); }
+$("#btnToc").onclick = openToc; $("#tocOpen").onclick = openToc; $("#tocX").onclick = closeToc;
+tocEl.addEventListener("click", e => { if (e.target === tocEl) closeToc(); });
+$("#tocList").addEventListener("click", e => {
+  const h = e.target.closest(".chap");
+  if (h) { const sec = h.parentElement, on = !sec.classList.contains("open"); sec.classList.toggle("open", on); h.setAttribute("aria-expanded", on); return; }
+  const b = e.target.closest("button[data-i]"); if (!b) return; closeToc(); go(+b.dataset.i);
+});
+
+/* ---------- 시작 ---------- */
+buildToc();
+const h0 = (location.hash.match(/^#p(\d+)$/) || [])[1];
+if (h0) cur = Math.max(0, Math.min(N - 1, +h0 - 1));
+layout();
+addEventListener("resize", layout);
+addEventListener("hashchange", () => { const m = location.hash.match(/^#p(\d+)$/); if (m && +m[1] - 1 !== cur) go(+m[1] - 1); });
+</script>
+<!--dkui--><style>.fig img,.fig svg{cursor:zoom-in}#lb{position:fixed;inset:0;z-index:99999;background:rgba(10,12,18,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:2vmin}#lb img,#lb svg{width:min(96vw,1200px);max-height:94vh;object-fit:contain;height:auto;background:#fff;border-radius:10px}#lb svg{width:96vw;height:auto}#lb b{position:absolute;top:10px;right:16px;color:#fff;font:700 28px/1 sans-serif}@media(min-width:901px){.tocbtn{display:none}.stage{margin:0 86px}.ctrl{position:fixed;inset:0;display:block;padding:0;min-height:0;pointer-events:none;z-index:15}.ctrl .prog{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(420px,38vw);pointer-events:auto;z-index:21}#prev,#next{position:fixed;top:50%;transform:translateY(-50%);pointer-events:auto;width:60px;height:60px;border-radius:50%;padding:0;font-size:0;display:grid;place-items:center;box-shadow:0 6px 22px rgba(20,16,50,.18)}#prev::before,#next::before{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-9.4px 0 0 -8px;border-top:4px solid currentColor;border-left:4px solid currentColor;border-radius:2px}#prev::before{transform:translateX(4px) rotate(-45deg)}#next::before{transform:translateX(-7.6px) rotate(135deg)}#prev{left:clamp(12px,2vw,30px)}#next{right:clamp(12px,2vw,30px)}#prev:disabled,#next:disabled{opacity:.25}}.hbtns{display:flex;gap:8px;align-items:center}</style><script>try{var _o=render;window._dkKey=cur+"|"+two;render=function(){var k=cur+"|"+two;if(k===window._dkKey&&document.querySelector("#book iframe")){ui();return}window._dkKey=k;return _o.apply(this,arguments)}}catch(e){}(function(){var h=document.querySelector("header"),tb=document.getElementById("btnToc");if(h&&tb){var w=document.createElement("div");w.className="hbtns";tb.parentNode.insertBefore(w,tb);if(document.fullscreenEnabled){var f=document.createElement("button");f.className="pill";f.type="button";f.id="fsb";f.textContent="전체화면";f.onclick=function(){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(function(){})};var mine=false;f.addEventListener("click",function(){mine=true});document.addEventListener("fullscreenchange",function(){var fe=document.fullscreenElement;if(fe&&fe!==document.documentElement)return;if(!fe&&!mine)return;f.textContent=fe?"전체화면 닫기":"전체화면";if(!fe){mine=false}window.dispatchEvent(new Event("resize"))});w.appendChild(f);document.addEventListener("keydown",function(e){if((e.key==="f"||e.key==="F")&&!/INPUT|TEXTAREA/.test((e.target||{}).tagName||"")){f.click()}})}w.appendChild(tb)}})();</script><script>(function(){function close(){var l=document.getElementById("lb");if(l)l.remove()}document.addEventListener("click",function(e){var el=e.target.closest&&e.target.closest(".fig img,.fig svg");if(!el)return;e.stopPropagation();e.preventDefault();close();var l=document.createElement("div");l.id="lb";var c=el.cloneNode(true);c.removeAttribute("style");l.appendChild(c);l.insertAdjacentHTML("beforeend","<b>×</b>");l.onclick=close;document.body.appendChild(l)},true);document.addEventListener("keydown",function(e){if(e.key==="Escape")close()},true)})();</script><!--/dkui--></body>
+</html>
