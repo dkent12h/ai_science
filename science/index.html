@@ -102,7 +102,7 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 
 .dev{position:absolute;z-index:2;right:clamp(16px,7vw,130px);top:clamp(70px,10vh,110px);height:min(76vh,760px);aspect-ratio:470/780;transform:rotate(5deg);filter:drop-shadow(0 30px 40px rgba(40,50,110,.22))}
 .dev svg{width:100%;height:100%;display:block;overflow:visible;touch-action:none;transition:none}
-.dev .knob{cursor:grab}
+.dev canvas{touch-action:none}.dev.on{filter:none}
 @media (max-width:900px){.dev{height:auto;width:min(48vw,280px);top:76px;right:auto;left:50%;transform:translateX(-50%) rotate(5deg)}}
 </style>
 </head>
@@ -218,7 +218,7 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
     <h1><span class="ln"><span>DK Digital</span></span><span class="ln"><span>Science</span></span></h1>
     <div class="hero-foot">
       <span>Light · Color · Physical Computing</span>
-      <span class="hint"><b>손잡이</b>를 돌려 빛의 색을 바꾸고, 판을 끌면 앞·뒷면 모두 360° 돌려 볼 수 있어요 (더블클릭: 제자리)</span>
+      <span class="hint"><b>손잡이</b>를 돌려 빛의 색을 바꾸고, 판을 끌면 입체 장치를 앞·뒷면 모두 돌려 볼 수 있어요 (더블클릭: 제자리)</span>
       <span class="scroll">scroll to explore <b>↓</b></span>
     </div>
   </section>
@@ -271,76 +271,215 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
   <a href="https://github.com/dkent12h" target="_blank" rel="noopener">github.com/dkent12h</a>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(function(es,io){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.15}).observe(el)});
 
 (function(){
-  var svg=document.getElementById('lightdev'); if(!svg) return;
-  var knobs=[].slice.call(svg.querySelectorAll('.knob')); var ang=[40,-20,95]; var auto=true, t0=performance.now();
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function $(id){return svg.querySelector('#'+id)}
+  var host=document.querySelector('.dev'); if(!host||!window.THREE) return;
+  var svgFallback=host.querySelector('svg');
+  var T=THREE, canvas=document.createElement('canvas'), renderer;
+  try{ renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }catch(e){ return; }
+  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
+  canvas.style.cssText='position:absolute;left:-25%;top:-25%;width:150%;height:150%;display:block;touch-action:none;cursor:grab';
+  host.appendChild(canvas); host.classList.add('on'); if(svgFallback) svgFallback.style.display='none';
+
+  var scene=new T.Scene(), cam=new T.PerspectiveCamera(28,1,0.1,100);
+  function fit(){
+    var w=canvas.clientWidth||300,h=canvas.clientHeight||500; renderer.setSize(w,h,false); cam.aspect=w/h;
+    var vis=7.3*1.5*1.22, d=vis/(2*Math.tan(T.MathUtils.degToRad(cam.fov/2))); cam.position.set(0,0,d); cam.updateProjectionMatrix();
+  }
+  new ResizeObserver(fit).observe(canvas); fit();
+
+  scene.add(new T.HemisphereLight(0xffffff,0xaab2c4,0.95));
+  var key=new T.DirectionalLight(0xffffff,0.85); key.position.set(-3,5,9); key.castShadow=true;
+  key.shadow.mapSize.set(2048,2048); var sc=key.shadow.camera; sc.left=-6;sc.right=6;sc.top=6;sc.bottom=-6;sc.near=1;sc.far=30; key.shadow.bias=-0.0006;
+  scene.add(key);
+  var back=new T.DirectionalLight(0xffffff,0.55); back.position.set(2,-3,-9); scene.add(back);
+  var floor=new T.Mesh(new T.PlaneGeometry(20,20),new T.ShadowMaterial({opacity:0.10})); floor.position.z=-1.6; floor.receiveShadow=true; scene.add(floor);
+
+  var G=new T.Group(); scene.add(G);
+  function P(x,y,z){return new T.Vector3((x-232)/100,-(y-385)/100,z)}
+  function mat(c,r,m){return new T.MeshStandardMaterial({color:c,roughness:r==null?0.6:r,metalness:m||0})}
+  function add(o,cast){ o.castShadow=cast!==false; o.receiveShadow=true; G.add(o); return o }
+  function box(x0,y0,x1,y1,z0,z1,c,r,m){
+    var g=new T.BoxGeometry((x1-x0)/100,(y1-y0)/100,z1-z0), o=new T.Mesh(g,mat(c,r,m));
+    o.position.set(((x0+x1)/2-232)/100,-(((y0+y1)/2)-385)/100,(z0+z1)/2); return add(o);
+  }
+  function rr(w,h,r){var s=new T.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
+  function slab(cx,cy,w,h,r,depth,z,c,hole){
+    var s=rr(w/100,h/100,r/100); if(hole){s.holes.push(rr(hole.w/100,hole.h/100,hole.r/100))}
+    var g=new T.ExtrudeGeometry(s,{depth:depth,bevelEnabled:true,bevelThickness:0.012,bevelSize:0.012,bevelSegments:2,curveSegments:10});
+    var o=new T.Mesh(g,mat(c,0.55)); o.position.set((cx-232)/100,-(cy-385)/100,z); return add(o);
+  }
+  function cyl(rt,rb,h,seg,c,x,y,z,axis,r,m){
+    var o=new T.Mesh(new T.CylinderGeometry(rt,rb,h,seg),mat(c,r==null?0.5:r,m||0));
+    if(axis==='z') o.rotation.x=Math.PI/2; else if(axis==='x') o.rotation.z=Math.PI/2;
+    o.position.set(x,y,z); return add(o);
+  }
+  function bez(p0,c1,c2,p3,z0,z1,hump,n){
+    var pts=[]; n=n||22;
+    for(var i=0;i<=n;i++){var t=i/n,u=1-t;
+      var x=u*u*u*p0[0]+3*u*u*t*c1[0]+3*u*t*t*c2[0]+t*t*t*p3[0], y=u*u*u*p0[1]+3*u*u*t*c1[1]+3*u*t*t*c2[1]+t*t*t*p3[1];
+      pts.push(P(x,y,z0+(z1-z0)*t+hump*Math.sin(Math.PI*t)));
+    } return pts;
+  }
+  function tube(pts,col,rad){
+    var g=new T.TubeGeometry(new T.CatmullRomCurve3(pts),pts.length*3,rad||0.03,8,false);
+    var o=new T.Mesh(g,mat(col,0.45)); return add(o);
+  }
+  function plugBox(x0,y0,x1,y1,z0,z1){return box(x0,y0,x1,y1,z0,z1,0x141519,0.5)}
+
+  /* ---------- plate ---------- */
+  slab(232,385,424,730,42,0.16,-0.16,0xf3f4f7);
+  slab(200,104,204,124,14,0.12,0,0xf6f7f9,{w:192,h:112,r:10});
+  slab(366,128,124,172,26,0.08,0,0xf6f7f9);
+  slab(232,638,404,196,28,0.08,0,0xf6f7f9);
+  // back face: plate text
+  (function(){var c=document.createElement('canvas');c.width=1024;c.height=1024;var x=c.getContext('2d');x.clearRect(0,0,1024,1024);x.textAlign='center';x.fillStyle='#8f95a2';x.font='800 92px "Noto Sans KR",sans-serif';x.fillText('빛의 합성 장치',512,500);x.fillStyle='#aab0bc';x.font='700 44px Arial,sans-serif';x.fillText('DK DIGITAL SCIENCE',512,570);
+    var t=new T.CanvasTexture(c);var m=new T.Mesh(new T.PlaneGeometry(3.4,3.4),new T.MeshBasicMaterial({map:t,transparent:true}));m.rotation.y=Math.PI;m.position.z=-0.176;G.add(m);
+    [[-1.6,-3.3],[1.6,-3.3],[-1.6,3.3],[1.6,3.3]].forEach(function(p){var s=new T.Mesh(new T.CylinderGeometry(0.1,0.1,0.01,24),mat(0xdfe2e8,0.8));s.rotation.x=Math.PI/2;s.position.set(p[0],p[1],-0.172);G.add(s)})})();
+
+  /* ---------- battery (plain 9V) ---------- */
+  box(112,52,290,154,0.02,0.58,0x2e323b,0.5);
+  box(112,52,290,70,0.58,0.585,0x3a3f4a,0.5);
+  box(92,66,122,138,0.02,0.32,0x111216,0.6);
+  [[108,82],[108,122]].forEach(function(p){cyl(0.08,0.08,0.06,24,0xc9ccd2,(p[0]-232)/100,-(p[1]-385)/100,0.34,'z',0.3,0.8)});
+  // wires clip -> DC plug
+  tube([P(94,84,0.34),P(52,84,0.07),P(30,92,0.06),P(26,110,0.05),P(26,360,0.05),P(30,392,0.1),P(44,407,0.38)],0xd8261d,0.03);
+  tube([P(94,120,0.34),P(52,120,0.07),P(36,126,0.06),P(31,140,0.05),P(31,380,0.05),P(36,403,0.1),P(44,417,0.38)],0x1a1a1a,0.03);
+  // DC plug
+  cyl(0.115,0.115,0.34,24,0x16171a,(61-232)/100,-(412-385)/100,0.38,'x',0.6);
+  cyl(0.06,0.06,0.12,16,0xc9ccd2,(80-232)/100,-(412-385)/100,0.38,'x',0.3,0.8);
+
+  /* ---------- Arduino + shield ---------- */
+  box(86,246,390,462,0.10,0.18,0x0e7a70,0.55);
+  box(66,276,138,340,0.18,0.70,0xb9bec6,0.35,0.8);
+  box(68,388,124,434,0.18,0.62,0x15161a,0.6);
+  cyl(0.1,0.1,0.06,20,0xe9eaee,(112+30-232)/100,-(260+14-385)/100,0.21,'z',0.5);
+  box(180,244,398,464,0.22,0.34,0x17181c,0.5);
+  box(190,251,372,261,0.34,0.50,0x0c0c0e,0.6); box(190,447,372,457,0.34,0.50,0x0c0c0e,0.6);
+  [[210,282],[270,282],[330,282],[210,396],[330,396]].forEach(function(g){
+    box(g[0]-6,g[1]-5.5,g[0]+39,g[1]+5.5,0.34,0.50,0xf2c200,0.6);
+    box(g[0]-6,g[1]+6.5,g[0]+39,g[1]+17.5,0.34,0.50,0xd8261d,0.6);
+    box(g[0]-6,g[1]+18.5,g[0]+39,g[1]+29.5,0.34,0.50,0x1d1e22,0.6);
+  });
+  box(252,364,298,386,0.34,0.50,0xeeeeF0,0.6);
+  (function(){var c=document.createElement('canvas');c.width=512;c.height=64;var x=c.getContext('2d');x.fillStyle='#f0f0f4';x.font='800 40px Arial,sans-serif';x.textAlign='center';x.fillText('IO Sensor Shield',256,46);
+    var m=new T.Mesh(new T.PlaneGeometry(1.4,0.18),new T.MeshBasicMaterial({map:new T.CanvasTexture(c),transparent:true}));m.position.copy(P(292,336,0.345));G.add(m)})();
+
+  /* ---------- LED module + ball ---------- */
+  box(338,124,394,174,0.08,0.16,0x0f1013,0.5);
+  plugBox(344,171,388,184,0.16,0.30);
+  var ballMat=new T.MeshStandardMaterial({color:0xf3f4f7,emissive:0xffffff,emissiveIntensity:0,roughness:0.38,metalness:0});
+  var ball=new T.Mesh(new T.SphereGeometry(0.56,48,32),ballMat); ball.position.copy(P(366,100,0.64)); ball.castShadow=true; ball.receiveShadow=true; G.add(ball);
+  var ballLight=new T.PointLight(0xffffff,0,3.2,2); ballLight.position.copy(ball.position); ballLight.position.z+=0.35; G.add(ballLight);
+  var LW=[[352,0x2a62d9,232,223],[362,0x2e9b3a,243,230],[372,0xd8261d,270,237]];
+  LW.forEach(function(w){
+    tube(bez([w[0],184],[w[0],w[3]],[w[2],w[3]-30],[w[2],276],0.30,0.70,0.10),w[1],0.028);
+    plugBox(w[2]-4,276,w[2]+4,286,0.50,0.74);
+  });
+  tube(bez([382,184],[382,243],[363,247],[363,300],0.30,0.52,0.08),0x1a1a1a,0.028); plugBox(359,300,368,312,0.50,0.70);
+
+  /* ---------- sensor wires + knob modules ---------- */
+  var K=0.82, KX=[46,136,226], KY=596, CAPS=[0xe0302a,0x25b04a,0x2d6be0], knobs=[];
+  [[86.2,210],[176.2,221],[266.2,232]].forEach(function(s,i){
+    var kcx=s[0],cx=s[1];
+    plugBox(cx-5,390,cx+5,426,0.50,0.72);
+    [[0xf2c200,396],[0xd8261d,408],[0x1a1a1a,420]].forEach(function(c,j){
+      var xs=cx-3.5+3.5*j, xe=kcx+(-8.5+9*j)*K;
+      var a=bez([cx,c[1]],[cx,c[1]+10],[xs,428],[xs,428],0.66,0.62,0.0,4);
+      var b=bez([xs,428],[xs,480],[xe,520],[xe,580],0.62,0.40,0.10,26);
+      tube(a.concat(b.slice(1)),c[0],0.026);
+    });
+    // module
+    var x0=KX[i],y0=KY, w=98*K,h=130*K, kcx2=x0+49*K, kcy=y0+70*K;
+    box(x0,y0,x0+w,y0+h,0.08,0.16,0x131419,0.5);
+    plugBox(kcx2-14,y0-21.3,kcx2+14,y0+11.5,0.16,0.40);
+    [[12,14],[86,14],[12,118],[86,118]].forEach(function(p){cyl(0.05,0.05,0.012,16,0xd9dce0,(x0+p[0]*K-232)/100,-(y0+p[1]*K-385)/100,0.166,'z',0.7)});
+    var grp=new T.Group(); grp.position.copy(P(kcx2,kcy,0.16)); G.add(grp);
+    var body=new T.Mesh(new T.CylinderGeometry(0.32,0.32,0.30,40),mat(0x25272c,0.45)); body.rotation.x=Math.PI/2; body.position.z=0.15; body.castShadow=true; body.receiveShadow=true; grp.add(body);
+    var ring=new T.Mesh(new T.CylinderGeometry(0.235,0.235,0.02,32),mat(0x1a1b1f,0.5)); ring.rotation.x=Math.PI/2; ring.position.z=0.31; grp.add(ring);
+    var cap=new T.Mesh(new T.CylinderGeometry(0.17,0.17,0.13,32),mat(CAPS[i],0.4)); cap.rotation.x=Math.PI/2; cap.position.z=0.375; cap.castShadow=true; grp.add(cap);
+    var ind=new T.Mesh(new T.BoxGeometry(0.03,0.16,0.02),mat(0x101010,0.5)); ind.position.set(0,0.085,0.445); grp.add(ind);
+    body.userData.k=i; cap.userData.k=i; ring.userData.k=i; ind.userData.k=i;
+    knobs.push({g:grp,ang:[40,-20,95][i],meshes:[body,cap,ring,ind]});
+  });
+
+  /* ---------- OLED ---------- */
+  var OS=1.087,OX=322,OY=590;
+  function ox(v){return OX+(v-344)*OS} function oy(v){return OY+(v-578)*OS}
+  box(OX,OY,OX+100,OY+102,0.08,0.16,0x1f5ccd,0.45);
+  box(ox(349),oy(603),ox(431),oy(665),0.16,0.20,0x0a0a0c,0.3);
+  plugBox(ox(362),oy(588),ox(426),oy(600),0.16,0.30);
+  var oc=document.createElement('canvas'); oc.width=512; oc.height=384; var octx=oc.getContext('2d'), otex=new T.CanvasTexture(oc);
+  var oled=new T.Mesh(new T.PlaneGeometry((ox(428)-ox(352))/100,(oy(662)-oy(606))/100),new T.MeshBasicMaterial({map:otex}));
+  oled.position.copy(P((ox(352)+ox(428))/2,(oy(606)+oy(662))/2,0.203)); G.add(oled);
+  [[369,260,0x1a1a1a],[385,270,0xd8261d],[401,290,0x7a4f8f],[417,280,0xf2c200]].forEach(function(w){
+    var rx=OX+(w[0]-344)*OS;
+    tube(bez([rx,602],[rx,530],[w[1],470],[w[1],380],0.32,0.54,0.12),w[2],0.026);
+  });
+  plugBox(252,366,300,384,0.50,0.70);
+
+  /* ---------- state ---------- */
+  var v=[0,0,0], auto=true, t0=performance.now(), lastTxt='';
   function mix(a,b,t){return a+(b-a)*t}
   function apply(){
-    var v=ang.map(function(a){return Math.round((a+135)/270*255)});
-    knobs.forEach(function(k,i){k.setAttribute('transform','rotate('+ang[i]+' '+k.dataset.lx+' '+k.dataset.ly+')')});
-    ['R','G','B'].forEach(function(l,i){var s=('00'+v[i]).slice(-3);$('t'+l).textContent=l+' '+s;$('b'+l).setAttribute('width',(24*v[i]/255).toFixed(1))});
-    var mx=Math.max(v[0],v[1],v[2]), lit=mx/255, k=mx? (255/mx):1; var f=Math.pow(k,.35);
-    var c=v.map(function(x){return Math.min(255,x*f)});
-    var base=[233,235,239], u=Math.min(1,lit*2.2);
-    var col=c.map(function(x,i){return Math.round(mix(base[i],mix(x,255,.22),u))});
-    var dark=col.map(function(x){return Math.round(x*.72)}), mid=col.map(function(x,i){return Math.round(mix(x,255,.16))});
-    function rgb(a){return 'rgb('+a.join(',')+')'}
-    $('bs0').setAttribute('stop-color',rgb(col.map(function(x){return Math.round(mix(x,255,.55))})));
-    $('bs1').setAttribute('stop-color',rgb(col)); $('bs2').setAttribute('stop-color',rgb(dark));
-    var g=c.map(Math.round); $('gs0').setAttribute('stop-color',rgb(g)); $('gs1').setAttribute('stop-color',rgb(g));
-    $('glow').setAttribute('opacity',(.08+.62*lit).toFixed(2));
+    v=knobs.map(function(k){return Math.round((k.ang+135)/270*255)});
+    knobs.forEach(function(k){k.g.rotation.z=-k.ang*Math.PI/180});
+    var mx=Math.max(v[0],v[1],v[2]), lit=mx/255, kk=mx?(255/mx):1, f=Math.pow(kk,.35);
+    var c=v.map(function(x){return Math.min(255,x*f)}), u=Math.min(1,lit*2.2);
+    var col=c.map(function(x,i){return mix([233,235,239][i],mix(x,255,.22),u)});
+    ballMat.color.setRGB(mix(.95,col[0]/255,u)*1,mix(.95,col[1]/255,u),mix(.95,col[2]/255,u));
+    ballMat.emissive.setRGB(c[0]/255,c[1]/255,c[2]/255); ballMat.emissiveIntensity=0.1+0.9*lit;
+    ballLight.color.setRGB(c[0]/255,c[1]/255,c[2]/255); ballLight.intensity=lit*1.6;
+    var txt=v.join(',');
+    if(txt!==lastTxt){lastTxt=txt;
+      octx.fillStyle='#0b1220';octx.fillRect(0,0,512,384);octx.font='800 96px ui-monospace,Menlo,Consolas,monospace';octx.textBaseline='alphabetic';
+      var L=['R','G','B'],C=['#ff7a72','#6dff8f','#7aa6ff'],B=['#ff5a50','#4dff7a','#5b8dff'],D=['#241214','#112016','#11182a'];
+      for(var i=0;i<3;i++){var y=100+i*125; octx.fillStyle=C[i]; octx.fillText(L[i]+' '+('00'+v[i]).slice(-3),26,y); octx.fillStyle=D[i]; octx.fillRect(330,y-62,150,46); octx.fillStyle=B[i]; octx.fillRect(330,y-62,150*v[i]/255,46)}
+      otex.needsUpdate=true;
+    }
   }
-  function tick(now){
-    if(auto&&!reduce){var t=(now-t0)/1000; ang=[Math.sin(t*.55)*125, Math.sin(t*.43+2.1)*125, Math.sin(t*.37+4.2)*125]; apply();}
-    requestAnimationFrame(tick);
-  }
-  var drag=-1;
-  function pt(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse());return {x:q.x,y:q.y}}
-  knobs.forEach(function(k,i){
-    var last=0;
-    function raw(e){var r=k.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
-    k.addEventListener('pointerdown',function(e){drag=i;auto=false;last=raw(e);k.setPointerCapture(e.pointerId);e.preventDefault()});
-    k.addEventListener('pointermove',function(e){ if(drag!==i) return; var a=raw(e),d=a-last; if(d>180)d-=360; if(d<-180)d+=360; last=a; ang[i]=Math.max(-135,Math.min(135,ang[i]+d)); apply();});
-    k.addEventListener('pointerup',function(){drag=-1});
-    k.addEventListener('pointercancel',function(){drag=-1});
+
+  /* ---------- interaction ---------- */
+  var home=new T.Quaternion().setFromEuler(new T.Euler(-0.5,0.38,0)), target=null;
+  G.quaternion.copy(home);
+  var ray=new T.Raycaster(), mouse=new T.Vector2(), allK=[]; knobs.forEach(function(k){allK=allK.concat(k.meshes)});
+  function pick(e){var r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mouse,cam);var h=ray.intersectObjects(allK,false);return h.length?h[0].object.userData.k:-1}
+  function scr(k){var p=knobs[k].g.getWorldPosition(new T.Vector3()).project(cam),r=canvas.getBoundingClientRect();return {x:r.left+(p.x+1)/2*r.width,y:r.top+(1-p.y)/2*r.height}}
+  var mode=null,lx=0,ly=0,kidx=-1,lastA=0,Z=new T.Vector3(0,0,1);
+  canvas.addEventListener('pointerdown',function(e){
+    target=null; var k=pick(e); canvas.setPointerCapture(e.pointerId); e.preventDefault();
+    if(k>=0){mode='knob';kidx=k;auto=false;var c=scr(k);lastA=Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI;
+      // direction: front-facing knob => normal toward camera
+      }
+    else{mode='orbit';lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'}
   });
-  /* full 3D body: front SVG + thickness slices + back face; trackball drag, dblclick resets */
-  var host=svg.parentNode, body=document.createElement('div'), slices=[], backEl=document.createElement('div');
-  host.style.perspective='1500px';
-  body.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;transform-style:preserve-3d;will-change:transform';
-  host.insertBefore(body,svg); body.appendChild(svg);
-  svg.style.position='absolute'; svg.style.left='0'; svg.style.top='0'; svg.style.backfaceVisibility='hidden'; svg.style.webkitBackfaceVisibility='hidden'; svg.style.touchAction='none';
-  var N=9;
-  for(var q=1;q<N;q++){var d=document.createElement('div');d.style.cssText='position:absolute;background:linear-gradient(135deg,#eceef2,#cfd3db);';body.appendChild(d);slices.push(d)}
-  backEl.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden';
-  backEl.innerHTML='<svg viewBox="0 0 470 780" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible"><defs><linearGradient id="bkg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f5f8"/><stop offset="1" stop-color="#dfe2e8"/></linearGradient></defs><rect x="20" y="20" width="424" height="730" rx="42" fill="url(#bkg)" stroke="#c9cdd5" stroke-width="2"/><rect x="38" y="38" width="388" height="694" rx="30" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>'+
-   [[70,70],[394,70],[70,700],[394,700]].map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="14" fill="#eceef2" stroke="#c3c7cf" stroke-width="2"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#cfd3db"/>'}).join('')+
-   '<rect x="120" y="150" width="224" height="120" rx="16" fill="none" stroke="#cfd3db" stroke-width="2" stroke-dasharray="6 6"/><rect x="120" y="500" width="224" height="120" rx="16" fill="none" stroke="#cfd3db" stroke-width="2" stroke-dasharray="6 6"/>'+
-   '<g transform="translate(232 390) scale(-1 1)" font-family="Noto Sans KR,Arial,sans-serif" text-anchor="middle"><text y="0" font-size="30" font-weight="800" fill="#8f95a2" transform="scale(-1 1)">빛의 합성 장치</text><text y="34" font-size="15" font-weight="700" fill="#aab0bc" letter-spacing="3" transform="scale(-1 1)">DK DIGITAL SCIENCE</text></g></svg>';
-  body.appendChild(backEl);
-  var T=16;
-  function layout(){
-    var u=host.clientWidth/470; if(!u) return;
-    slices.forEach(function(d,i){var z=-(i+1)*T/N*u;d.style.left=20*u+'px';d.style.top=20*u+'px';d.style.width=424*u+'px';d.style.height=730*u+'px';d.style.borderRadius=42*u+'px';d.style.transform='translateZ('+z.toFixed(2)+'px)'});
-    backEl.style.transform='translateZ('+(-T*u).toFixed(2)+'px) rotateY(180deg)';
+  canvas.addEventListener('pointermove',function(e){
+    if(mode==='orbit'){var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;
+      var qy=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),dx*0.009), qx=new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),dy*0.009);
+      G.quaternion.premultiply(qx).premultiply(qy).normalize();}
+    else if(mode==='knob'){var c=scr(kidx),a=Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI,d=a-lastA;if(d>180)d-=360;if(d<-180)d+=360;lastA=a;
+      var n=Z.clone().applyQuaternion(G.quaternion); var s=n.z>=0?1:-1; // viewed from back => reversed
+      knobs[kidx].ang=Math.max(-135,Math.min(135,knobs[kidx].ang+d*s));}
+    else{canvas.style.cursor=pick(e)>=0?'pointer':'grab'}
+  });
+  function up(){mode=null;canvas.style.cursor='grab'}
+  canvas.addEventListener('pointerup',up); canvas.addEventListener('pointercancel',up);
+  canvas.addEventListener('dblclick',function(){target=home.clone()});
+
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function loop(now){
+    if(auto&&!reduce){var t=(now-t0)/1000; knobs[0].ang=Math.sin(t*.55)*125; knobs[1].ang=Math.sin(t*.43+2.1)*125; knobs[2].ang=Math.sin(t*.37+4.2)*125}
+    if(target){G.quaternion.slerp(target,0.12); if(G.quaternion.angleTo(target)<0.002){G.quaternion.copy(target);target=null}}
+    apply(); renderer.render(scene,cam); requestAnimationFrame(loop);
   }
-  layout(); addEventListener('resize',layout);
-  var M=new DOMMatrix(), drag3=false,lx=0,ly=0,anim=null;
-  function put(){body.style.transform=M.toString()}
-  host.style.cursor='grab';
-  host.addEventListener('pointerdown',function(e){ if(e.target.closest&&e.target.closest('.knob')) return; drag3=true;lx=e.clientX;ly=e.clientY;body.style.transition='none';host.style.cursor='grabbing';host.setPointerCapture(e.pointerId);e.preventDefault()});
-  host.addEventListener('pointermove',function(e){ if(!drag3) return; var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY; M=new DOMMatrix().rotate(-dy*0.6,dx*0.6,0).multiply(M); put()});
-  function end3(){drag3=false;host.style.cursor='grab'}
-  host.addEventListener('pointerup',end3); host.addEventListener('pointercancel',end3);
-  host.addEventListener('dblclick',function(){M=new DOMMatrix();body.style.transition='transform .6s cubic-bezier(.2,.8,.2,1)';put()});
-  window.__lightdev={get matrix(){return M.toString()}};
-  apply(); requestAnimationFrame(tick);
+  requestAnimationFrame(loop);
+  window.__ld3d={G:G,knobs:knobs,renderer:renderer};
 })();
+
 
 </script>
 </body>
