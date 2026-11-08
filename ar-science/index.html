@@ -6,45 +6,49 @@
 <title>초등과학 AR 3D 모형</title>
 <script src="lib/model-viewer.min.js"></script>
 <style>
-  :root{
-    --bg:#0f172a; --panel:#ffffff; --ink:#1e293b; --sub:#64748b;
-    --main:#2563eb; --accent:#f97316; --line:#e2e8f0;
-  }
+  :root{--bg:#0b1220;--panel:#fff;--ink:#1e293b;--sub:#64748b;--main:#2563eb;--accent:#f97316;--line:#e2e8f0}
   *{box-sizing:border-box}
   html,body{height:100%;margin:0}
   body{font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column}
-  header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
-  header h1{font-size:20px;margin:0;font-weight:800}
+  header{display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+  header h1{font-size:19px;margin:0;font-weight:800;white-space:nowrap}
   #tabs{display:flex;gap:8px;margin-left:auto;overflow-x:auto}
-  .tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;font-size:17px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;font:700 17px inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
   .tab[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
   main{flex:1;display:flex;min-height:0}
-  .stage{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 35%,#334155,#0f172a 70%)}
+  .stage{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 38%,#2c3b57,#0b1220 72%)}
   model-viewer{width:100%;flex:1;min-height:0;--poster-color:transparent;--progress-bar-color:var(--accent)}
-  .hs{display:block;border:0;border-radius:999px;padding:6px 14px;background:rgba(255,255,255,.95);color:var(--ink);font:700 16px/1.2 inherit;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;transform:translateY(-6px);transition:opacity .2s}
+  .hs{display:block;transform:translate(-50%,-115%);border:0;border-radius:999px;padding:4px 11px;background:rgba(255,255,255,.95);color:var(--ink);font:700 15px/1.2 inherit;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;white-space:nowrap;transition:opacity .2s,background .2s}
   .hs.hide{opacity:0;pointer-events:none}
-  .hs[data-visible="false"]{opacity:.25}
+  .hs[data-visible="false"]{opacity:.0;pointer-events:none}
   .hs.on{background:var(--accent);color:#fff}
-  .hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(15,23,42,.75);color:#fff;padding:6px 14px;border-radius:999px;font-size:15px;pointer-events:none}
-  .bar{position:relative;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:12px;background:#0f172a}
-  .btn{border:0;border-radius:14px;padding:12px 20px;font-size:18px;font-weight:800;font-family:inherit;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .legend{position:absolute;left:12px;top:12px;display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:#fff;background:rgba(11,18,32,.65);padding:8px 12px;border-radius:12px;pointer-events:none}
+  .legend i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;vertical-align:-2px}
+  .bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px;background:#0b1220}
+  .btn{border:0;border-radius:14px;padding:11px 16px;font-size:17px;font-weight:800;font-family:inherit;cursor:pointer;background:#fff;color:var(--ink)}
   .btn[aria-pressed="true"]{background:var(--main);color:#fff}
-  .btn.ar{background:var(--accent);color:#fff;font-size:20px;padding:12px 26px}
-  .btn.ar[disabled]{background:#94a3b8;cursor:not-allowed}
-  aside{width:340px;background:var(--panel);padding:18px;overflow:auto;border-left:1px solid var(--line)}
-  aside h2{margin:0 0 6px;font-size:26px}
-  aside p{font-size:18px;line-height:1.6;margin:8px 0}
-  aside ul{padding-left:20px;margin:10px 0}
-  aside li{font-size:18px;line-height:1.6;margin:6px 0}
-  #info{margin-top:14px;padding:14px;border-radius:14px;background:#fff7ed;border:2px solid var(--accent);display:none}
+  .btn.ar{background:var(--accent);color:#fff;font-size:19px;padding:11px 22px;position:absolute;right:12px;top:12px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .sep{width:2px;background:#334155;margin:0 4px}
+  aside{width:350px;background:var(--panel);padding:16px 18px;overflow:auto;border-left:1px solid var(--line)}
+  aside h2{margin:0 0 4px;font-size:25px}
+  aside p{font-size:17px;line-height:1.55;margin:6px 0}
+  .facts{margin:8px 0;padding:0;list-style:none}
+  .facts li{font-size:16px;line-height:1.5;margin:5px 0;padding-left:20px;position:relative}
+  .facts li:before{content:"✔";position:absolute;left:0;color:var(--main);font-weight:800}
+  h3{font-size:16px;color:var(--sub);margin:14px 0 6px}
+  #parts{display:flex;flex-wrap:wrap;gap:6px}
+  .pt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:6px 11px;font:700 16px inherit;font-family:inherit;cursor:pointer}
+  .pt.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  #info{margin-top:12px;padding:12px 14px;border-radius:14px;background:#fff7ed;border:2px solid var(--accent);display:none}
   #info b{font-size:21px;color:var(--accent)}
-  #arnote{font-size:15px;color:var(--sub);margin-top:12px}
+  #info p{margin:4px 0 0}
+  .note{font-size:14px;color:var(--sub);margin-top:12px;line-height:1.5}
   @media (max-width:760px){
     main{flex-direction:column}
-    aside{width:auto;height:38%;border-left:0;border-top:1px solid var(--line)}
-    header h1{font-size:17px}
-    .btn{padding:10px 14px;font-size:16px}
-    .btn.ar{font-size:18px}
+    aside{width:auto;height:40%;border-left:0;border-top:1px solid var(--line)}
+    header h1{font-size:16px}.tab{font-size:15px;padding:5px 12px}
+    .btn{padding:9px 12px;font-size:15px}.btn.ar{font-size:16px;padding:9px 14px}
+    .legend{font-size:13px;padding:6px 9px}
   }
 </style>
 </head>
@@ -55,89 +59,109 @@
 </header>
 <main>
   <section class="stage">
-    <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="20deg"
-      interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.75" environment-image="neutral"
-      ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor"
-      camera-orbit="0deg 80deg auto" min-camera-orbit="auto auto 0.15m" max-camera-orbit="auto auto 1.2m" alt="3D 모형">
-      <button slot="ar-button" id="arBtn" class="btn ar" style="position:absolute;right:12px;top:12px">📱 AR로 보기</button>
+    <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
+      interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.9" environment-image="neutral"
+      camera-orbit="0deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.2m"
+      ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 모형">
+      <button slot="ar-button" id="arBtn" class="btn ar">📱 AR로 보기</button>
     </model-viewer>
-    <div class="hint" id="hint">손가락(마우스)으로 돌려 보고, 두 손가락으로 확대해요</div>
+    <div class="legend" id="legend"><span><i style="background:#cd3430"></i>산소 많은 피</span><span><i style="background:#3e6ccd"></i>산소 적은 피</span></div>
     <div class="bar">
-      <button class="btn" id="rotBtn" aria-pressed="true">🔄 자동 회전</button>
+      <button class="btn" id="beatBtn" aria-pressed="true">💓 박동</button>
+      <button class="btn" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
+      <button class="btn" id="runBtn" aria-pressed="false">🏃 운동 후</button>
+      <span class="sep" id="sep"></span>
+      <button class="btn" id="rotBtn" aria-pressed="true">🔄 회전</button>
       <button class="btn" id="lblBtn" aria-pressed="true">🏷️ 이름표</button>
-      <button class="btn" id="resetBtn">🎯 처음 시점</button>
+      <button class="btn" id="resetBtn">🎯 처음</button>
     </div>
   </section>
   <aside>
     <h2 id="mName"></h2>
     <p id="mIntro"></p>
-    <ul id="mFacts"></ul>
+    <ul class="facts" id="mFacts"></ul>
+    <h3>👆 부위를 눌러 보세요</h3>
+    <div id="parts"></div>
     <div id="info"><b id="iName"></b><p id="iDesc"></p></div>
-    <p id="arnote"></p>
+    <p class="note">※ 그림에서는 내 몸의 왼쪽·오른쪽이 반대로 보여요. (마주 보고 있기 때문이에요)<br><span id="arnote"></span></p>
   </aside>
 </main>
 
 <script>
 (async function(){
-  const mv = document.getElementById('mv');
-  const tabs = document.getElementById('tabs');
+  const mv = document.getElementById('mv'), tabs = document.getElementById('tabs');
   const $ = id => document.getElementById(id);
-  let models = [], current = null, labelsOn = true;
+  let models = [], current = null, labelsOn = true, beating = true, speed = 1;
 
   try { models = await (await fetch('models.json')).json(); }
   catch(e){ $('mIntro').textContent = 'models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
 
   models.forEach((m,i)=>{
     const b = document.createElement('button');
-    b.className='tab'; b.role='tab'; b.textContent = (m.emoji||'')+' '+m.name;
-    b.onclick = ()=>load(i);
+    b.className='tab'; b.role='tab'; b.textContent=(m.emoji||'')+' '+m.name; b.onclick=()=>load(i);
     tabs.appendChild(b);
   });
-  if (models.length < 2) tabs.style.display='none';
+  if (models.length<2) tabs.style.display='none';
+
+  function setBeat(on){
+    beating = on; $('beatBtn').setAttribute('aria-pressed', on);
+    if (on) mv.play({repetitions: Infinity}); else mv.pause();
+  }
+  function setSpeed(s){
+    speed = s; mv.timeScale = s;
+    $('restBtn').setAttribute('aria-pressed', s===1); $('runBtn').setAttribute('aria-pressed', s!==1);
+  }
 
   function load(i){
     current = models[i];
     [...tabs.children].forEach((t,j)=>t.setAttribute('aria-selected', j===i));
     mv.querySelectorAll('.hs').forEach(h=>h.remove());
+    mv.autoplay = !!current.animated;
+    mv.animationName = current.animated ? 'beat' : undefined;
     mv.src = current.file;
-    if (current.poster) mv.poster = current.poster;
-    mv.alt = current.name + ' 3D 모형';
-    $('mName').textContent = (current.emoji||'')+' '+current.name;
-    $('mIntro').textContent = current.intro||'';
-    $('mFacts').innerHTML = (current.facts||[]).map(f=>'<li>'+f+'</li>').join('');
+    mv.alt = current.name+' 3D 모형';
+    mv.resetTurntableRotation(0); mv.cameraOrbit='0.02deg 82deg auto'; mv.cameraTarget='auto auto auto';
+    ['beatBtn','restBtn','runBtn','sep'].forEach(id=>$(id).style.display = current.animated?'':'none');
+    if (current.animated){ beating=true; $('beatBtn').setAttribute('aria-pressed',true); setSpeed(1); }
+    $('mName').textContent=(current.emoji||'')+' '+current.name;
+    $('mIntro').textContent=current.intro||'';
+    $('mFacts').innerHTML=(current.facts||[]).map(f=>'<li>'+f+'</li>').join('');
     $('info').style.display='none';
+    const pl=$('parts'); pl.innerHTML='';
     (current.hotspots||[]).forEach((h,k)=>{
-      const b = document.createElement('button');
+      const b=document.createElement('button');
       b.className='hs'+(labelsOn?'':' hide'); b.slot='hotspot-'+k;
       b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 1 0');
       b.setAttribute('data-visibility-attribute','data-visible');
-      b.textContent=h.name;
-      b.onclick=()=>pick(h,b);
+      b.textContent=h.name; b.onclick=()=>pick(k);
       mv.appendChild(b);
+      const p=document.createElement('button'); p.className='pt'; p.textContent=h.name; p.onclick=()=>pick(k);
+      pl.appendChild(p);
     });
   }
-  function pick(h,btn){
-    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on'));
-    btn.classList.add('on');
-    $('iName').textContent=h.name; $('iDesc').textContent=h.desc||'';
-    $('info').style.display='block';
-    stopRotate();
+  function pick(k){
+    const h=current.hotspots[k];
+    mv.querySelectorAll('.hs').forEach((x,j)=>x.classList.toggle('on',j===k));
+    [...$('parts').children].forEach((x,j)=>x.classList.toggle('on',j===k));
+    $('iName').textContent=h.name; $('iDesc').textContent=h.desc||''; $('info').style.display='block';
+    mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed','false');
+    const [x,y,z]=h.pos.split(' ').map(Number);
+    mv.resetTurntableRotation(0); mv.cameraTarget=`${x}m ${y}m ${z}m`; mv.cameraOrbit='0.01deg 82deg 0.5m';
   }
-  function stopRotate(){ mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed','false'); }
 
+  $('beatBtn').onclick=()=>setBeat(!beating);
+  $('restBtn').onclick=()=>setSpeed(1);
+  $('runBtn').onclick=()=>setSpeed(2);
   $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
-  $('lblBtn').onclick=()=>{
-    labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn);
-    mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn));
-  };
-  $('resetBtn').onclick=()=>{ mv.cameraOrbit='0deg 80deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal(); };
-  mv.addEventListener('camera-change',e=>{ if(e.detail.source==='user-interaction'){ $('hint').style.display='none'; } });
+  $('lblBtn').onclick=()=>{ labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn); mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn)); };
+  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit='0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('parts').children].forEach(x=>x.classList.remove('on')); $('info').style.display='none'; };
   mv.addEventListener('load',()=>{
-    const ok = mv.canActivateAR;
-    $('arBtn').style.display = ok ? '' : 'none';
-    $('arnote').textContent = ok
-      ? '「AR로 보기」를 누르고 카메라를 바닥에 비추면, 모형이 우리 교실에 나타나요. 걸어 다니며 가까이 가 봐요!'
-      : '지금 기기에서는 AR을 쓸 수 없어요. 스마트폰·태블릿(Chrome 또는 Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
+    const ok=mv.canActivateAR;
+    $('arBtn').style.display=ok?'':'none';
+    $('arnote').textContent= ok ? '「AR로 보기」를 누르고 카메라를 바닥에 비추면, 커다란 심장이 우리 교실에 나타나요.'
+      : '스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
+    if (current.animated){ mv.timeScale=speed; if(!beating) mv.pause(); }
   });
   load(0);
 })();
