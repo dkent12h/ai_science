@@ -177,7 +177,7 @@ body.nofs{overflow:hidden}
     </div>
     <div class="stage">
       <div class="vw">
-        <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
+        <model-viewer id="mv" camera-controls touch-action="pan-y" rotation-per-second="14deg"
           interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.95" environment-image="neutral"
           camera-orbit="0.01deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.6m"
           ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 심장 모형" animation-name="beat" autoplay>
@@ -224,7 +224,7 @@ body.nofs{overflow:hidden}
   <p class="lead">모형을 관찰한 내용으로 답을 써 보세요. 쓴 내용은 이 기기에 저장되고, 아래 버튼으로 PDF 기록으로 만들 수 있어요.</p>
   <div class="qs">
     <div class="q"><span class="qn">미션 1 · 외형 관찰</span><p>① ‘겉모습’에서 심장에 연결된 큰 혈관 4개(대동맥, 대정맥, 폐동맥, 폐정맥) 중 산소가 많은 혈액이 흐르는 혈관을 모두 쓰고, 모형의 어떤 색을 보고 알았는지 함께 써 보세요.</p><textarea id="a1" placeholder="예) ○○, ○○ — 모형에서 ○색으로 표시되어 있어서"></textarea></div>
-    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② ‘혈액 흐름’에서 ‘흐름 재생’을 눌러 보고, 혈액이 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 혈액이 폐에서 하는 일도 한 문장으로 써 보세요.</p><textarea id="a2" placeholder="예) 오른쪽 위 방 → … / 폐에서는 ○○를 받아요"></textarea></div>
+    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② ‘혈액 흐름’에서 ‘흐름 재생’을 눌러 보고, 혈액이 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 혈액이 폐에서 하는 일도 한 문장으로 써 보세요.</p><textarea id="a2" placeholder="예) 오른쪽 위 방(우심방) → … / 폐에서는 ○○를 받아요"></textarea></div>
     <div class="q"><span class="qn">미션 3 · 박동 비교</span><p>③ ‘쉬는 중’과 ‘운동 후’를 번갈아 눌러 심장 박동 빠르기를 비교하고, 운동할 때 심장이 더 빨리 뛰어야 하는 까닭을 ‘산소’라는 낱말을 넣어 써 보세요.</p><textarea id="a3" placeholder="예) 운동하면 근육이 ○○가 더 필요해서"></textarea></div>
   </div>
   <div class="mrow">
@@ -273,15 +273,15 @@ body.nofs{overflow:hidden}
   const add=(s,d)=>{ const p=num(s); return (p[0]+d[0]).toFixed(4)+'m '+(p[1]+d[1]).toFixed(4)+'m '+(p[2]+d[2]).toFixed(4)+'m'; };
   const Pt=D.pts, pts={
     bodyIn:add(Pt.svc,[-0.03,0.08,0]), svc:Pt.svc, RA:Pt.RA, tri:Pt.tri, RV:Pt.RV, pv:Pt.pv, lungOut:add(Pt.pv,[0.10,0.085,0]),
-    lungIn:add(Pt.LA,[0.10,0.05,0]), LA:Pt.LA, mit:Pt.mit, LV:Pt.LV, aov:Pt.aov, aorta:Pt.aorta, bodyOut:add(Pt.aorta,[0.035,0.08,0])
+    lungIn:add(Pt.LA,[0.10,0.05,0]), LAm:add(Pt.LA,[0.0,0.05,0]), RVm:add(Pt.RV,[0.005,0.01,0]), LVm:add(Pt.LV,[-0.005,0.0,0]), LVl:add(Pt.LV,[0.012,-0.03,0]), LA:Pt.LA, mit:Pt.mit, LV:Pt.LV, aov:Pt.aov, aorta:Pt.aorta, bodyOut:add(Pt.aorta,[0.035,0.08,0])
   };
   const flow=[
-    {t:'온몸 → 오른쪽 위 방', d:'온몸을 돌고 온 산소가 적은 혈액이 대정맥을 따라 심장의 오른쪽 위 방으로 들어와요.', path:['bodyIn','svc','RA'], red:false, lab:['온몸에서','bodyIn']},
-    {t:'오른쪽 위 방 → 오른쪽 아래 방', d:'혈액이 판막(문)을 지나 아래쪽 방으로 내려가요.', path:['RA','tri','RV'], red:false},
-    {t:'오른쪽 아래 방 → 폐', d:'심장이 줄어들면서 혈액을 폐동맥으로 밀어내요. 혈액은 폐로 가서 산소를 받고 이산화 탄소를 내보내요.', path:['RV','pv','lungOut'], red:false, lab:['폐로','lungOut']},
-    {t:'폐 → 왼쪽 위 방', d:'산소를 받은 혈액이 폐정맥을 따라 심장의 왼쪽 위 방으로 돌아와요. 여기서부터는 산소가 많은 혈액이에요.', path:['lungIn','LA'], red:true, lab:['폐에서','lungIn']},
-    {t:'왼쪽 위 방 → 왼쪽 아래 방', d:'혈액이 판막(문)을 지나 왼쪽 아래 방으로 내려가요.', path:['LA','mit','LV'], red:true},
-    {t:'왼쪽 아래 방 → 온몸', d:'가장 두꺼운 왼쪽 아래 방이 힘차게 줄어들어 혈액을 대동맥으로 내보내요. 혈액은 온몸으로 가요.', path:['LV','aov','aorta','bodyOut'], red:true, lab:['온몸으로','bodyOut']}
+    {t:'온몸 → 오른쪽 위 방(우심방)', d:'온몸을 돌고 온 산소가 적은 혈액이 대정맥을 따라 심장의 오른쪽 위 방으로 들어와요.', path:['bodyIn','svc','RA'], red:false, lab:['온몸에서','bodyIn']},
+    {t:'오른쪽 위 방(우심방) → 오른쪽 아래 방(우심실)', d:'혈액이 판막(문)을 지나 아래쪽 방으로 내려가요.', path:['RA','tri','RVm'], red:false},
+    {t:'오른쪽 아래 방(우심실) → 폐', d:'심장이 줄어들면서 혈액을 폐동맥으로 밀어내요. 혈액은 폐로 가서 산소를 받고 이산화 탄소를 내보내요.', path:['RV','pv','lungOut'], red:false, lab:['폐로','lungOut']},
+    {t:'폐 → 왼쪽 위 방(좌심방)', d:'산소를 받은 혈액이 폐정맥을 따라 심장의 왼쪽 위 방으로 돌아와요. 여기서부터는 산소가 많은 혈액이에요.', path:['lungIn','LA'], red:true, lab:['폐에서','lungIn']},
+    {t:'왼쪽 위 방(좌심방) → 왼쪽 아래 방(좌심실)', d:'혈액이 판막(문)을 지나 왼쪽 아래 방으로 내려가요.', path:['LAm','mit','LVm'], red:true},
+    {t:'왼쪽 아래 방(좌심실) → 온몸', d:'가장 두꺼운 왼쪽 아래 방이 힘차게 줄어들어 혈액을 대동맥으로 내보내요. 혈액은 온몸으로 가요.', path:['LVl','LVm','aov','aorta','bodyOut'], red:true, lab:['온몸으로','bodyOut']}
   ];
   const tabs=[
     {key:'outer', file:'models/heart.glb', badge:'3D · 사실적 외형', step:'STEP 01 · OBSERVE', h:'겉모습 살펴보기',
@@ -316,16 +316,12 @@ body.nofs{overflow:hidden}
   let segs=[], labs=[];
   function buildSvg(){
     svg.innerHTML=''; segs=[]; labs=[];
-    const defs=el('defs',{});
-    [['ab',B],['ar',R]].forEach(([id,c])=>{ const m=el('marker',{id,viewBox:'0 0 10 10',refX:'6',refY:'5',markerUnits:'userSpaceOnUse',markerWidth:'38',markerHeight:'38',orient:'auto'},defs); el('path',{d:'M0,0 L10,5 L0,10 z',fill:c,stroke:'#fff','stroke-width':'1.2'},m); });
     flow.forEach((s,i)=>{
-      const base=el('path',{class:'seg',stroke:s.red?R:B,'stroke-width':'12',opacity:'.55'});
-      const cas=el('path',{class:'seg',stroke:'#fff','stroke-width':'17',opacity:'0'});
-      const act=el('path',{class:'seg',stroke:s.red?R:B,'stroke-width':'10',opacity:'0','marker-end':'url(#'+(s.red?'ar':'ab')+')'});
-      const dots=el('path',{class:'seg dots',opacity:'0'});
-      const beads=[0,1,2,3].map(()=>el('circle',{r:'0',fill:s.red?R:B,stroke:'#fff','stroke-width':'3',opacity:'0'}));
-      segs.push({base,cas,act,dots,s,beads});
-      if(s.lab){ const t=el('text',{class:'flt'}); t.textContent=s.lab[0]; labs.push({t,pt:s.lab[1]}); }
+      const path=el('path',{fill:'none',stroke:'none'});
+      const col=s.red?R:B, beads=[];
+      for(let k=0;k<8;k++) beads.push(el('circle',{r:'0',fill:col,stroke:'#fff','stroke-width':'2.5',opacity:'0'}));
+      let t=null; if(s.lab){ t=el('text',{class:'flt',opacity:'0'}); t.textContent=s.lab[0]; labs.push({t,pt:s.lab[1],i}); }
+      segs.push({path,beads,s});
     });
   }
   function curve(P){
@@ -341,19 +337,20 @@ body.nofs{overflow:hidden}
   function wpPos(name){ const e=mv.querySelector('[slot="hotspot-wp-'+name+'"]'); if(!e) return null; const r=e.getBoundingClientRect(), v=vw.getBoundingClientRect(); return [r.left-v.left+r.width/2, r.top-v.top+r.height/2]; }
   function drawFlow(){
     if(cur!==2||!segs.length) return;
+    const tt=performance.now()/2400;
     segs.forEach((g,i)=>{
+      const on=flowIdx===i;
+      if(!on){ g.beads.forEach(c=>c.setAttribute('opacity','0')); return; }
       const P=g.s.path.map(wpPos); if(P.some(p=>!p)) return;
-      const d=curve(P); [g.base,g.cas,g.act,g.dots].forEach(p=>p.setAttribute('d',d));
-      const on=flowIdx===i, anyOn=flowIdx>=0;
-      g.base.setAttribute('opacity', on?0:(anyOn?.28:.7));
-      g.cas.setAttribute('opacity', on?.95:0);
-      const L=g.act.getTotalLength?g.act.getTotalLength():0, tt=performance.now()/2600;
-      g.beads.forEach((c,bi)=>{ if(!on||!L){ c.setAttribute('opacity','0'); return; }
-        const f=((tt-bi*0.07)%1+1)%1, q=g.act.getPointAtLength(f*L); c.setAttribute('cx',q.x); c.setAttribute('cy',q.y);
-        c.setAttribute('r',String(14-bi*3)); c.setAttribute('opacity',String(1-bi*0.22)); });
-       g.act.setAttribute('opacity', on?1:0); g.dots.setAttribute('opacity', on?1:0);
+      g.path.setAttribute('d',curve(P)); const L=g.path.getTotalLength(); if(!L) return;
+      const sp=Math.min(.07,22/L);
+      g.beads.forEach((c,k)=>{
+        const f=(((tt-k*sp)%1)+1)%1, q=g.path.getPointAtLength(f*L);
+        c.setAttribute('cx',q.x); c.setAttribute('cy',q.y); c.setAttribute('r',String(14-k*0.9));
+        c.setAttribute('opacity',String(Math.max(.25,1-k*.09)));
+      });
     });
-    labs.forEach(l=>{ const p=wpPos(l.pt); if(p){ l.t.setAttribute('x',p[0]); l.t.setAttribute('y',p[1]-18); } });
+    labs.forEach(l=>{ const p=wpPos(l.pt); if(p){ l.t.setAttribute('x',p[0]); l.t.setAttribute('y',p[1]-18); l.t.setAttribute('opacity',flowIdx===l.i?1:0); } });
   }
   function showStep(k){
     flowIdx=k; const s=flow[k];
@@ -376,7 +373,7 @@ body.nofs{overflow:hidden}
     $('flowbar').style.display=i===2?'contents':'none'; svg.style.display=i===2?'block':'none';
     mv.querySelectorAll('.hs,.wp').forEach(h=>h.remove());
     const want=T.file.split('/')[1]; if(!(mv.getAttribute('src')||'').endsWith(want)) mv.src=T.file;
-    mv.classList.toggle('isflow',i===2); mv.autoRotate=(i===0); $('rotBtn').setAttribute('aria-pressed',i===0); mv.resetTurntableRotation(0); mv.cameraOrbit=i===2?'0.02deg 82deg 118%':'0.02deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.jumpCameraToGoal();
+    mv.classList.toggle('isflow',i===2); mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed',false); mv.resetTurntableRotation(0); mv.cameraOrbit=i===2?'0.02deg 82deg 118%':(i===0?'-26deg 82deg auto':'0.02deg 82deg auto'); mv.cameraTarget='auto auto auto'; mv.jumpCameraToGoal();
     const list=$('list'); list.innerHTML='';
     const data=hsFor(i);
     data.forEach((h,k)=>{
@@ -401,7 +398,7 @@ body.nofs{overflow:hidden}
   $('restBtn').onclick=()=>setSpeed(1,'rest'); $('runBtn').onclick=()=>setSpeed(2,'run'); $('slowBtn').onclick=()=>setSpeed(0.5,'slow');
   $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
   $('lblBtn').onclick=()=>{ labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn); mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn)); };
-  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit=cur===2?'0.01deg 82deg 118%':'0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
+  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit=cur===2?'0.01deg 82deg 118%':(cur===0?'-26deg 82deg auto':'0.01deg 82deg auto'); mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
     mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('list').children].forEach(x=>x.classList.remove('on')); if(cur!==2) cap(''); };
   $('playFlow').onclick=playFlow; $('prevBtn').onclick=()=>step(-1); $('nextBtn').onclick=()=>step(1);
   mv.addEventListener('load',()=>{
