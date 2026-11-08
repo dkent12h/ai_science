@@ -21,6 +21,7 @@
   .hs{display:block;transform:translate(-50%,-115%);border:0;border-radius:999px;padding:4px 11px;background:rgba(255,255,255,.95);color:var(--ink);font:700 15px/1.2 inherit;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;white-space:nowrap;transition:opacity .2s,background .2s}
   .hs.hide{opacity:0;pointer-events:none}
   .hs[data-visible="false"]{opacity:.0;pointer-events:none}
+  .hs.hide.on{opacity:1;pointer-events:auto}
   .hs.on{background:var(--accent);color:#fff}
   .legend{position:absolute;left:12px;top:12px;display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:#fff;background:rgba(11,18,32,.65);padding:8px 12px;border-radius:12px;pointer-events:none}
   .legend i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;vertical-align:-2px}
@@ -46,7 +47,7 @@
   @media (max-width:760px){
     main{flex-direction:column}
     aside{width:auto;height:40%;border-left:0;border-top:1px solid var(--line)}
-    header h1{font-size:16px}.tab{font-size:15px;padding:5px 12px}
+    header h1{display:none}.tab{font-size:15px;padding:5px 12px}
     .btn{padding:9px 12px;font-size:15px}.btn.ar{font-size:16px;padding:9px 14px}
     .legend{font-size:13px;padding:6px 9px}
   }
@@ -87,7 +88,7 @@
     <div id="parts"></div>
     <div id="info"><b id="iName"></b><p id="iDesc"></p></div>
     <p class="note">※ 정면에서 본 모습이라 화면의 왼쪽이 몸의 오른쪽입니다.<br><span id="arnote"></span></p>
-    <p class="note" style="font-size:12px;opacity:.7">3D 데이터: BodyParts3D, © 2008 Life Science Integrated Database Center, <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en" style="color:inherit">CC 표시-동일조건변경허락 2.1 Japan</a>. 색칠·절단·박동 애니메이션 등 가공했으며, 가공물도 동일 라이선스로 제공됩니다.</p>
+    <p class="note" style="font-size:12px;opacity:.7">3D 모델: <a href="https://grab3d.com/" style="color:inherit">Grab3D</a> (CC0 1.0 퍼블릭 도메인). 폴리곤 축소·박동 애니메이션 등을 가공했습니다.</p>
 </aside>
 </main>
 
@@ -95,7 +96,7 @@
 (async function(){
   const mv = document.getElementById('mv'), tabs = document.getElementById('tabs');
   const $ = id => document.getElementById(id);
-  let models = [], current = null, labelsOn = true, beating = true, speed = 1;
+  let models = [], current = null, labelsOn = innerWidth>640, beating = true, speed = 1;
 
   try { models = await (await fetch('models.json')).json(); }
   catch(e){ $('mIntro').textContent = 'models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
@@ -192,6 +193,7 @@
       : '스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
     if (current.animated){ mv.timeScale=speed; if(!beating) mv.pause(); }
   });
+  $('lblBtn').setAttribute('aria-pressed',labelsOn);
   load(0);
 })();
 </script>
