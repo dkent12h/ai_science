@@ -62,6 +62,14 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .bl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.9)}
 .bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
 .bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c,var(--acc))}
+.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.codewrap{position:relative}
+.cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.lk em{font-style:normal;font-size:.7em;font-weight:700;background:#111;color:#fff;border-radius:99px;padding:.15em .7em;margin-left:.4em;vertical-align:middle}
+.cpy.mk{right:calc(var(--u)*11.5);text-decoration:none;display:inline-block}
+.cpy:hover{background:rgba(255,255,255,.3)}
+.donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
+.donebtn.on{background:var(--c,var(--acc));color:#fff}
 .nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
 .nt li{position:relative;padding-left:calc(var(--u)*2.8)}
 .nt li::before{content:"※";position:absolute;left:0;color:var(--c,var(--acc));font-weight:800}
@@ -241,7 +249,7 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
    ============================================================ */
 const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="UNIHIKER K10 보드가 카메라로 얼굴을 보고 반응하는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
 <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="125" fill="#7fb0ff" opacity=".18" filter="url(#g)"/><rect x="96" y="70" width="208" height="260" rx="30" fill="#1b1b22" stroke="#3a3a46" stroke-width="5"/><rect x="116" y="110" width="168" height="128" rx="12" fill="#10242e" stroke="#3ccfc2" stroke-width="3"/><circle cx="200" cy="162" r="30" fill="#f6d6b8"/><path d="M170 150Q200 112 230 150Q214 132 200 134Q186 132 170 150" fill="#ff8a1f"/><circle cx="190" cy="164" r="3.6" fill="#222"/><circle cx="210" cy="164" r="3.6" fill="#222"/><path d="M190 178Q200 186 210 178" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M128 122h22M128 122v22M272 122h-22M272 122v22M128 226h22M128 226v-22M272 226h-22M272 226v-22" stroke="#ffe83a" stroke-width="4" stroke-linecap="round" fill="none"/><circle cx="200" cy="92" r="9" fill="#0b0b10" stroke="#e8e9ee" stroke-width="3"/><circle cx="200" cy="92" r="3.5" fill="#ff8a1f"/><circle cx="132" cy="278" r="9" fill="#ff3b30"/><circle cx="166" cy="278" r="9" fill="#ffd34d"/><circle cx="200" cy="278" r="9" fill="#1fe05a"/><circle cx="234" cy="278" r="9" fill="#4dd0ff"/><circle cx="268" cy="278" r="9" fill="#d946ef"/><circle cx="150" cy="308" r="12" fill="#2b2b33" stroke="#9fa1a8" stroke-width="3"/><circle cx="250" cy="308" r="12" fill="#2b2b33" stroke="#9fa1a8" stroke-width="3"/><path d="M60 150q-22 40 0 80M38 130q-34 60 0 120" fill="none" stroke="#9fdcff" stroke-width="5" stroke-linecap="round" opacity=".7"/></svg>`;
-const MEDIA = {"img": {}, "video": {}, "links": {}};
+const MEDIA = {"img": {"3": ["https://dfimg.dfrobot.com/3983cb8c5c984ae89a81daf6a55eebbe/educationg/a31d7be8db1622bd5901b8881adbd8ee.png", "https://dfimg.dfrobot.com/3983cb8c5c984ae89a81daf6a55eebbe/educationg/659e610933e148f644fe041217eb6b72.png"], "6": ["https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/8d946432240502b26e2a515a9ef60f57.png", "https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/e3061c71b98a42da73f516f778b75332.gif"], "9": ["https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/35a0087feec8b4c6e5b2a5bee0b1a97a.gif"], "12": ["https://dfimg.dfrobot.com/652ce179aa9508d63a4326b8/community/e3061c71b98a42da73f516f778b75332.gif"], "15": ["https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/fe45bb6abc3dfb2f98d0a87fb05ad1f0.png", "https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/d7f5869854bb4ca8d5adc92adde48198.gif"], "18": ["https://dfimg.dfrobot.com/2a7cb5f1fd2f4edb843b8a18b15033af/community/457b16855fb6ad1241bc4b601865607a.gif"]}, "video": {}, "links": {}};
 const ILLU = {};
 const PARTS = {};
 const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1장 · AI 헤어스타일 시뮬레이터", "c": "#ff8a1f"}, {"n": "2장 · AI 버블티 램프", "c": "#16a34a"}, {"n": "3장 · 주인공 입장 머신", "c": "#1e6bff"}, {"n": "4장 · 파블로프의 반려동물 급식기", "c": "#d946ef"}, {"n": "5장 · AI 칼로리 캐처", "c": "#0d9488"}, {"n": "마무리", "c": "#7c4dff"}];
@@ -376,6 +384,12 @@ text|6|마무리|핵심 질문|
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const FK = "dkbook:" + location.pathname;   // 입력칸 저장 키 (이 브라우저에만 저장)
 const typing = t => t && t.closest && t.closest("textarea,input");
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cpy")) { const mk = t.classList.contains("mk"); const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { if (mk) return; t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
+  if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
+});
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.cplk"); if (!a) return; e.preventDefault(); const txt = a.dataset.copy, em = a.querySelector("em"); const ok = () => { em.textContent = "복사됨 ✓"; setTimeout(() => em.textContent = "주소 복사", 1600); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (y) {} t.remove(); ok(); } });
 document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
 const $ = s => document.querySelector(s);
 /* ---------- 적응형 퀴즈 ---------- */
@@ -428,7 +442,7 @@ function chipHTML(label, n, urlOverride) {
 function mediaHTML(n, skipImg) {
   let h = "";
   if (ILLU[n]) h += `<figure class="fig svg${ILLU[n].indexOf("data-dark") > 0 ? " dark" : ""}">${ILLU[n]}</figure>`;
-  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async"></figure>`; });
+  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"></figure>`; });
   const v = MEDIA.video[n];
   if (v) {
     const m = String(v).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
@@ -445,6 +459,7 @@ function partsHTML(n, bl) {
     return th ? li.replace("</li>", `<span class="th">${th}</span></li>`) : li;
   }).join("");
 }
+function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=18)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
 function pageHTML(i) {
   if (i < 0 || i >= N) return `<div class="page blank"></div>`;
   const p = pages[i], n = i + 1, ch = CHAPS[p.chap], c = ch.c;
@@ -465,7 +480,7 @@ function pageHTML(i) {
     const qid = (p.lines.find(l => l.startsWith("QZ ")) || "").slice(3);
     return `<div class="page quiz" style="--c:${c}"><div class="eb">${esc(p.eb)}</div><h2 class="ttl qt">${esc(p.title)}</h2><div class="body">${quizHTML(qid, n)}</div>${foot}</div>`;
   }
-  let body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
+  let done = "", code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
   p.lines.forEach(l => {
     let m;
     if (l.startsWith("F ")) {
@@ -478,7 +493,9 @@ function pageHTML(i) {
     else if (l.startsWith("+ ")) { const [lab, url] = l.slice(2).split("|"); chips += chipHTML(lab, n, url); }
     else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
     else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
-    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += /github\.com/.test(url) ? `<a href="#" class="cplk" data-copy="${esc(url)}"><b>${esc(lab)} <em>주소 복사</em></b><span>${esc(url)}</span></a>` : `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
+    else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
     else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
     else if ((m = l.match(/^(\d+)\. (.*)$/))) nums += `<li><span class="n">${m[1]}</span><span>${esc(m[2])}</span></li>`;
   });
@@ -492,7 +509,7 @@ function pageHTML(i) {
   const longTitle = p.title.length > 26 && p.lines.length > 0;
   title = `<h2 class="ttl" ${p.lines.length===0 ? `style="font-size:calc(var(--u)*8.2);margin-top:calc(var(--u)*10)"` : longTitle ? `style="font-size:calc(var(--u)*4.2)"` : ""}>${esc(p.title)}</h2>`;
   return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
-    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
+    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<div class="codewrap">${typeof CODE_LINK !== "undefined" ? `<a class="cpy mk" href="${CODE_LINK}" target="_blank" rel="noopener">MakeCode ↗</a>` : ""}<button class="cpy" type="button">복사</button><pre class="code"${codeStyle(code)}>${esc(code)}</pre></div>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${done}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
 }
 function fillQR(root) {
   root.querySelectorAll(".qr").forEach(el => {
