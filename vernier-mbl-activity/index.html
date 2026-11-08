@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MBL 수업 활동 · DK Digital Science</title>
-<meta name="description" content="센서를 연결해 온도를 그래프로 보며 물의 온도와 녹는 양을 비교하는 용해와 용액 활동">
+<title>MBL 온도센서를 이용한 과학실험 · DK Digital Science</title>
+<meta name="description" content="온도 센서로 용해, 날씨, 열의 이동, 단열, 계절의 변화, 상태 변화를 그래프로 보며 탐구합니다">
 <meta name="theme-color" content="#eeeef1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -248,44 +248,25 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
    MEDIA.links[페이지번호] = { "활동지": "https://...", "AR 보기": "https://..." }
    ============================================================ */
 const CODE_LINK = "";
-const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="센서가 재고 태블릿에 그래프가 그려지는 그림" font-family="inherit" font-weight="700" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter></defs>
-<circle cx="200" cy="200" r="130" fill="#0d9488" opacity=".35" filter="url(#g)"/>
-<path d="M60 250 Q200 330 340 250" fill="none" stroke="#c9ccd6" stroke-width="4"/>
-<g transform="translate(70,70)"><rect x="0" y="40" width="120" height="150" rx="14" fill="#f2f4f8" stroke="#9aa5b8" stroke-width="4"/><path d="M60 40 L60 4" stroke="#8a8a96" stroke-width="6"/><circle cx="60" cy="200" r="0"/><rect x="48" y="70" width="24" height="90" rx="12" fill="#fff" stroke="#6a6a76" stroke-width="4"/><rect x="55" y="110" width="10" height="50" rx="5" fill="#e11d48"/><circle cx="60" cy="168" r="16" fill="#e11d48"/></g>
-<g transform="translate(220,110)"><path d="M10 80 Q60 20 110 80" fill="none" stroke="#0d9488" stroke-width="8" stroke-linecap="round"/><path d="M30 100 Q60 70 90 100" fill="none" stroke="#0d9488" stroke-width="8" stroke-linecap="round"/><circle cx="60" cy="118" r="9" fill="#0d9488"/></g>
-<g transform="translate(200,210)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#fff" stroke="#6a6a76" stroke-width="5"/><polyline points="18,90 56,76 94,52 142,30" fill="none" stroke="#f08a4b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><polyline points="18,100 56,100 94,100 142,100" fill="none" stroke="#4aa3e8" stroke-width="7" stroke-linecap="round"/></g></svg>`;
-const MEDIA = {"img": {"5": ["https://turbo.vernier.com/wp-content/uploads/2019/11/product.gdx-tmp._hero.001-600x337.jpg"], "6": ["https://turbo.vernier.com/wp-content/uploads/2021/04/ga-gdx-connect-collect-1024x816.png"], "7": ["https://turbo.vernier.com/wp-content/uploads/2020/02/figure.gdx-tmp._evaporation._methanol._ethanol.001-600x337.png"], "11": ["https://turbo.vernier.com/wp-content/uploads/2020/09/simple-harmonic-motion.jpg"]}, "video": {}, "links": {}};
-const ILLU = {"3": "<svg viewBox=\"0 0 600 250\" role=\"img\" aria-label=\"찬물, 보통 물, 따뜻한 물이 담긴 컵 세 개\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(40,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#a9d6f6\"/></g><text x=\"105\" y=\"230\" font-size=\"24\">찬물</text><g transform=\"translate(60,32)\"><rect x=\"8\" y=\"0\" width=\"34\" height=\"34\" rx=\"6\" fill=\"#e6f5ff\" stroke=\"#7fb8e0\" stroke-width=\"3\" transform=\"rotate(-10 25 17)\"/><rect x=\"42\" y=\"12\" width=\"30\" height=\"30\" rx=\"6\" fill=\"#f1fbff\" stroke=\"#7fb8e0\" stroke-width=\"3\" transform=\"rotate(12 57 27)\"/></g>\n<g transform=\"translate(235,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#b9e5c1\"/></g><text x=\"300\" y=\"230\" font-size=\"24\">보통 물</text>\n<g transform=\"translate(430,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#f7cfaa\"/></g><text x=\"495\" y=\"230\" font-size=\"24\">따뜻한 물</text>\n<g stroke=\"#e08a52\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M470 28 C462 18 478 12 470 2\"/><path d=\"M495 28 C487 18 503 12 495 2\"/><path d=\"M520 28 C512 18 528 12 520 2\"/></g>\n</svg>", "4": "<svg viewBox=\"0 0 600 180\" role=\"img\" aria-label=\"온도 그래프 모양 세 가지\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(10,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,86 60,66 104,40 146,18\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">올라가요</text></g>\n<g transform=\"translate(210,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,18 60,40 104,66 146,86\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">내려가요</text></g>\n<g transform=\"translate(410,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,52 146,52\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">그대로예요</text></g>\n</svg>"};
+const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="태블릿에 그래프가 그려지는 그림" font-family="inherit" font-weight="700" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter></defs><circle cx="200" cy="200" r="140" fill="#0d9488" opacity=".35" filter="url(#g)"/><g transform="translate(40,70) scale(.53)"><rect x="6" y="6" width="588" height="388" rx="38" fill="#1b1b22"/><rect x="20" y="20" width="560" height="360" rx="26" fill="#fff"/><line x1="64" y1="318" x2="520" y2="318" stroke="#6a6a76" stroke-width="5"/><line x1="64" y1="318" x2="64" y2="62" stroke="#6a6a76" stroke-width="5"/><polyline points="70,250 140,230 220,200 300,170 380,150 470,138" fill="none" stroke="#f08a4b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><polyline points="70,285 140,284 220,283 300,282 380,281 470,281" fill="none" stroke="#4aa3e8" stroke-width="10" stroke-linecap="round"/></g><g transform="translate(250,250)"><rect x="0" y="0" width="100" height="40" rx="12" fill="#0d9488"/><circle cx="26" cy="20" r="8" fill="#fff"/><path d="M52 20 q14 -14 28 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg>`;
+const MEDIA = {"img": {"3": ["https://turbo.vernier.com/wp-content/uploads/2019/11/product.gdx-tmp._hero.001-600x337.jpg"], "7": ["https://turbo.vernier.com/wp-content/uploads/2021/04/ga-gdx-connect-collect-1024x816.png"], "8": ["https://turbo.vernier.com/wp-content/uploads/2020/02/figure.gdx-tmp._evaporation._methanol._ethanol.001-600x337.png"], "12": ["https://turbo.vernier.com/wp-content/uploads/2020/09/simple-harmonic-motion.jpg"]}, "video": {}, "links": {}};
+const ILLU = {"4": "<svg viewBox=\"0 0 600 400\" role=\"img\" aria-label=\"스마트패드(태블릿)에 Graphical Analysis 그래프가 뜬 화면\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"6\" y=\"6\" width=\"588\" height=\"388\" rx=\"38\" fill=\"#1b1b22\"/><rect x=\"20\" y=\"20\" width=\"560\" height=\"360\" rx=\"26\" fill=\"#fff\"/>\n<rect x=\"20\" y=\"20\" width=\"560\" height=\"38\" rx=\"26\" fill=\"#eef0f6\"/><text x=\"44\" y=\"46\" font-size=\"16\" text-anchor=\"start\">☰</text><text x=\"300\" y=\"46\" font-size=\"15\" fill=\"#6a6a76\">Graphical Analysis</text>\n<line x1=\"64\" y1=\"318\" x2=\"520\" y2=\"318\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"64\" y1=\"318\" x2=\"64\" y2=\"82\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"70,250 140,230 220,200 300,170 380,150 470,138\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"70,280 140,279 220,278 300,277 380,276 470,276\" fill=\"none\" stroke=\"#4aa3e8\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n<text x=\"292\" y=\"346\" font-size=\"14\" fill=\"#6a6a76\">시간 (s)</text><text x=\"34\" y=\"200\" font-size=\"14\" fill=\"#6a6a76\" transform=\"rotate(-90 34 200)\">온도 (℃)</text>\n<rect x=\"470\" y=\"344\" width=\"96\" height=\"26\" rx=\"9\" fill=\"#16a34a\"/><text x=\"518\" y=\"362\" font-size=\"13\" fill=\"#fff\">▶ 수집 시작</text><rect x=\"28\" y=\"62\" width=\"544\" height=\"310\" fill=\"#fff\"/><image href=\"https://turbo.vernier.com/wp-content/uploads/2020/02/figure.gdx-tmp._evaporation._methanol._ethanol.001-600x337.png\" x=\"28\" y=\"62\" width=\"544\" height=\"310\" preserveAspectRatio=\"xMidYMid meet\"/><circle cx=\"300\" cy=\"13\" r=\"3\" fill=\"#444\"/></svg>", "5": "<svg viewBox=\"0 0 600 250\" role=\"img\" aria-label=\"찬물, 보통 물, 따뜻한 물이 담긴 컵 세 개\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(40,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#a9d6f6\"/></g><text x=\"105\" y=\"230\" font-size=\"24\">찬물</text><g transform=\"translate(60,32)\"><rect x=\"8\" y=\"0\" width=\"34\" height=\"34\" rx=\"6\" fill=\"#e6f5ff\" stroke=\"#7fb8e0\" stroke-width=\"3\" transform=\"rotate(-10 25 17)\"/><rect x=\"42\" y=\"12\" width=\"30\" height=\"30\" rx=\"6\" fill=\"#f1fbff\" stroke=\"#7fb8e0\" stroke-width=\"3\" transform=\"rotate(12 57 27)\"/></g>\n<g transform=\"translate(235,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#b9e5c1\"/></g><text x=\"300\" y=\"230\" font-size=\"24\">보통 물</text>\n<g transform=\"translate(430,40)\"><path d=\"M0 0 L130 0 L116 136.5 Q114 149.5 100 149.5 L30 149.5 Q16 149.5 14 136.5 Z\" fill=\"#fff\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"M8 41.6 L122 41.6 L113 133.9 Q112 143.0 100 143.0 L30 143.0 Q18 143.0 17 133.9 Z\" fill=\"#f7cfaa\"/></g><text x=\"495\" y=\"230\" font-size=\"24\">따뜻한 물</text>\n<g stroke=\"#e08a52\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"><path d=\"M470 28 C462 18 478 12 470 2\"/><path d=\"M495 28 C487 18 503 12 495 2\"/><path d=\"M520 28 C512 18 528 12 520 2\"/></g>\n</svg>", "6": "<svg viewBox=\"0 0 600 180\" role=\"img\" aria-label=\"온도 그래프 모양 세 가지\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(10,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,86 60,66 104,40 146,18\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">올라가요</text></g>\n<g transform=\"translate(210,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,18 60,40 104,66 146,86\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">내려가요</text></g>\n<g transform=\"translate(410,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,52 146,52\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">그대로예요</text></g>\n</svg>"};
 const PARTS = {};
-const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1 · 수업 준비", "c": "#0d9488"}, {"n": "2 · 실험하기", "c": "#16a34a"}, {"n": "3 · 분석과 정리", "c": "#1e6bff"}, {"n": "4 · 선생님께", "c": "#e4174b"}];
+const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1 · 센서 준비", "c": "#0d9488"}, {"n": "2 · 수업 ① 용해와 용액", "c": "#16a34a"}, {"n": "3 · 수업 ② 날씨", "c": "#1e6bff"}, {"n": "4 · 수업 ③ 열과 우리 생활", "c": "#e4174b"}, {"n": "5 · 수업 ④ 계절의 변화·상태 변화", "c": "#f97316"}];
 const QUIZ = {};
 const DATA = `
-cover|0|MBL을 이용한 과학실험|수업 활동|
-: 물의 온도와 녹는 양 — 용해와 용액 (5학년 1학기)
+cover|0|MBL을 이용한 과학실험|MBL 온도센서를 이용한 과학실험|
+: 고 무선 온도 센서로 하는 수업 7가지 — 용해와 용액부터 상태 변화까지
 @toc 표지
 ---
-text|0|이 책은|수업 순서|
-1. 오늘의 질문 · 예상하기
-2. 센서 준비하고 앱에 연결하기
-3. 활동 A · B · C — 온도를 그래프로 보며 녹이기
-4. 데이터 확인하고 정리하기
-5. 선생님께 — MBL 활용 지점과 안전
-* 먼저 「MBL 기초」를 보면 센서와 앱 사용법을 알 수 있습니다.
-@toc 수업 순서
----
-text|1|수업 개요|오늘의 질문|
-: 찬물, 보통 물, 따뜻한 물 중에서 어느 물에 소금과 백반이 더 많이 녹을까요? 그리고 그 물의 온도는 실험하는 동안 정말 그대로일까요?
-- 학습목표 — 물의 온도를 같게 맞추거나 다르게 하여 용질이 녹는 양을 비교할 수 있다
-- 40분 · 모둠 4명 · 센서는 모둠당 1~3대
-* MBL의 역할은 녹는 양을 재는 것이 아니라, 비교 조건(물의 온도)이 실험 내내 유지되는지를 데이터로 확인하는 것입니다.
-@toc 오늘의 질문
----
-text|1|1 · 예상하기|먼저 예상해 보아요|
-: 따뜻한 물이 담긴 컵을 5분 동안 그냥 두면 물의 온도 그래프는 어떤 모양일까요?
-- 올라가요 / 내려가요 / 그대로예요 중에 골라 봅니다
-F 내 예상은 무엇이고 그 까닭은?|예) 따뜻한 물이 ... 때문에 ...
-* 앱의 그래프 예측(Graph Predictions) 기능으로 손으로 그린 예상을 실제 그래프와 겹쳐 비교할 수 있습니다.
-@toc 예상하기
+text|0|이 책은|학습 순서|
+1. 센서 준비 — 온도 센서와 태블릿 앱
+2. 수업 ① 용해와 용액 — 물의 온도와 녹는 양
+3. 수업 ② 날씨와 우리 생활 — 기온 변화, 이슬
+4. 수업 ③ 열과 우리 생활 — 온도 재기, 접촉, 단열
+5. 수업 ④ 계절의 변화, 물의 상태 변화
+* 먼저 「MBL 기초」에서 센서 연결과 앱 사용법을 익혀 두세요.
+@toc 학습 순서
 ---
 text|1|2 · 센서 준비하기|오늘 쓸 센서: 고 무선 온도 센서|
 - Go Direct Temperature Probe (GDX-TMP)
@@ -294,7 +275,26 @@ text|1|2 · 센서 준비하기|오늘 쓸 센서: 고 무선 온도 센서|
 * 사진은 Vernier 제공입니다. 센서는 처음 쓰기 전에 충전합니다.
 @toc 오늘 쓸 센서
 ---
-text|1|2 · 센서 연결하기|센서를 켜고 앱에 연결해요|
+text|1|스마트패드로 보기|태블릿 앱 화면에 이렇게 보여요|
+: 온도 센서가 재는 값이 스마트패드의 Graphical Analysis 앱에 실시간 그래프로 나타납니다.
+* 태블릿 틀 안의 그래프는 Vernier의 실제 온도 센서 그래프 이미지를 합성한 것입니다.
+@toc 태블릿 화면
+---
+text|2|수업 개요|오늘의 질문|
+: 찬물, 보통 물, 따뜻한 물 중에서 어느 물에 소금과 백반이 더 많이 녹을까요? 그리고 그 물의 온도는 실험하는 동안 정말 그대로일까요?
+- 학습목표 — 물의 온도를 같게 맞추거나 다르게 하여 용질이 녹는 양을 비교할 수 있다
+- 40분 · 모둠 4명 · 센서는 모둠당 1~3대
+* MBL의 역할은 녹는 양을 재는 것이 아니라, 비교 조건(물의 온도)이 실험 내내 유지되는지를 데이터로 확인하는 것입니다.
+@toc 오늘의 질문
+---
+text|2|1 · 예상하기|먼저 예상해 보아요|
+: 따뜻한 물이 담긴 컵을 5분 동안 그냥 두면 물의 온도 그래프는 어떤 모양일까요?
+- 올라가요 / 내려가요 / 그대로예요 중에 골라 봅니다
+F 내 예상은 무엇이고 그 까닭은?|예) 따뜻한 물이 ... 때문에 ...
+* 앱의 그래프 예측(Graph Predictions) 기능으로 손으로 그린 예상을 실제 그래프와 겹쳐 비교할 수 있습니다.
+@toc 예상하기
+---
+text|2|2 · 센서 연결하기|센서를 켜고 앱에 연결해요|
 1. 센서의 전원을 켜면 빨간 불이 깜빡입니다. 연결을 기다리는 중이에요
 2. 앱에서 Sensor Data Collection(센서 데이터 수집)을 누릅니다
 3. 센서 라벨의 센서 번호(ID)와 같은 센서를 고릅니다. 안 보이면 WIRELESS를 누르고 고른 뒤 Pair를 누릅니다
@@ -332,19 +332,131 @@ F 마지막으로 모두 녹은 숟가락 수를 적어 보세요|소금: 찬물
 * 용질은 입에 넣지 않고, 백반이 눈에 들어가면 바로 씻습니다.
 @toc 활동 C: 녹이기
 ---
-text|3|7 · 데이터 활용|내 데이터로 확인하고 활용해요|
+text|2|7 · 데이터 활용|내 데이터로 확인하고 활용해요|
 : 앱에서 내보내기 → CSV로 저장한 표 파일을 활동 웹페이지에 불러오면 온도 그래프를 그리고 시작·끝·변화량을 계산해 줍니다. 컵마다 파일을 따로 저장했다면 여러 개를 한꺼번에 불러와 한 그래프에서 비교합니다.
-+ 활동 웹페이지 열기|https://dkent12h.github.io/ai_science/vernier-mbl-activity/activity/
++ 활동 웹페이지 열기|https://dkent12h.github.io/ai_science/vernier-mbl/activity/
 * 그림은 Vernier 제공입니다. Graphical Analysis로 그린 그래프와 표의 예입니다. 파일은 그 기기의 화면에서만 읽고 저장하거나 보내지 않습니다.
 @toc 데이터 활용
 ---
-text|3|8 · 정리하기|알게 된 점을 정리해요|
+text|2|8 · 정리하기|알게 된 점을 정리해요|
 : 물의 온도가 높아지면 소금이 녹는 양은 어떻게 되고, 백반이 녹는 양은 어떻게 되었나요? 용질이 녹는 양은 무엇에 따라 달라지나요?
 F 물의 온도와 용질의 종류에 따라 녹는 양은 어떻게 달라지나요?|예) 백반은 따뜻한 물에서 ... 소금은 ...
 F MBL 센서로 재니까 온도계보다 좋았던 점은?|예) 그래프로 보니까 컵의 온도가 ...
 @toc 정리하기
 ---
-text|4|선생님께|MBL 활용 지점 한눈에|
+text|3|5-2 · 날씨와 우리 생활|하루 동안 기온 변화 알아보기|
+- 성취기준 — [6과06-01] 기상 요소 조사, [6과06-02] 이슬·안개·구름 관찰
+- 학습목표(제안) — 기온이 시간에 따라 변하는 모습을 그래프로 설명할 수 있다.
+- MBL 활용 — 방과 후부터 다음 날 아침까지 자동 기록한 기온 그래프를 읽습니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 하루 동안 기온 변화 알아보기
+---
+text|3|5-2 · 날씨와 우리 생활 · 활동|하루 동안 기온 변화 알아보기: 활동 순서|
+1. 센서를 그늘진 곳에 걸고 앱의 수집 간격과 시간을 정합니다
+2. 방과 후 수집을 시작하고 다음 날 아침 앱에서 자료를 확인합니다
+3. 그래프에서 가장 높은 때와 가장 낮은 때를 찾아 표시합니다
+4. 낮의 기온 변화와 밤의 기온 변화를 말로 비교합니다
+- 그래프 읽기 — 기온이 가장 높은 시각과 가장 낮은 시각은 언제인가요? 가파른 구간은 언제인가요?
+* 센서 내부에 저장하는 원격 데이터 로깅은 국내 판매 모델과 앱 버전에서 쓸 수 있는지 구매 전에 확인하세요. 안 되면 태블릿을 연결해 둔 채 수업 시간 동안만 기록합니다.
+@toc 하루 동안 기온 변화 알아보기 활동
+---
+text|3|5-2 · 날씨와 우리 생활|이슬이 맺히는 조건 찾기|
+- 성취기준 — [6과06-02] 이슬·안개·구름 관찰
+- 학습목표(제안) — 차가운 물체 표면에 물방울이 맺히는 조건을 온도와 함께 설명할 수 있다.
+- MBL 활용 — 물방울이 맺히기 시작하는 순간의 온도를 그래프에 표시합니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 이슬이 맺히는 조건 찾기
+---
+text|3|5-2 · 날씨와 우리 생활 · 활동|이슬이 맺히는 조건 찾기: 활동 순서|
+1. 컵에 얼음물을 담고 센서를 컵 속 물에 넣습니다
+2. 수집을 시작하고 컵 겉면을 관찰합니다
+3. 물방울이 맺히기 시작하는 순간 앱에 표시하거나 시각을 적습니다
+4. 그때의 온도를 그래프에서 읽습니다
+- 그래프 읽기 — 물방울이 맺힌 순간 온도는 몇 ℃였나요? 컵 속 물의 온도는 어떻게 변했나요?
+* 물방울은 컵 속 물이 새어 나온 것이 아니라 공기 중 수증기가 차가운 표면에 닿아 맺힌 것임을 이야기로 정리합니다.
+@toc 이슬이 맺히는 조건 찾기 활동
+---
+text|4|5-2 · 열과 우리 생활|온도계와 센서로 온도 재기|
+- 성취기준 — [6과07-01] 온도를 온도계로 측정한다.
+- 학습목표(제안) — 물체의 따뜻하고 차가운 정도를 온도로 나타낼 수 있다.
+- MBL 활용 — 온도계 값과 센서 값을 비교하고, 센서를 옮길 때의 그래프를 예측해 봅니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 온도계와 센서로 온도 재기
+---
+text|4|5-2 · 열과 우리 생활 · 활동|온도계와 센서로 온도 재기: 활동 순서|
+1. 같은 물의 온도를 온도계와 센서로 각각 재어 표에 적습니다
+2. 손바닥으로 센서 끝을 쥐었을 때 그래프를 지켜봅니다
+3. 센서를 따뜻한 물에서 찬물로 옮길 때 그래프 모양을 먼저 그려 봅니다
+4. 실제 그래프와 예상 그래프를 겹쳐 비교합니다
+- 그래프 읽기 — 센서를 옮기자마자 그래프가 어떻게 변했나요? 예상과 어디가 달랐나요?
+* 온도계로 직접 재는 것이 성취기준이므로 온도계 측정을 먼저 하고, 센서는 변화를 보는 보완 도구로 씁니다.
+@toc 온도계와 센서로 온도 재기 활동
+---
+text|4|5-2 · 열과 우리 생활|뜨거운 물과 찬물이 접촉할 때 온도 변화|
+- 성취기준 — [6과07-02] 접촉한 두 물체의 온도 변화 관찰, [6과07-03] 열의 이동
+- 학습목표(제안) — 두 물체의 온도가 가까워지는 까닭을 열의 이동으로 설명할 수 있다.
+- MBL 활용 — 센서 2개를 한 그래프에 띄워 두 선이 가까워지는 모습을 봅니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 뜨거운 물과 찬물이 접촉할 때 온도 변화
+---
+text|4|5-2 · 열과 우리 생활 · 활동|뜨거운 물과 찬물이 접촉할 때 온도 변화: 활동 순서|
+1. 금속 캔에 따뜻한 물을 담아 센서 1을 넣습니다
+2. 큰 그릇에 찬물을 담아 센서 2를 넣습니다
+3. 캔을 큰 그릇에 담그고 수집을 시작합니다
+4. 두 선이 가까워지는 모습을 보고, 캔을 플라스틱 컵으로 바꿔 다시 해 봅니다
+- 그래프 읽기 — 두 선은 어떻게 변했나요? 금속 캔과 플라스틱 컵 중 선이 더 빨리 가까워지는 것은?
+* 초등에서는 그래프가 가파른지 완만한지만 해석하고, 열량·비열 계산은 하지 않습니다. 따뜻한 물은 50℃를 넘기지 않습니다.
+@toc 뜨거운 물과 찬물이 접촉할 때 온도 변화 활동
+---
+text|4|5-2 · 열과 우리 생활|단열 장치 만들기|
+- 성취기준 — [6과07-04] 온도를 오랫동안 일정하게 유지하는 장치를 제작한다.
+- 학습목표(제안) — 단열 재료를 비교하여 더 잘 보온하는 장치를 만들 수 있다.
+- MBL 활용 — 30분 동안 자동 기록한 모둠별 그래프를 겹쳐 가장 완만한 장치를 고릅니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 단열 장치 만들기
+---
+text|4|5-2 · 열과 우리 생활 · 활동|단열 장치 만들기: 활동 순서|
+1. 솜·신문지·스티로폼·포일 중 재료를 골라 컵을 감싸는 장치를 만듭니다
+2. 같은 온도의 따뜻한 물을 같은 양만 넣고 센서를 꽂습니다
+3. 30분 동안 수집하고 모둠별 그래프를 한 화면에 겹칩니다
+4. 가장 완만한 장치를 고르고 이유를 데이터로 설명합니다
+- 그래프 읽기 — 가장 완만한 그래프는 어떤 장치인가요? 개선해서 다시 하면 그래프가 어떻게 달라졌나요?
+* 1차 설계 → 그래프 근거로 개선 → 2차 측정을 겹쳐 보면 개선 효과가 눈에 보입니다. 컵 크기와 물의 양은 모두 같게 합니다.
+@toc 단열 장치 만들기 활동
+---
+text|5|6-2 · 계절의 변화|하루 동안 태양 고도, 그림자 길이, 기온|
+- 성취기준 — [6과13-01] 하루 동안 태양 고도·그림자 길이 측정, 관계 찾기
+- 학습목표(제안) — 하루 동안 태양 고도, 그림자 길이, 기온이 어떻게 변하는지 말할 수 있다.
+- MBL 활용 — 5분 간격 기온 그래프를 그림자 길이 변화와 나란히 놓고 비교합니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 하루 동안 태양 고도, 그림자 길이, 기온
+---
+text|5|6-2 · 계절의 변화 · 활동|하루 동안 태양 고도, 그림자 길이, 기온: 활동 순서|
+1. 양지와 그늘에 센서를 하나씩 놓고 기온을 수집합니다
+2. 태양 고도와 그림자 길이를 정해진 시각마다 측정해 표에 적습니다
+3. 기온 그래프에서 가장 높은 시각을 찾습니다
+4. 그림자가 가장 짧은 시각과 기온이 가장 높은 시각을 비교합니다
+- 그래프 읽기 — 그림자가 가장 짧은 시각과 기온이 가장 높은 시각은 같은가요, 다른가요?
+* 자료에 따라 6과13-01에 ‘기온’이 들어 있는지가 다릅니다. 고시 원문을 확인하고, 없으면 기온은 보조 기록으로만 씁니다.
+@toc 하루 동안 태양 고도, 그림자 길이, 기온 활동
+---
+text|5|3~4학년군 · 물의 상태 변화|얼음이 녹는 동안의 온도 변화|
+- 성취기준 — [4과10-02] 어는 것·녹는 것 등 상태 변화 과정 관찰 (요약본 기준)
+- 학습목표(제안) — 상태가 변하는 동안 온도가 어떻게 변하는지 관찰하여 말할 수 있다.
+- MBL 활용 — 실시간 그래프에서 온도가 거의 변하지 않고 평평해지는 구간을 찾습니다.
+* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
+@toc 얼음이 녹는 동안의 온도 변화
+---
+text|5|3~4학년군 · 물의 상태 변화 · 활동|얼음이 녹는 동안의 온도 변화: 활동 순서|
+1. 컵에 얼음을 가득 넣고 센서를 꽂습니다
+2. 수집을 시작하고 얼음이 녹는 모습을 지켜봅니다
+3. 그래프가 평평해지는 구간이 있는지 찾습니다
+4. 얼음이 모두 녹은 뒤 그래프가 어떻게 달라지는지 봅니다
+- 그래프 읽기 — 그래프가 평평한 구간은 언제였나요? 그동안 컵 속에서는 어떤 일이 있었나요?
+* 3~4학년군에서는 ‘변하다가 멈춘다’는 수준까지만 다룹니다. 3~4학년군 성취기준은 요약본으로만 확인했습니다.
+@toc 얼음이 녹는 동안의 온도 변화 활동
+---
+text|5|선생님께|MBL 활용 지점 한눈에|
 - 예상: 그래프 예측(Graph Predictions)으로 예상 그래프와 실제 그래프를 겹쳐 봅니다
 - 활동 A: 시간 기반 수집 5분 — 변화를 끊김 없이 기록
 - 활동 B: 여러 센서 동시 수집 또는 수집을 여러 번 — 세 컵 조건이 공정한지 확인
@@ -353,13 +465,21 @@ text|4|선생님께|MBL 활용 지점 한눈에|
 * 앱의 무료 버전(Basic)으로 위 기능을 쓸 수 있는 것으로 확인했습니다. 실시간 데이터 공유 등은 유료(Pro) 기능이라 쓰지 않습니다.
 @toc MBL 활용 지점
 ---
-text|4|선생님께|수업 흐름과 안전|
+text|5|선생님께|수업 흐름과 안전|
 - 5분 질문·예상 → 5분 센서 연결 → 8분 활동 A → 10분 활동 B·C → 12분 데이터 확인·정리
 - 센서가 모둠당 1대면 활동 A는 한 모둠이 대표로 하고, 활동 B는 수집을 세 번 합니다
 - 센서 손잡이는 −10~45℃ 범위라 따뜻한 물에 담그지 않게 지도합니다
 - 소금은 온도 차이가 작을 수 있으니 수업 전에 예비실험을 해 보세요
 * 센서 사양(설명서 기준): 측정 범위 −40~125℃, 정확도 ±0.25℃, 분해능 0.01℃, 물속에서 저으면 약 20초 안에 거의 맞아요.
 @toc 수업 흐름과 안전
+---
+text|5|선생님께|수업 전에 확인하세요|
+- 센서 손잡이는 −10~45℃ 범위입니다. 따뜻한 물에 담그지 않게 지도합니다
+- 따뜻한 물은 선생님이 준비하고 50℃를 넘기지 않습니다
+- 열량·비열, 용해열, 어는점 내림 등 중등 내용은 다루지 않습니다
+- 원격 로깅과 그래프 예측·겹쳐 보기 기능은 앱 버전에서 쓸 수 있는지 확인하세요
+* 이 책의 활동은 필자의 제안이며, 성취기준 원문은 교육부 고시 제2022-33호 별책 9로 확인하세요.
+@toc 수업 전 확인
 `;
 
 /* ---------- 쪽 만들기 ---------- */
@@ -452,7 +572,7 @@ function pageHTML(i) {
   }
   if (p.kind === "end") {
     return `<div class="page endp" style="--c:${c}"><div class="mini" style="width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.4);gap:calc(var(--u)*.9);padding:calc(var(--u)*2)"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div>
-      <div class="ttl" style="font-size:calc(var(--u)*4.4)">MBL 수업 활동</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
+      <div class="ttl" style="font-size:calc(var(--u)*4.4)">MBL 온도센서를 이용한 과학실험</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
   }
   if (p.kind === "divider") {
     const body = p.lines.map(l => /^[:\-*] /.test(l) ? `<p>${esc(l.slice(2))}</p>` : "").join("");
