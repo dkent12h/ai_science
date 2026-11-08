@@ -218,7 +218,7 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
     <h1><span class="ln"><span>DK Digital</span></span><span class="ln"><span>Science</span></span></h1>
     <div class="hero-foot">
       <span>Light · Color · Physical Computing</span>
-      <span class="hint"><b>손잡이</b>를 돌려 빛의 색을 바꾸고, 판을 끌면 장치가 360° 돌아갑니다</span>
+      <span class="hint"><b>손잡이</b>를 돌려 빛의 색을 바꾸고, 판을 끌면 앞·뒷면 모두 360° 돌려 볼 수 있어요 (더블클릭: 제자리)</span>
       <span class="scroll">scroll to explore <b>↓</b></span>
     </div>
   </section>
@@ -303,27 +303,42 @@ document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(f
   function pt(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse());return {x:q.x,y:q.y}}
   knobs.forEach(function(k,i){
     var last=0;
-    function raw(e){var p=pt(e);return Math.atan2(p.y-k.dataset.cy,p.x-k.dataset.cx)*180/Math.PI}
+    function raw(e){var r=k.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
     k.addEventListener('pointerdown',function(e){drag=i;auto=false;last=raw(e);k.setPointerCapture(e.pointerId);e.preventDefault()});
     k.addEventListener('pointermove',function(e){ if(drag!==i) return; var a=raw(e),d=a-last; if(d>180)d-=360; if(d<-180)d+=360; last=a; ang[i]=Math.max(-135,Math.min(135,ang[i]+d)); apply();});
     k.addEventListener('pointerup',function(){drag=-1});
     k.addEventListener('pointercancel',function(){drag=-1});
   });
-  /* body rotation: drag anywhere except the knobs */
-  var rot=0,bodyDrag=false,a0=0,r0=0;
-  svg.style.touchAction='none'; svg.style.transformOrigin='50% 50%'; svg.style.cursor='grab';
-  function ctr(){var r=svg.getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2}}
-  function ba(e){var c=ctr();return Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI}
-  function setRot(){
-    var pn=svg.parentNode,w=pn.offsetWidth,h=pn.offsetHeight,t=rot*Math.PI/180,c=Math.abs(Math.cos(t)),sn=Math.abs(Math.sin(t));
-    var W=w*c+h*sn,H=w*sn+h*c,wmax=Math.min(h,innerWidth-40);
-    var sc=Math.min(1,h/H,wmax/W);
-    svg.style.transform='rotate('+rot+'deg) scale('+sc.toFixed(3)+')';
+  /* full 3D body: front SVG + thickness slices + back face; trackball drag, dblclick resets */
+  var host=svg.parentNode, body=document.createElement('div'), slices=[], backEl=document.createElement('div');
+  host.style.perspective='1500px';
+  body.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;transform-style:preserve-3d;will-change:transform';
+  host.insertBefore(body,svg); body.appendChild(svg);
+  svg.style.position='absolute'; svg.style.left='0'; svg.style.top='0'; svg.style.backfaceVisibility='hidden'; svg.style.webkitBackfaceVisibility='hidden'; svg.style.touchAction='none';
+  var N=9;
+  for(var q=1;q<N;q++){var d=document.createElement('div');d.style.cssText='position:absolute;background:linear-gradient(135deg,#eceef2,#cfd3db);';body.appendChild(d);slices.push(d)}
+  backEl.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden';
+  backEl.innerHTML='<svg viewBox="0 0 470 780" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible"><defs><linearGradient id="bkg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f5f8"/><stop offset="1" stop-color="#dfe2e8"/></linearGradient></defs><rect x="20" y="20" width="424" height="730" rx="42" fill="url(#bkg)" stroke="#c9cdd5" stroke-width="2"/><rect x="38" y="38" width="388" height="694" rx="30" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>'+
+   [[70,70],[394,70],[70,700],[394,700]].map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="14" fill="#eceef2" stroke="#c3c7cf" stroke-width="2"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#cfd3db"/>'}).join('')+
+   '<rect x="120" y="150" width="224" height="120" rx="16" fill="none" stroke="#cfd3db" stroke-width="2" stroke-dasharray="6 6"/><rect x="120" y="500" width="224" height="120" rx="16" fill="none" stroke="#cfd3db" stroke-width="2" stroke-dasharray="6 6"/>'+
+   '<g transform="translate(232 390) scale(-1 1)" font-family="Noto Sans KR,Arial,sans-serif" text-anchor="middle"><text y="0" font-size="30" font-weight="800" fill="#8f95a2" transform="scale(-1 1)">빛의 합성 장치</text><text y="34" font-size="15" font-weight="700" fill="#aab0bc" letter-spacing="3" transform="scale(-1 1)">DK DIGITAL SCIENCE</text></g></svg>';
+  body.appendChild(backEl);
+  var T=16;
+  function layout(){
+    var u=host.clientWidth/470; if(!u) return;
+    slices.forEach(function(d,i){var z=-(i+1)*T/N*u;d.style.left=20*u+'px';d.style.top=20*u+'px';d.style.width=424*u+'px';d.style.height=730*u+'px';d.style.borderRadius=42*u+'px';d.style.transform='translateZ('+z.toFixed(2)+'px)'});
+    backEl.style.transform='translateZ('+(-T*u).toFixed(2)+'px) rotateY(180deg)';
   }
-  svg.addEventListener('pointerdown',function(e){ if(e.target.closest&&e.target.closest('.knob')) return; bodyDrag=true;a0=ba(e);r0=rot;svg.style.cursor='grabbing';svg.setPointerCapture(e.pointerId);e.preventDefault()});
-  svg.addEventListener('pointermove',function(e){ if(!bodyDrag) return; var d=ba(e)-a0; rot=r0+d; setRot()});
-  function endB(){bodyDrag=false;svg.style.cursor='grab'}
-  svg.addEventListener('pointerup',endB); svg.addEventListener('pointercancel',endB);
+  layout(); addEventListener('resize',layout);
+  var M=new DOMMatrix(), drag3=false,lx=0,ly=0,anim=null;
+  function put(){body.style.transform=M.toString()}
+  host.style.cursor='grab';
+  host.addEventListener('pointerdown',function(e){ if(e.target.closest&&e.target.closest('.knob')) return; drag3=true;lx=e.clientX;ly=e.clientY;body.style.transition='none';host.style.cursor='grabbing';host.setPointerCapture(e.pointerId);e.preventDefault()});
+  host.addEventListener('pointermove',function(e){ if(!drag3) return; var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY; M=new DOMMatrix().rotate(-dy*0.6,dx*0.6,0).multiply(M); put()});
+  function end3(){drag3=false;host.style.cursor='grab'}
+  host.addEventListener('pointerup',end3); host.addEventListener('pointercancel',end3);
+  host.addEventListener('dblclick',function(){M=new DOMMatrix();body.style.transition='transform .6s cubic-bezier(.2,.8,.2,1)';put()});
+  window.__lightdev={get matrix(){return M.toString()}};
   apply(); requestAnimationFrame(tick);
 })();
 
