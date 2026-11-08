@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>스마트 과학 IoT 키트 · DK Digital Science</title>
+<meta name="description" content="IoT:bit와 센서로 배우는 기초 코딩 11개와 환경 모니터링 프로젝트 5개">
+<meta name="theme-color" content="#eeeef1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#7c4dff;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;overflow:hidden;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;display:flex;flex-direction:column}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+
+/* 위쪽 줄 */
+header{flex:none;height:64px;display:flex;justify-content:space-between;align-items:center;padding:0 clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:14px;background:transparent;color:var(--ink);transition:background .25s,color .25s}
+.pill:hover:not(:disabled){background:var(--ink);color:#fff}
+.pill:disabled{opacity:.35;cursor:default}
+.pill.solid{background:var(--ink);color:#fff}
+.pill.solid:hover:not(:disabled){background:var(--acc);border-color:var(--acc)}
+
+/* 책 무대 */
+.stage{flex:1;min-height:0;display:flex;overflow:auto;touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
+.book{position:relative;perspective:2600px;margin:auto;flex:none}
+.leaf{position:absolute;top:0;height:100%;width:50%;overflow:hidden}
+.leaf.left{left:0}.leaf.right{left:50%}
+.book.one .leaf.right{left:0;width:100%}.book.one .leaf.left,.book.one .flip{display:none}
+.page{position:absolute;inset:0;background:rgba(255,255,255,.82);border:1.5px solid var(--line);padding:calc(var(--u)*5.2) calc(var(--u)*6) calc(var(--u)*7.2);display:flex;flex-direction:column;overflow:hidden;
+  font-size:calc(var(--u)*3.15);line-height:1.55}
+.leaf.left .page,.face.l .page{border-radius:calc(var(--u)*4) 0 0 calc(var(--u)*4);border-right-color:rgba(11,11,16,.08)}
+.leaf.right .page,.face.r .page{border-radius:0 calc(var(--u)*4) calc(var(--u)*4) 0;border-left-color:rgba(11,11,16,.08)}
+.book.one .leaf.right .page{border-radius:calc(var(--u)*4)}
+.leaf.left .page::after,.face.l .page::after{content:"";position:absolute;top:0;right:0;bottom:0;width:calc(var(--u)*7);background:linear-gradient(90deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.leaf.right .page::after,.face.r .page::after{content:"";position:absolute;top:0;left:0;bottom:0;width:calc(var(--u)*7);background:linear-gradient(270deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.book.one .leaf.right .page::after{display:none}
+.book{filter:drop-shadow(0 30px 40px rgba(30,20,70,.18))}
+.flip{position:absolute;top:0;height:100%;width:50%;transform-style:preserve-3d;display:none;will-change:transform}
+.flip.on{display:block}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face.back{transform:rotateY(180deg)}
+.pfoot{position:absolute;left:calc(var(--u)*6);right:calc(var(--u)*6);bottom:calc(var(--u)*3);display:flex;justify-content:space-between;font-size:calc(var(--u)*2.3);font-weight:700;color:var(--muted)}
+.leaf.left .pfoot,.face.l .pfoot{flex-direction:row}
+.leaf.right .pfoot,.face.r .pfoot{flex-direction:row-reverse}
+
+/* 페이지 내용 */
+.eb{font-size:calc(var(--u)*2.6);font-weight:800;color:var(--c,var(--acc));letter-spacing:.01em;margin:0 0 calc(var(--u)*1.6)}
+.ttl{margin:0;font-size:calc(var(--u)*5.4);line-height:1.12;letter-spacing:-.045em;font-weight:800;text-wrap:balance}
+.body{margin-top:calc(var(--u)*3.4);display:flex;flex-direction:column;gap:calc(var(--u)*2.1);min-height:0;flex:1}
+.body p{margin:0}
+.bl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.9)}
+.bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
+.bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c,var(--acc))}
+.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.codewrap{position:relative}
+.cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.lk em{font-style:normal;font-size:.7em;font-weight:700;background:#111;color:#fff;border-radius:99px;padding:.15em .7em;margin-left:.4em;vertical-align:middle}
+.cpy.mk{right:calc(var(--u)*11.5);text-decoration:none;display:inline-block}
+.cpy:hover{background:rgba(255,255,255,.3)}
+.donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
+.donebtn.on{background:var(--c,var(--acc));color:#fff}
+.nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
+.nt li{position:relative;padding-left:calc(var(--u)*2.8)}
+.nt li::before{content:"※";position:absolute;left:0;color:var(--c,var(--acc));font-weight:800}
+.stm{font-size:calc(var(--u)*4.1);line-height:1.38;font-weight:700;letter-spacing:-.03em}
+.nums{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*2.6)}
+.nums li{display:flex;gap:calc(var(--u)*2.8);align-items:flex-start;font-weight:500;font-size:calc(var(--u)*3.25)}
+.nums .n{flex:none;width:calc(var(--u)*6.4);height:calc(var(--u)*6.4);border-radius:50%;background:var(--c,var(--acc));color:#fff;display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*3.2);margin-top:calc(var(--u)*-.4)}
+.stepno{width:calc(var(--u)*11);height:calc(var(--u)*11);border-radius:50%;background:var(--c,var(--acc));color:#fff;display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*5.6);letter-spacing:-.04em;margin-bottom:calc(var(--u)*3)}
+.parts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.2);counter-reset:p;align-content:start}
+.parts li{counter-increment:p;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:calc(var(--u)*1.6);padding:calc(var(--u)*2.2) calc(var(--u)*2) calc(var(--u)*2.4);border:1.5px solid var(--line);border-radius:calc(var(--u)*3);font-size:calc(var(--u)*3.3);line-height:1.3;font-weight:700;background:rgba(255,255,255,.8);text-align:center;word-break:keep-all}
+.parts li::before{content:counter(p);position:absolute;left:calc(var(--u)*1.8);top:calc(var(--u)*1.8);width:calc(var(--u)*5.2);height:calc(var(--u)*5.2);border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*2.8);font-weight:800;z-index:1}
+.parts .th{order:-1;margin:0;display:flex;gap:calc(var(--u)*1.4);justify-content:center;align-items:center;width:100%;height:calc(var(--u)*24)}
+.parts .th img{height:100%;width:auto;max-width:100%;min-width:0;object-fit:contain;border-radius:calc(var(--u)*1.6);background:#fff}
+.parts .th img:only-child{max-width:100%}
+.parts .th:has(img+img) img{max-width:48%}
+.parts.many .th,.parts.five .th{height:calc(var(--u)*17)}
+.parts.dense{gap:calc(var(--u)*1.2)}
+.parts.dense li{gap:calc(var(--u)*.6);padding:calc(var(--u)*1.2) calc(var(--u)*1.2) calc(var(--u)*1.2);font-size:calc(var(--u)*2.9)}
+.parts.dense li::before{width:calc(var(--u)*4.2);height:calc(var(--u)*4.2);font-size:calc(var(--u)*2.4);left:calc(var(--u)*1.2);top:calc(var(--u)*1.2)}
+.parts.dense .th{height:calc(var(--u)*9.5)}
+.chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*1)}
+.chip{display:inline-flex;align-items:center;gap:calc(var(--u)*1.2);border:1.5px solid var(--c,var(--acc));color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.3) calc(var(--u)*3.2);font-weight:800;font-size:calc(var(--u)*2.9);text-decoration:none;background:transparent}
+a.chip{background:var(--c,var(--acc));color:#fff}
+.tag{align-self:flex-start;font-size:calc(var(--u)*2.5);font-weight:800;background:rgba(11,11,16,.07);border-radius:999px;padding:calc(var(--u)*.7) calc(var(--u)*2.4)}
+.lk{display:flex;flex-direction:column;gap:calc(var(--u)*2)}
+.lk a{display:block;border:1.5px solid var(--ink);border-radius:calc(var(--u)*3);padding:calc(var(--u)*2.6) calc(var(--u)*3.2);text-decoration:none;transition:background .25s,color .25s}
+.lk a:hover{background:var(--ink);color:#fff}
+.lk b{display:block;font-size:calc(var(--u)*3.4)}
+.lk span{display:block;font-size:calc(var(--u)*2.3);font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;opacity:.7;margin-top:calc(var(--u)*.6)}
+.qr{width:calc(var(--u)*24);height:calc(var(--u)*24);padding:calc(var(--u)*2);background:#fff;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.4)}
+.qr svg{width:100%;height:100%;display:block}
+.fig{margin:0;border-radius:calc(var(--u)*2.6);overflow:hidden;border:1.5px solid var(--line);background:#fff}
+.fig img,.fig video,.fig iframe{display:block;width:100%;height:auto;border:0;aspect-ratio:16/9;object-fit:contain}
+.body{flex:1}
+.fig{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;background:transparent;border:0}
+.fig img{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:auto;object-fit:contain;border-radius:calc(var(--u)*2);border:1.5px solid var(--line);background:#fff}
+.fig.svg{flex:1 1 0;min-height:0;background:#fff;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*2.4);margin-top:calc(var(--u)*1)}
+.fig.svg svg{width:100%;height:100%;display:block}
+.fig.svg.dark{flex:1 1 0;min-height:0;background:transparent;border:0;padding:0;display:flex;align-items:center;justify-content:center}
+.fig.svg.dark svg{height:100%;width:auto;max-width:100%;max-height:100%}
+.fig.vid{flex:none;width:100%;border:0}
+.fig.vid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:calc(var(--u)*2.4);background:#000}
+.play{position:relative;display:block;width:100%;padding:0;border:0;border-radius:calc(var(--u)*2.4);overflow:hidden;background:#111;aspect-ratio:16/9}
+.play img{width:100%;height:100%;max-height:none;object-fit:cover;border:0;border-radius:0;display:block;opacity:.85}
+.tri{position:absolute;left:50%;top:50%;width:calc(var(--u)*13);height:calc(var(--u)*13);margin:calc(var(--u)*-6.5) 0 0 calc(var(--u)*-6.5);border-radius:50%;background:var(--c,#ff3b30);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.tri::after{content:"";position:absolute;left:38%;top:28%;border-style:solid;border-width:calc(var(--u)*3.6) 0 calc(var(--u)*3.6) calc(var(--u)*5.6);border-color:transparent transparent transparent #fff}
+a.tag{text-decoration:none;color:var(--ink)}
+.page.divider .fig{flex:none;margin-bottom:calc(var(--u)*4)}
+.page.divider .fig img{max-height:calc(var(--u)*50)}
+.big{font-size:calc(var(--u)*10.5);font-weight:800;letter-spacing:-.06em;line-height:1.02;text-wrap:balance}
+.para{font-size:calc(var(--u)*3.45);line-height:1.72;font-weight:500;color:#25252d;text-wrap:pretty}
+.para.s{font-size:calc(var(--u)*3);line-height:1.62}
+.fields{display:flex;flex-direction:column;gap:calc(var(--u)*2);flex:1 1 0;min-height:0}
+.ff{display:flex;flex-direction:column;gap:calc(var(--u)*1.1);flex:1 1 0;min-height:0}
+.ff span{font-weight:800;font-size:calc(var(--u)*2.9);color:var(--c,var(--acc))}
+.ff textarea{flex:1;min-height:calc(var(--u)*8);width:100%;resize:none;border:1.5px solid var(--line);border-radius:calc(var(--u)*2.2);padding:calc(var(--u)*1.8) calc(var(--u)*2.4);font:inherit;font-size:calc(var(--u)*3.1);line-height:1.5;background:#fff;color:var(--ink);user-select:text;-webkit-user-select:text}
+.ff textarea:focus{outline:2px solid var(--c,var(--acc));outline-offset:1px}
+
+/* 표지 · 장 표지 */
+.page.cover{background:#0b0b10;color:#fff;border-color:#0b0b10}
+.page.cover .pfoot{color:rgba(255,255,255,.55)}
+.page.cover::after{display:none}
+.rgb{flex:1;min-height:0;margin:calc(var(--u)*2) 0;display:grid;grid-template-columns:repeat(5,1fr);gap:6%;align-content:center;padding:0 12%}
+.rgb i{display:none}
+.rgb::before{content:"";display:none}
+.rgb.cvart{display:block;padding:0}.rgb.cvart svg{width:100%;height:100%;display:block}
+.led{aspect-ratio:1;border-radius:50%;background:#2a2a33}
+.led.on{background:var(--c,#ff3b30);box-shadow:0 0 calc(var(--u)*3) var(--c,#ff3b30)}
+.cv-t{font-size:calc(var(--u)*6.1);font-weight:800;letter-spacing:-.06em;line-height:1}
+.cv-s{font-size:calc(var(--u)*3.6);font-weight:700;opacity:.7;margin-top:calc(var(--u)*1.6)}
+.cv-e{font-size:calc(var(--u)*2.8);font-weight:700;opacity:.65;margin-bottom:calc(var(--u)*2)}
+.page.divider{justify-content:flex-end}
+.page.divider .no{font-size:calc(var(--u)*3.2);font-weight:800;color:var(--c);margin-bottom:calc(var(--u)*2)}
+.page.divider .bar{width:calc(var(--u)*14);height:calc(var(--u)*1.6);border-radius:99px;background:var(--c);margin-bottom:calc(var(--u)*4)}
+.page.blank{background:transparent;border-color:transparent;box-shadow:none}
+.page.blank::after{display:none}
+.endp{justify-content:center;align-items:flex-start;gap:calc(var(--u)*3)}
+
+/* 아래 조작줄 */
+.ctrl{flex:none;display:flex;align-items:center;justify-content:center;gap:12px;padding:10px clamp(12px,3vw,40px) calc(14px + env(safe-area-inset-bottom));min-height:68px}
+.prog{flex:1;max-width:560px;display:flex;flex-direction:column;gap:4px;align-items:center}
+.prog small{font-weight:800;font-size:13px;color:var(--muted);letter-spacing:.02em}
+input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
+
+/* 목차 (왼쪽 서랍) */
+.toc{position:fixed;inset:0;z-index:50;display:none;background:rgba(11,11,16,.32)}
+.toc.on{display:block}
+.toc-in{position:absolute;left:0;top:0;bottom:0;width:min(460px,92vw);background:#f4f4f8;overflow:auto;padding:22px clamp(18px,3vw,32px) 40px;box-shadow:12px 0 50px rgba(0,0,0,.22);animation:drawer .28s cubic-bezier(.3,.7,.2,1)}
+@keyframes drawer{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+.toc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.toc h3{font-size:clamp(30px,4vw,42px);letter-spacing:-.05em;margin:0;font-weight:800}
+.toc .ch{border-bottom:1.5px solid var(--line)}
+.toc .chap{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:17px 6px;font-size:clamp(22px,2.3vw,27px);font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.toc .chap::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.toc .chap .rg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700}
+.toc .chap .chev{width:10px;height:10px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg);margin:-4px 4px 0 8px;transition:transform .2s;flex:none}
+.toc .ch.open .chap .chev{transform:rotate(225deg);margin-top:4px}
+.toc .chap:hover{background:rgba(11,11,16,.05)}
+.toc .ch ol{display:none;border-top:0;margin:0 0 12px 26px}
+.toc .ch.open ol{display:block}
+.toc ol{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--line)}
+.toc li button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 10px;font-size:clamp(15px,1.4vw,16.5px);font-weight:600;letter-spacing:-.03em;color:var(--ink);border-radius:0}
+.toc li button:hover{background:rgba(11,11,16,.05)}
+.toc li button.cur{background:var(--c);color:#fff;border-radius:10px}
+.toc li button.cur .pg{color:rgba(255,255,255,.85)}
+.toc li .pg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700;flex:none}
+.tocbtn{position:fixed;left:clamp(10px,2vw,28px);top:50%;transform:translateY(-50%);z-index:20;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--ink);background:rgba(255,255,255,.85);display:grid;place-items:center;color:var(--ink);transition:background .25s,color .25s;box-shadow:0 8px 24px rgba(30,20,70,.14)}
+.tocbtn:hover{background:var(--ink);color:#fff}
+.tocbtn svg{width:24px;height:24px}
+@media (max-width:900px){.tocbtn{top:auto;bottom:12px;left:10px;transform:none;width:46px;height:46px}.ctrl{padding-left:64px}}
+@media (prefers-reduced-motion:reduce){.flip{transition:none!important}}
+
+/* 적응형 퀴즈 */
+.page.quiz .qt{font-size:calc(var(--u)*3.9);line-height:1.35;margin:calc(var(--u)*1) 0 calc(var(--u)*1.2)}.page.quiz .body{min-height:0;display:flex;flex-direction:column}
+.qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:calc(var(--u)*1.4)}
+.qmeta .rd{font-weight:800;font-size:calc(var(--u)*2.7);color:var(--c)}
+.qmeta .dots i{display:inline-block;width:calc(var(--u)*2);height:calc(var(--u)*2);border-radius:50%;background:var(--line);margin-left:calc(var(--u)*.9)}
+.qmeta .dots i.on{background:var(--c)}.qmeta .dots i.done{background:var(--c);opacity:.35}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*1.5)}.opts.one{grid-template-columns:1fr}
+.opt{font:inherit;font-weight:700;font-size:calc(var(--u)*3.3);padding:calc(var(--u)*2.1) calc(var(--u)*2.4);border:1.5px solid var(--line);border-radius:calc(var(--u)*2.2);background:#fff;color:var(--ink);text-align:left;cursor:pointer;transition:border-color .2s,color .2s}
+.opts.one .opt{font-size:calc(var(--u)*3.1);padding:calc(var(--u)*1.7) calc(var(--u)*2.4)}
+.opt:hover{border-color:var(--c);color:var(--c)}
+.chosen{font-size:calc(var(--u)*2.7);color:var(--muted);margin-bottom:calc(var(--u)*1.4)}.chosen b{color:var(--ink)}
+.fbk{flex:0 1 auto;min-height:0;overflow-y:auto;border:1.5px solid var(--line);border-left:calc(var(--u)*1.2) solid var(--k);border-radius:calc(var(--u)*2);background:#fff;padding:calc(var(--u)*1.6) calc(var(--u)*2.2);display:flex;flex-direction:column;gap:calc(var(--u)*.9)}
+.fbk.ok{--k:#16a34a}.fbk.no{--k:#e4174b}
+.fbk .vd{font-weight:800;font-size:calc(var(--u)*3.1);color:var(--k)}.fbk .vd small{font-weight:600;font-size:calc(var(--u)*2.4);color:var(--muted);margin-left:calc(var(--u)*1.2)}
+.fbk p{margin:0;font-size:calc(var(--u)*2.55);line-height:1.45;font-weight:500;color:#25252d}
+.vrow{display:flex;gap:calc(var(--u)*2);align-items:center}
+.vrow .play{flex:none;width:calc(var(--u)*23);position:relative;border:0;padding:0;background:#000;border-radius:calc(var(--u)*1.6);overflow:hidden;aspect-ratio:16/9;cursor:pointer}
+.vrow .play img{display:block;width:100%;height:100%;object-fit:cover;opacity:.85}
+.vrow .tri{position:absolute;left:50%;top:50%;width:calc(var(--u)*7);height:calc(var(--u)*7);margin:calc(var(--u)*-3.5) 0 0 calc(var(--u)*-3.5);border-radius:50%;background:rgba(255,255,255,.92)}
+.vrow .tri::after{content:"";position:absolute;left:calc(var(--u)*2.8);top:calc(var(--u)*1.9);border-left:calc(var(--u)*2.4) solid #0b0b10;border-top:calc(var(--u)*1.6) solid transparent;border-bottom:calc(var(--u)*1.6) solid transparent}
+.vrow p{font-size:calc(var(--u)*2.4)!important;color:#33333d}
+.kbox{background:color-mix(in srgb,var(--c) 10%,#fff);border-radius:calc(var(--u)*1.8);padding:calc(var(--u)*1.6) calc(var(--u)*2.2);display:flex;flex-direction:column;gap:calc(var(--u)*.6)}
+.kbox p{font-weight:700}
+.qact{display:flex;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*1.4);flex-wrap:wrap;flex:none}
+.qact button{font:inherit;font-weight:800;font-size:calc(var(--u)*2.7);padding:calc(var(--u)*1.2) calc(var(--u)*2.8);border-radius:999px;border:1.5px solid var(--c);color:var(--c);background:#fff;cursor:pointer}
+.qact button.go{background:var(--c);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="../science/" aria-label="DK Digital Science 처음으로">
+    <span class="mini" aria-hidden="true"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span>
+    DK Digital Science
+  </a>
+  <button class="pill" id="btnToc" type="button">목차</button>
+</header>
+
+<div class="stage" id="stage">
+  <div class="book" id="book">
+    <div class="leaf left" id="L"></div>
+    <div class="leaf right" id="R"></div>
+    <div class="flip" id="F"><div class="face front" id="Ff"></div><div class="face back" id="Fb"></div></div>
+  </div>
+</div>
+
+<div class="ctrl">
+  <button class="pill" id="prev" type="button" aria-label="이전 페이지">← 이전</button>
+  <div class="prog"><small id="pos">1 / 1</small><input type="range" id="rng" min="1" max="1" value="1" aria-label="페이지 이동"></div>
+  <button class="pill solid" id="next" type="button" aria-label="다음 페이지">다음 →</button>
+</div>
+
+<button class="tocbtn" id="tocOpen" type="button" aria-label="목차 열기" title="목차"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+<div class="toc" id="toc" role="dialog" aria-label="목차">
+  <div class="toc-in"><div class="toc-hd"><h3>목차</h3><button class="pill" id="tocX" type="button">닫기 ✕</button></div><div id="tocList"></div></div>
+</div>
+
+<script>var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});</script>
+<script>
+"use strict";
+/* ============================================================
+   사진·영상·링크 넣는 곳 (페이지 번호 기준, 비워 두면 표시되지 않습니다)
+   MEDIA.img[페이지번호]   = "img/12.jpg"   (또는 여러 장: ["img/12a.jpg","img/12b.jpg"])
+   MEDIA.video[페이지번호] = "https://www.youtube.com/watch?v=..." 또는 "video/12.mp4"
+   MEDIA.links[페이지번호] = { "활동지": "https://...", "AR 보기": "https://..." }
+   ============================================================ */
+const CODE_LINK = "https://makecode.microbit.org/";
+const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="센서와 IoT:bit 보드가 구름으로 데이터를 보내는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="130" fill="#0d9488" opacity=".35" filter="url(#g)"/><path d="M120 130a36 36 0 0 1 70-8a30 30 0 0 1 54 16a26 26 0 0 1-4 52h-112a30 30 0 0 1-8-60z" fill="#e8f1ff" opacity=".95"/><path d="M200 190v34" stroke="#7fb0ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 10"/><rect x="110" y="226" width="180" height="120" rx="14" fill="#f2f4f8" stroke="#9aa5b8" stroke-width="4"/><rect x="146" y="238" width="108" height="64" rx="8" fill="#1b1b22"/><circle cx="168" cy="252" r="4" fill="#ff3b30"/><circle cx="184" cy="252" r="4" fill="#33333d"/><circle cx="200" cy="252" r="4" fill="#33333d"/><circle cx="216" cy="252" r="4" fill="#33333d"/><circle cx="232" cy="252" r="4" fill="#ff3b30"/><circle cx="168" cy="263" r="4" fill="#33333d"/><circle cx="184" cy="263" r="4" fill="#33333d"/><circle cx="200" cy="263" r="4" fill="#33333d"/><circle cx="216" cy="263" r="4" fill="#33333d"/><circle cx="232" cy="263" r="4" fill="#33333d"/><circle cx="168" cy="274" r="4" fill="#33333d"/><circle cx="184" cy="274" r="4" fill="#33333d"/><circle cx="200" cy="274" r="4" fill="#ff3b30"/><circle cx="216" cy="274" r="4" fill="#33333d"/><circle cx="232" cy="274" r="4" fill="#33333d"/><circle cx="168" cy="285" r="4" fill="#ff3b30"/><circle cx="184" cy="285" r="4" fill="#33333d"/><circle cx="200" cy="285" r="4" fill="#33333d"/><circle cx="216" cy="285" r="4" fill="#33333d"/><circle cx="232" cy="285" r="4" fill="#ff3b30"/><circle cx="168" cy="296" r="4" fill="#33333d"/><circle cx="184" cy="296" r="4" fill="#ff3b30"/><circle cx="200" cy="296" r="4" fill="#ff3b30"/><circle cx="216" cy="296" r="4" fill="#ff3b30"/><circle cx="232" cy="296" r="4" fill="#33333d"/><rect x="128" y="318" width="10" height="20" rx="2" fill="#ffb020" transform="translate(0,0)"/><rect x="146" y="318" width="10" height="20" rx="2" fill="#d33" transform="translate(0,0)"/><rect x="164" y="318" width="10" height="20" rx="2" fill="#333" transform="translate(0,0)"/><rect x="182" y="318" width="10" height="20" rx="2" fill="#ffb020" transform="translate(0,0)"/><rect x="200" y="318" width="10" height="20" rx="2" fill="#d33" transform="translate(0,0)"/><rect x="218" y="318" width="10" height="20" rx="2" fill="#333" transform="translate(0,0)"/><rect x="236" y="318" width="10" height="20" rx="2" fill="#ffb020" transform="translate(0,0)"/><rect x="254" y="318" width="10" height="20" rx="2" fill="#d33" transform="translate(0,0)"/><rect x="30" y="250" width="52" height="52" rx="10" fill="#16a34a"/><path d="M42 290q20-34 40-34" stroke="#bbf7d0" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M82 276h28" stroke="#6ee7a0" stroke-width="4"/><rect x="318" y="250" width="52" height="52" rx="10" fill="#1f6bff"/><circle cx="334" cy="270" r="7" fill="#0b0b10"/><circle cx="354" cy="270" r="7" fill="#0b0b10"/><path d="M290 276h28" stroke="#7fb0ff" stroke-width="4"/><path d="M40 70l10 24 10-24" stroke="#ffd54a" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="52" r="16" fill="#ffd54a"/><path d="M340 90q10 18 0 28q-10-10 0-28z" fill="#5cc8ff"/></svg>`;
+const MEDIA = {"img": {"6": ["https://learn-en.readthedocs.io/en/latest/_images/iot_bit_01.jpg", "https://learn-en.readthedocs.io/en/latest/_images/iot_bit_02.png"], "7": ["https://learn-en.readthedocs.io/en/latest/_images/iot_bit_18.gif", "https://learn-en.readthedocs.io/en/latest/_images/iot_bit_09.gif", "https://learn-en.readthedocs.io/en/latest/_images/iot_bit_10.gif"], "8": ["https://learn-en.readthedocs.io/en/latest/_images/iot_bit_11.jpg", "https://learn-en.readthedocs.io/en/latest/_images/iot_bit_12.jpg"], "54": ["https://learn-en.readthedocs.io/en/latest/_images/case_01_011.png"], "55": ["https://learn-en.readthedocs.io/en/latest/_images/case_01_02.png"], "56": ["https://learn-en.readthedocs.io/en/latest/_images/case_01_031.png", "https://learn-en.readthedocs.io/en/latest/_images/case_01_04.png"], "59": ["https://learn-en.readthedocs.io/en/latest/_images/case_02_011.png"], "60": ["https://learn-en.readthedocs.io/en/latest/_images/case_02_02.png"], "61": ["https://learn-en.readthedocs.io/en/latest/_images/case_02_031.png", "https://learn-en.readthedocs.io/en/latest/_images/case_02_04.png"], "65": ["https://learn-en.readthedocs.io/en/latest/_images/case_03_011.png"], "66": ["https://learn-en.readthedocs.io/en/latest/_images/case_03_02.png", "https://learn-en.readthedocs.io/en/latest/_images/case_03_031.png"], "70": ["https://learn-en.readthedocs.io/en/latest/_images/case_04_011.png"], "71": ["https://learn-en.readthedocs.io/en/latest/_images/case_04_02.png", "https://learn-en.readthedocs.io/en/latest/_images/case_04_031.png", "https://learn-en.readthedocs.io/en/latest/_images/case_04_04.png", "https://learn-en.readthedocs.io/en/latest/_images/case_04_05.png"], "75": ["https://learn-en.readthedocs.io/en/latest/_images/case_05_02.png"], "76": ["https://learn-en.readthedocs.io/en/latest/_images/case_05_011.png"], "79": ["https://learn-en.readthedocs.io/en/latest/_images/case_ts_01.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_02.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_08.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_10.png"], "80": ["https://learn-en.readthedocs.io/en/latest/_images/case_ts_17.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_11.png"], "82": ["https://learn-en.readthedocs.io/en/latest/_images/case_ts_14.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_16.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_19.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ts_20.png"], "83": ["https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_04.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_06.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_10.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_13.png"], "84": ["https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_17.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_18.png", "https://learn-en.readthedocs.io/en/latest/_images/case_ifttt_20.png"]}, "video": {}, "links": {}};
+const ILLU = {"11": "<svg viewBox=\"0 0 420 213\" role=\"img\" aria-label=\"OLED에 글자 쓰기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"30\" y=\"84\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"107\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Hello&quot;</text><rect x=\"30\" y=\"121\" width=\"176\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"144\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 줄 바꾸기</text><rect x=\"30\" y=\"158\" width=\"231\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"181\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 2026</text></svg>", "15": "<svg viewBox=\"0 0 420 412\" role=\"img\" aria-label=\"BME280: 온도와 습도 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Temp:&quot;</text><rect x=\"30\" y=\"209\" width=\"360\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [BME280 온도 ℃]</text><rect x=\"30\" y=\"246\" width=\"176\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 줄 바꾸기</text><rect x=\"30\" y=\"283\" width=\"308\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Humidity:&quot;</text><rect x=\"30\" y=\"320\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"343\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [BME280 습도]</text><rect x=\"30\" y=\"357\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"380\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 1000 ms</text></svg>", "19": "<svg viewBox=\"0 0 420 381\" role=\"img\" aria-label=\"조도 센서: 밝기 알아보기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"275\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Light:&quot;</text><rect x=\"30\" y=\"209\" width=\"284\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [조도 P1]</text><rect x=\"30\" y=\"246\" width=\"273\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 조도 P1 &lt; 100 이면</text><rect x=\"30\" y=\"283\" width=\"14\" height=\"39\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"283\" width=\"195\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">아이콘 보이기 ☾</text><rect x=\"30\" y=\"326\" width=\"187\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"349\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 500 ms</text></svg>", "23": "<svg viewBox=\"0 0 420 381\" role=\"img\" aria-label=\"소음 센서: 소리 크기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"275\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Noise:&quot;</text><rect x=\"30\" y=\"209\" width=\"284\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [소음 P1]</text><rect x=\"30\" y=\"246\" width=\"273\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 소음 P1 &gt; 200 이면</text><rect x=\"30\" y=\"283\" width=\"14\" height=\"39\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"283\" width=\"195\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">아이콘 보이기 ☹</text><rect x=\"30\" y=\"326\" width=\"187\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"349\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 200 ms</text></svg>", "27": "<svg viewBox=\"0 0 420 256\" role=\"img\" aria-label=\"PIR 센서: 사람 알아보기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"47\" width=\"336\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 디지털 읽기 P10 = 1 이면</text><rect x=\"30\" y=\"84\" width=\"14\" height=\"76\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"84\" width=\"195\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"107\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">아이콘 보이기 ☺</text><rect x=\"46\" y=\"121\" width=\"219\" height=\"34\" rx=\"7\" fill=\"#e30fc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"144\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">멜로디 재생 BaDing</text><rect x=\"30\" y=\"164\" width=\"89\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"187\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">아니면</text><rect x=\"30\" y=\"201\" width=\"142\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"224\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">화면 지우기</text></svg>", "31": "<svg viewBox=\"0 0 420 418\" role=\"img\" aria-label=\"초음파 센서: 거리 재기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"357\" height=\"34\" rx=\"7\" fill=\"#dc143c\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">변수 거리 ← 초음파 거리(cm) P1</text><rect x=\"30\" y=\"172\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"209\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Dist:&quot;</text><rect x=\"30\" y=\"246\" width=\"229\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 거리</text><rect x=\"30\" y=\"283\" width=\"229\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 거리 &lt; 20 이면</text><rect x=\"30\" y=\"320\" width=\"14\" height=\"39\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"320\" width=\"219\" height=\"34\" rx=\"7\" fill=\"#e30fc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"343\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">멜로디 재생 BaDing</text><rect x=\"30\" y=\"363\" width=\"187\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"386\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 300 ms</text></svg>", "35": "<svg viewBox=\"0 0 420 381\" role=\"img\" aria-label=\"토양습도 센서: 흙이 말랐나요 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Soil:&quot;</text><rect x=\"30\" y=\"209\" width=\"326\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [토양습도 P1]</text><rect x=\"30\" y=\"246\" width=\"304\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 토양습도 P1 &lt; 50 이면</text><rect x=\"30\" y=\"283\" width=\"14\" height=\"39\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"283\" width=\"195\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">아이콘 보이기 ☹</text><rect x=\"30\" y=\"326\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"349\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 1000 ms</text></svg>", "39": "<svg viewBox=\"0 0 420 381\" role=\"img\" aria-label=\"수위 센서: 물의 높이 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"275\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Water:&quot;</text><rect x=\"30\" y=\"209\" width=\"284\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [수위 P2]</text><rect x=\"30\" y=\"246\" width=\"262\" height=\"34\" rx=\"7\" fill=\"#00a4a6\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">만약 수위 P2 &lt; 10 이면</text><rect x=\"30\" y=\"283\" width=\"14\" height=\"39\" fill=\"#00a4a6\"/><rect x=\"46\" y=\"283\" width=\"219\" height=\"34\" rx=\"7\" fill=\"#e30fc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"59\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">멜로디 재생 BaDing</text><rect x=\"30\" y=\"326\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"349\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 1000 ms</text></svg>", "43": "<svg viewBox=\"0 0 420 301\" role=\"img\" aria-label=\"먼지 센서: 공기 확인 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"14\" y=\"98\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"135\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"172\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Dust:&quot;</text><rect x=\"30\" y=\"209\" width=\"339\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [먼지 P9, P10]</text><rect x=\"30\" y=\"246\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 1000 ms</text></svg>", "47": "<svg viewBox=\"0 0 420 278\" role=\"img\" aria-label=\"서보: 각도 움직이기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"208\" height=\"34\" rx=\"7\" fill=\"#5c6bc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">서보 P10 쓰기 0도</text><rect x=\"14\" y=\"98\" width=\"185\" height=\"34\" rx=\"7\" fill=\"#d400d4\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"121\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">버튼 A를 누르면</text><rect x=\"30\" y=\"135\" width=\"208\" height=\"34\" rx=\"7\" fill=\"#5c6bc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"158\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">서보 P10 쓰기 0도</text><rect x=\"14\" y=\"186\" width=\"185\" height=\"34\" rx=\"7\" fill=\"#d400d4\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"209\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">버튼 B를 누르면</text><rect x=\"30\" y=\"223\" width=\"219\" height=\"34\" rx=\"7\" fill=\"#5c6bc0\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"246\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">서보 P10 쓰기 90도</text></svg>", "51": "<svg viewBox=\"0 0 420 449\" role=\"img\" aria-label=\"RTC 시계: 시간 알려 주기 블록 그림\" font-family=\"inherit\"><rect width=\"100%\" height=\"100%\" fill=\"#f4f6fb\" rx=\"14\"/><rect x=\"14\" y=\"10\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"33\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">시작할 때</text><rect x=\"30\" y=\"47\" width=\"328\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"70\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 켜기: 가로 128, 세로 64</text><rect x=\"30\" y=\"84\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#e08a00\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"107\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">RTC 시 정하기 14</text><rect x=\"30\" y=\"121\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#e08a00\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"144\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">RTC 분 정하기 15</text><rect x=\"14\" y=\"172\" width=\"121\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"27\" y=\"195\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">무한 반복</text><rect x=\"30\" y=\"209\" width=\"144\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"232\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 지우기</text><rect x=\"30\" y=\"246\" width=\"264\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"269\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;Time:&quot;</text><rect x=\"30\" y=\"283\" width=\"274\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"306\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [RTC 시]</text><rect x=\"30\" y=\"320\" width=\"220\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"343\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 글자 쓰기 &quot;:&quot;</text><rect x=\"30\" y=\"357\" width=\"274\" height=\"34\" rx=\"7\" fill=\"#0e7490\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"380\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">OLED 숫자 쓰기 [RTC 분]</text><rect x=\"30\" y=\"394\" width=\"198\" height=\"34\" rx=\"7\" fill=\"#1e90ff\" stroke=\"#00000033\" stroke-width=\"2\"/><text x=\"43\" y=\"417\" font-size=\"19\" fill=\"#fff\" font-weight=\"800\" text-anchor=\"start\">기다리기 1000 ms</text></svg>"};
+const PARTS = {};
+const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "기초 1 · OLED에 글자 쓰기", "c": "#ff8a1f"}, {"n": "기초 2 · BME280: 온도와 습도", "c": "#16a34a"}, {"n": "기초 3 · 조도 센서: 밝기 알아보기", "c": "#1e6bff"}, {"n": "기초 4 · 소음 센서: 소리 크기", "c": "#d946ef"}, {"n": "기초 5 · PIR 센서: 사람 알아보기", "c": "#0d9488"}, {"n": "기초 6 · 초음파 센서: 거리 재기", "c": "#ff3b30"}, {"n": "기초 7 · 토양습도 센서: 흙이 말랐나요", "c": "#f59e0b"}, {"n": "기초 8 · 수위 센서: 물의 높이", "c": "#8b5cf6"}, {"n": "기초 9 · 먼지 센서: 공기 확인", "c": "#06b6d4"}, {"n": "기초 10 · 서보: 각도 움직이기", "c": "#e11d48"}, {"n": "기초 11 · RTC 시계: 시간 알려 주기", "c": "#65a30d"}, {"n": "프로젝트 1 · 공기질 모니터링", "c": "#2563eb"}, {"n": "프로젝트 2 · 환경 소음 측정", "c": "#ea580c"}, {"n": "프로젝트 3 · 환경 품질 관측소", "c": "#0891b2"}, {"n": "프로젝트 4 · 자동 물주기", "c": "#c026d3"}, {"n": "프로젝트 5 · 방범 감시 장치", "c": "#4f46e5"}, {"n": "클라우드 · ThingSpeak", "c": "#0d9488"}, {"n": "클라우드 · 이메일 알림", "c": "#16a34a"}, {"n": "마무리", "c": "#7c4dff"}];
+const QUIZ = {};
+const DATA = `
+cover|0||스마트 과학 IoT 키트|
+: 센서로 모으고, 코드로 읽고, 클라우드로 보내는 과학 실험 — 기초 코딩 11 + 프로젝트 5
+@toc 표지
+---
+text|0|이 책은|학습 순서 ①|
+1. 기초 1 — OLED에 글자 쓰기
+2. 기초 2 — BME280: 온도와 습도
+3. 기초 3 — 조도 센서: 밝기 알아보기
+4. 기초 4 — 소음 센서: 소리 크기
+5. 기초 5 — PIR 센서: 사람 알아보기
+6. 기초 6 — 초음파 센서: 거리 재기
+@toc 학습 순서
+---
+text|0|이 책은|학습 순서 ②|
+7. 기초 7 — 토양습도 센서: 흙이 말랐나요
+8. 기초 8 — 수위 센서: 물의 높이
+9. 기초 9 — 먼지 센서: 공기 확인
+10. 기초 10 — 서보: 각도 움직이기
+11. 기초 11 — RTC 시계: 시간 알려 주기
+12. 프로젝트 1 — 공기질 모니터링
+13. 프로젝트 2 — 환경 소음 측정
+@toc 학습 순서 ②
+---
+text|0|이 책은|학습 순서 ③|
+14. 프로젝트 3 — 환경 품질 관측소
+15. 프로젝트 4 — 자동 물주기
+16. 프로젝트 5 — 방범 감시 장치
+17. 클라우드 — ThingSpeak에 데이터 올리기
+18. 클라우드 — 온도가 높으면 이메일 알림
+* ELECFREAKS ‘Smart Science IoT Kit’ 매뉴얼을 참고해 새로 쓴 안내서입니다. 그림은 원문 사이트의 것을 보여 줍니다.
+@toc 학습 순서 ③
+---
+text|0|준비하기|키트 구성품|
+- IoT:bit 확장보드 1개 (micro:bit는 따로 준비)
+- OLED 화면, BME280(온도·습도)
+- 인체감지(PIR) 센서, 조도 센서, 소음 센서
+- 수위 센서, 토양습도 센서, 먼지 센서
+- Sonar:bit(초음파), 180° 서보
+* 컴퓨터(또는 태블릿)와 인터넷, MakeCode 웹사이트(makecode.microbit.org)를 사용합니다.
+L 키트 소개 원문 보기(영어)|https://wiki.elecfreaks.com/en/microbit/wisdom-life/microbit-smart-science-iot-kit/iot-kit
+@toc 구성품
+---
+text|0|알아보기|IoT:bit 확장보드|
+: micro:bit에 끼우는 확장보드로, 센서를 3핀(S·V·G)으로 간단히 연결합니다. 와이파이(ESP8266)와 시계(RTC), 부저가 들어 있어 센서값을 인터넷으로 보낼 수 있습니다.
+- 센서와 서보를 꽂는 3핀 단자
+- 시간을 기억하는 RTC (CR1220 단추 전지 필요)
+- 와이파이 모듈, 부저와 이어폰 단자
+- OLED·BME280을 바로 꽂는 IIC 단자
+@toc IoT:bit
+---
+text|0|시작하기|처음 연결하기|
+1. IoT:bit에 CR1220 단추 전지를 끼웁니다(RTC가 시간을 기억하려면 필요합니다).
+2. micro:bit를 IoT:bit에 꽂습니다.
+3. USB 케이블로 전원을 연결하고 스위치를 켭니다.
+@toc 처음 연결
+---
+text|0|시작하기|MakeCode 준비하기|
+1. makecode.microbit.org에서 새 프로젝트를 만듭니다.
+2. 서랍에서 ‘고급’을 눌러 더 많은 블록을 엽니다.
+3. 맨 아래 ‘확장’에서 IOT를 검색해 추가합니다.
+* 일부 패키지가 제거된다는 경고가 나오면 안내를 따르거나 새 프로젝트를 만드세요.
+L MakeCode 열기|https://makecode.microbit.org/
+@toc MakeCode 준비
+---
+text|0|안전하게|안전 수칙|
+- 키트에 물이나 다른 액체를 쏟지 않습니다.
+- IoT:bit와 부품의 구조를 망가뜨리지 않습니다.
+- 점퍼선으로 피부를 찌르거나 긁지 않습니다.
+- IoT:bit의 핀을 구부리거나 누르거나 만지지 않습니다.
+- 쉽게 떨어질 곳에 두지 않습니다.
+- 쓴 뒤에는 마르고 깨끗한 상자에 보관합니다.
+@toc 안전 수칙
+---
+text|1|기초 1 · OLED에 글자 쓰기|OLED에 글자 쓰기|
+: OLED 화면에 글자와 숫자를 쓰고 줄을 바꿉니다. 이후 모든 장의 결과 화면이 됩니다.
+- 준비물 — IoT:bit(micro:bit 끼움), OLED
+- 연결 — OLED는 IoT:bit의 I2C(IIC) 단자에 끼웁니다.
+- 배울 내용 — ‘OLED 켜기’는 시작할 때 한 번 · 지우기 → 글자·숫자 쓰기 · 줄 바꾸기
+@toc 기초1 OLED에 글자 쓰기
+---
+text|1|기초 1 · OLED에 글자 쓰기|블록으로 만들기|
+1. IoT 확장을 추가하고 ‘시작할 때’에 ‘OLED 켜기’(128×64)를 넣습니다.
+2. ‘OLED 글자 쓰기’ 블록에 Hello를 적습니다.
+3. ‘줄 바꾸기’ 다음에 ‘OLED 숫자 쓰기’로 2026을 씁니다.
+4. micro:bit로 내려받으면 OLED에 두 줄이 나타납니다.
+@toc 기초1 블록
+---
+text|1|기초 1 · OLED에 글자 쓰기|자바스크립트 코드|
+C OLED.init(128, 64)
+C OLED.writeString("Hello")
+C OLED.newLine()
+C OLED.writeNum(2026)
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초1 코드
+---
+text|1|기초 1 · OLED에 글자 쓰기|해 보기|
+: 글자 대신 내 이름을 영어로 써 보고, 숫자를 바꿔 봅시다.
+F OLED에 쓴 글자|여기에 적어 보세요
+@toc 기초1 해 보기
+---
+text|2|기초 2 · BME280: 온도와 습도|BME280: 온도와 습도|
+: BME280 센서로 온도와 습도를 읽어 OLED에 계속 보여 줍니다.
+- 준비물 — IoT:bit, OLED, BME280
+- 연결 — BME280은 IIC 단자(SCL P19, SDA P20)에 연결합니다.
+- 배울 내용 — ‘무한 반복’으로 값을 계속 읽기 · 센서 값을 글자와 함께 쓰기 · 기다리기
+@toc 기초2 BME280: 온도와 습도
+---
+text|2|기초 2 · BME280: 온도와 습도|블록으로 만들기|
+1. ‘시작할 때’에 OLED 켜기를 넣습니다.
+2. ‘무한 반복’ 안에서 OLED를 지우고 Temp: 글자 뒤에 BME280 온도(℃) 값을 씁니다.
+3. 줄을 바꾸고 Humidity: 글자 뒤에 습도 값을 씁니다.
+4. 1초 기다리면 값이 1초마다 새로 고쳐집니다.
+@toc 기초2 블록
+---
+text|2|기초 2 · BME280: 온도와 습도|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Temp:")
+C     OLED.writeNum(Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C))
+C     OLED.newLine()
+C     OLED.writeString("Humidity:")
+C     OLED.writeNum(Environment.octopus_BME280(Environment.BME280_state.BME280_humidity))
+C     basic.pause(1000)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초2 코드
+---
+text|2|기초 2 · BME280: 온도와 습도|해 보기|
+: 센서를 손으로 감싸 쥐면 온도와 습도가 어떻게 변할까요?
+F 손으로 감쌌을 때 온도|여기에 적어 보세요
+@toc 기초2 해 보기
+---
+text|3|기초 3 · 조도 센서: 밝기 알아보기|조도 센서: 밝기 알아보기|
+: 주변 밝기를 숫자로 보고, 어두워지면 표시로 알려 줍니다.
+- 준비물 — IoT:bit, OLED, 조도 센서
+- 연결 — 조도 센서는 P1에 연결합니다.
+- 배울 내용 — 센서 값을 읽어 숫자로 보기 · 조건(만약 … 이면) · 기준값 정하기
+@toc 기초3 조도 센서: 밝기 알아보기
+---
+text|3|기초 3 · 조도 센서: 밝기 알아보기|블록으로 만들기|
+1. 조도 센서를 P1에 연결합니다.
+2. OLED에 Light: 글자와 조도 값을 씁니다.
+3. ‘만약 조도 < 100 이면’을 만들고 아이콘을 보입니다. 100은 우리 교실에 맞게 바꿉니다.
+4. 센서를 손으로 가렸다 떼며 값이 어떻게 바뀌는지 봅니다.
+@toc 기초3 블록
+---
+text|3|기초 3 · 조도 센서: 밝기 알아보기|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Light:")
+C     OLED.writeNum(Environment.ReadLightIntensity(AnalogPin.P1))
+C     if (Environment.ReadLightIntensity(AnalogPin.P1) < 100) {
+C         basic.showIcon(IconNames.Asleep)
+C     } else {
+C         basic.clearScreen()
+C     }
+C     basic.pause(500)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초3 코드
+---
+text|3|기초 3 · 조도 센서: 밝기 알아보기|해 보기|
+: 교실 불을 켰을 때와 껐을 때의 값을 적고, 알맞은 기준값을 정해 봅시다.
+F 불 켰을 때 / 껐을 때 값|여기에 적어 보세요
+@toc 기초3 해 보기
+---
+text|4|기초 4 · 소음 센서: 소리 크기|소음 센서: 소리 크기|
+: 소리의 크기를 숫자로 읽고, 시끄러우면 알려 줍니다.
+- 준비물 — IoT:bit, OLED, 소음 센서
+- 연결 — 소음 센서는 P1에 연결합니다.
+- 배울 내용 — 아날로그 값 읽기 · 큰 소리를 기준값과 비교하기 · 경고 표시
+@toc 기초4 소음 센서: 소리 크기
+---
+text|4|기초 4 · 소음 센서: 소리 크기|블록으로 만들기|
+1. 소음 센서를 P1에 연결합니다.
+2. OLED에 Noise: 글자와 소음 값을 씁니다.
+3. 기준값(예: 200)보다 크면 화난 얼굴 아이콘을 보입니다.
+4. 박수를 치거나 조용히 있어 보며 값을 비교합니다.
+@toc 기초4 블록
+---
+text|4|기초 4 · 소음 센서: 소리 크기|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Noise:")
+C     OLED.writeNum(Environment.ReadNoise(AnalogPin.P1))
+C     if (Environment.ReadNoise(AnalogPin.P1) > 200) {
+C         basic.showIcon(IconNames.Angry)
+C     } else {
+C         basic.clearScreen()
+C     }
+C     basic.pause(200)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초4 코드
+---
+text|4|기초 4 · 소음 센서: 소리 크기|해 보기|
+: 우리 교실이 조용할 때, 수업 중일 때, 쉬는 시간의 값은 각각 얼마일까요?
+F 상황별 소음 값|여기에 적어 보세요
+@toc 기초4 해 보기
+---
+text|5|기초 5 · PIR 센서: 사람 알아보기|PIR 센서: 사람 알아보기|
+: 사람이 지나가면 알아채고 소리와 표시로 알려 줍니다.
+- 준비물 — IoT:bit, 인체감지(PIR) 센서
+- 연결 — PIR 센서는 P10에 연결합니다.
+- 배울 내용 — 디지털 값 0과 1 · 사람이 있으면 1 · 소리 내기(보드의 부저)
+@toc 기초5 PIR 센서: 사람 알아보기
+---
+text|5|기초 5 · PIR 센서: 사람 알아보기|블록으로 만들기|
+1. PIR 센서를 P10에 연결합니다.
+2. ‘무한 반복’에서 P10의 디지털 값을 읽습니다.
+3. 값이 1이면 아이콘을 보이고 소리를 냅니다.
+4. 아니면 화면을 지웁니다. 센서 앞에서 손을 흔들어 시험합니다.
+@toc 기초5 블록
+---
+text|5|기초 5 · PIR 센서: 사람 알아보기|자바스크립트 코드|
+C basic.forever(function () {
+C     if (pins.digitalReadPin(DigitalPin.P10) == 1) {
+C         basic.showIcon(IconNames.Happy)
+C         music.beginMelody(music.builtInMelody(Melodies.BaDing), MelodyOptions.Once)
+C     } else {
+C         basic.clearScreen()
+C     }
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초5 코드
+---
+text|5|기초 5 · PIR 센서: 사람 알아보기|해 보기|
+: 현관 감시 장치를 만들려면 소리 대신 어떤 신호를 더하면 좋을까요?
+F 내가 더하고 싶은 신호|여기에 적어 보세요
+@toc 기초5 해 보기
+---
+text|6|기초 6 · 초음파 센서: 거리 재기|초음파 센서: 거리 재기|
+: 초음파 센서로 거리를 재서 OLED에 쓰고, 가까워지면 소리를 냅니다.
+- 준비물 — IoT:bit, OLED, Sonar:bit(초음파)
+- 연결 — 초음파 센서는 P1에 연결합니다.
+- 배울 내용 — 거리(cm) 읽기 · 기준 거리 정하기 · 주차 도우미 원리
+@toc 기초6 초음파 센서: 거리 재기
+---
+text|6|기초 6 · 초음파 센서: 거리 재기|블록으로 만들기|
+1. 초음파 센서를 P1에 연결합니다.
+2. 변수 ‘거리’에 초음파로 잰 cm 값을 넣습니다.
+3. OLED에 Dist: 글자와 거리를 씁니다.
+4. 거리가 20보다 작으면 소리를 냅니다. 손바닥을 가까이 대 봅니다.
+@toc 기초6 블록
+---
+text|6|기초 6 · 초음파 센서: 거리 재기|자바스크립트 코드|
+C let distance = 0
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     distance = Environment.sonarbit_distance(Environment.Distance_Unit.Distance_Unit_cm, DigitalPin.P1)
+C     OLED.clear()
+C     OLED.writeString("Dist:")
+C     OLED.writeNum(distance)
+C     if (distance < 20) {
+C         music.beginMelody(music.builtInMelody(Melodies.BaDing), MelodyOptions.Once)
+C     }
+C     basic.pause(300)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초6 코드
+---
+text|6|기초 6 · 초음파 센서: 거리 재기|해 보기|
+: 자동차 뒤에 달면 몇 cm에서 소리를 내게 하면 안전할까요?
+F 내가 정한 경고 거리|여기에 적어 보세요
+@toc 기초6 해 보기
+---
+text|7|기초 7 · 토양습도 센서: 흙이 말랐나요|토양습도 센서: 흙이 말랐나요|
+: 흙의 촉촉함을 숫자로 보고, 마르면 알려 줍니다.
+- 준비물 — IoT:bit, OLED, 토양습도 센서
+- 연결 — 토양습도 센서는 P1에 연결합니다.
+- 배울 내용 — 센서 값이 클수록 촉촉함 · 기준값 정하기 · 식물 돌보기 자동화의 시작
+@toc 기초7 토양습도 센서: 흙이 말랐나요
+---
+text|7|기초 7 · 토양습도 센서: 흙이 말랐나요|블록으로 만들기|
+1. 토양습도 센서를 P1에 연결합니다.
+2. OLED에 Soil: 글자와 값을 씁니다.
+3. 값이 50보다 작으면 슬픈 얼굴을 보입니다.
+4. 마른 흙과 물을 준 흙에 꽂아 값을 비교합니다.
+@toc 기초7 블록
+---
+text|7|기초 7 · 토양습도 센서: 흙이 말랐나요|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Soil:")
+C     OLED.writeNum(Environment.ReadSoilHumidity(AnalogPin.P1))
+C     if (Environment.ReadSoilHumidity(AnalogPin.P1) < 50) {
+C         basic.showIcon(IconNames.Sad)
+C     } else {
+C         basic.showIcon(IconNames.Happy)
+C     }
+C     basic.pause(1000)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초7 코드
+---
+text|7|기초 7 · 토양습도 센서: 흙이 말랐나요|해 보기|
+: 마른 흙, 촉촉한 흙, 물에 담근 흙의 값을 비교해 알맞은 기준값을 정해 봅시다.
+F 흙 상태별 값|여기에 적어 보세요
+@toc 기초7 해 보기
+---
+text|8|기초 8 · 수위 센서: 물의 높이|수위 센서: 물의 높이|
+: 물이 얼마나 찼는지 숫자로 보고, 물이 부족하면 소리로 알려 줍니다.
+- 준비물 — IoT:bit, OLED, 수위 센서(물 담을 컵)
+- 연결 — 수위 센서는 P2에 연결합니다.
+- 배울 내용 — 물에 닿는 면적에 따라 값이 커짐 · 부족 경고 · 전자부품 물 조심
+@toc 기초8 수위 센서: 물의 높이
+---
+text|8|기초 8 · 수위 센서: 물의 높이|블록으로 만들기|
+1. 수위 센서를 P2에 연결합니다. 센서 아랫부분(줄무늬)만 물에 담급니다.
+2. OLED에 Water: 글자와 값을 씁니다.
+3. 값이 10보다 작으면 소리를 냅니다.
+4. 컵의 물높이를 바꾸며 값을 적어 봅니다.
+@toc 기초8 블록
+---
+text|8|기초 8 · 수위 센서: 물의 높이|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Water:")
+C     OLED.writeNum(Environment.ReadWaterLevel(AnalogPin.P2))
+C     if (Environment.ReadWaterLevel(AnalogPin.P2) < 10) {
+C         music.beginMelody(music.builtInMelody(Melodies.BaDing), MelodyOptions.Once)
+C     }
+C     basic.pause(1000)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초8 코드
+---
+text|8|기초 8 · 수위 센서: 물의 높이|해 보기|
+: 물높이 1cm, 2cm, 3cm일 때의 값을 표로 만들어 봅시다.
+F 물높이별 값|여기에 적어 보세요
+@toc 기초8 해 보기
+---
+text|9|기초 9 · 먼지 센서: 공기 확인|먼지 센서: 공기 확인|
+: 공기 중 먼지 양을 읽어 OLED에 보여 줍니다.
+- 준비물 — IoT:bit, OLED, 먼지 센서
+- 연결 — 먼지 센서의 LED IN은 P9, OUT은 P10에 연결합니다.
+- 배울 내용 — 센서 핀 두 개 쓰기 · 단위(㎍/㎥) · 공기질 알아보기
+@toc 기초9 먼지 센서: 공기 확인
+---
+text|9|기초 9 · 먼지 센서: 공기 확인|블록으로 만들기|
+1. 먼지 센서의 LED IN을 P9에, OUT을 P10에 연결합니다.
+2. OLED에 Dust: 글자와 먼지 값을 씁니다.
+3. 1초마다 새로 읽습니다. 먼지 센서 앞에서 가볍게 먼지를 털어 봅니다.
+@toc 기초9 블록
+---
+text|9|기초 9 · 먼지 센서: 공기 확인|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Dust:")
+C     OLED.writeNum(Environment.ReadDust(DigitalPin.P9, AnalogPin.P10))
+C     basic.pause(1000)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초9 코드
+---
+text|9|기초 9 · 먼지 센서: 공기 확인|해 보기|
+: 창문을 열기 전과 후에 먼지 값이 어떻게 변하는지 비교해 봅시다.
+F 창문 열기 전·후 값|여기에 적어 보세요
+@toc 기초9 해 보기
+---
+text|10|기초 10 · 서보: 각도 움직이기|서보: 각도 움직이기|
+: 버튼으로 서보 모터의 각도를 바꿉니다.
+- 준비물 — IoT:bit, 180° 서보
+- 연결 — 서보는 P10에 연결합니다.
+- 배울 내용 — 서보는 각도(0~180)를 정하면 그 자리로 움직임 · 버튼 누르면 실행(이벤트)
+@toc 기초10 서보: 각도 움직이기
+---
+text|10|기초 10 · 서보: 각도 움직이기|블록으로 만들기|
+1. 서보를 P10에 연결합니다.
+2. ‘시작할 때’ 서보를 0도로 맞춥니다.
+3. 버튼 A는 0도, 버튼 B는 90도로 움직이게 만듭니다.
+4. 180도까지 바꾸면 어떻게 될까요?
+@toc 기초10 블록
+---
+text|10|기초 10 · 서보: 각도 움직이기|자바스크립트 코드|
+C pins.servoWritePin(AnalogPin.P10, 0)
+C input.onButtonPressed(Button.A, function () {
+C     pins.servoWritePin(AnalogPin.P10, 0)
+C })
+C input.onButtonPressed(Button.B, function () {
+C     pins.servoWritePin(AnalogPin.P10, 90)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초10 코드
+---
+text|10|기초 10 · 서보: 각도 움직이기|해 보기|
+: 서보에 종이 깃발을 붙여 ‘물이 부족해요’ 깃발을 올리는 장치를 상상해 봅시다.
+F 깃발을 올릴 상황|여기에 적어 보세요
+@toc 기초10 해 보기
+---
+text|11|기초 11 · RTC 시계: 시간 알려 주기|RTC 시계: 시간 알려 주기|
+: 보드에 있는 RTC 시계로 시간을 정하고 OLED에 보여 줍니다.
+- 준비물 — IoT:bit(CR1220 단추 전지를 끼움), OLED
+- 연결 — RTC는 IoT:bit 안에 들어 있어 따로 연결하지 않습니다.
+- 배울 내용 — RTC는 전원을 꺼도 시간이 이어짐 · 시와 분 정하고 읽기
+@toc 기초11 RTC 시계: 시간 알려 주기
+---
+text|11|기초 11 · RTC 시계: 시간 알려 주기|블록으로 만들기|
+1. IoT:bit에 CR1220 단추 전지를 먼저 끼웁니다.
+2. ‘시작할 때’ RTC의 시를 14, 분을 15로 정합니다(지금 시각으로 바꿉니다).
+3. 무한 반복에서 시와 분을 OLED에 씁니다.
+4. 한 번 시간을 정한 뒤에는 정하는 블록을 지우고 다시 내려받아 보세요. 시간이 이어지는지 확인합니다.
+@toc 기초11 블록
+---
+text|11|기초 11 · RTC 시계: 시간 알려 주기|자바스크립트 코드|
+C OLED.init(128, 64)
+C RTC_DS1307.setTime(RTC_DS1307.TimeType.HOUR, 14)
+C RTC_DS1307.setTime(RTC_DS1307.TimeType.MINUTE, 15)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Time:")
+C     OLED.writeNum(RTC_DS1307.getTime(RTC_DS1307.TimeType.HOUR))
+C     OLED.writeString(":")
+C     OLED.writeNum(RTC_DS1307.getTime(RTC_DS1307.TimeType.MINUTE))
+C     basic.pause(1000)
+C })
+* MakeCode 오른쪽 위에서 ‘자바스크립트’로 바꿔 붙여넣으면 블록으로 바뀝니다.
+@toc 기초11 코드
+---
+text|11|기초 11 · RTC 시계: 시간 알려 주기|해 보기|
+: 시간 정하는 블록을 지우고 다시 내려받아도 시계가 이어지는지 확인해 봅시다.
+F 확인한 결과|여기에 적어 보세요
+@toc 기초11 해 보기
+---
+text|12|프로젝트 1 · 공기질 모니터링|공기질 모니터링|
+: 먼지 센서로 공기 속 먼지를 1분마다 재서 OLED에 보여 주는 공기질 측정기를 만듭니다.
+- 준비물 — IoT:bit, OLED, 먼지 센서
+@toc 프로젝트1 공기질 모니터링
+---
+text|12|프로젝트 1 · 공기질 모니터링|배선하기|
+- 먼지 센서의 LED IN은 P9, OUT은 P10에 연결합니다.
+- OLED는 IIC 단자에 끼웁니다.
+@toc 프로젝트1 배선
+---
+text|12|프로젝트 1 · 공기질 모니터링|블록으로 만들기|
+1. MakeCode에서 ‘시작할 때’에 OLED 켜기(128×64)를 넣습니다.
+2. ‘무한 반복’에서 OLED 지우기 → 글자 Dust(ug/m3): → 먼지 값을 씁니다.
+3. 60초(60000 ms) 기다려 1분에 한 번 측정합니다.
+@toc 프로젝트1 블록
+---
+text|12|프로젝트 1 · 공기질 모니터링|자바스크립트 코드|
+C OLED.init(128, 64)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Dust(ug/m3):")
+C     OLED.writeNum(Environment.ReadDust(DigitalPin.P9, AnalogPin.P10))
+C     basic.pause(60000)
+C })
+L 원문 MakeCode 프로그램 열기|https://makecode.microbit.org/_YFCE0bc7vbVC
+@toc 프로젝트1 코드
+---
+text|12|프로젝트 1 · 공기질 모니터링|해 보기|
+: 교실, 복도, 운동장에서 각각 측정해 어디가 가장 깨끗한지 비교해 봅시다.
+F 장소별 먼지 값|여기에 적어 보세요
+@toc 프로젝트1 해 보기
+---
+text|13|프로젝트 2 · 환경 소음 측정|환경 소음 측정|
+: 소음 센서와 RTC 시계로 시간과 소음 크기를 함께 보여 주는 장치를 만듭니다.
+- 준비물 — IoT:bit, OLED, 소음 센서
+@toc 프로젝트2 환경 소음 측정
+---
+text|13|프로젝트 2 · 환경 소음 측정|배선하기|
+- 소음 센서는 P1에 연결합니다.
+- OLED는 IIC 단자에 끼웁니다.
+- 보드의 RTC를 사용합니다(IIC 버스에 이미 연결됨).
+@toc 프로젝트2 배선
+---
+text|13|프로젝트 2 · 환경 소음 측정|블록으로 만들기|
+1. ‘시작할 때’ OLED를 켜고 RTC의 시와 분을 지금 시각으로 정합니다.
+2. 무한 반복에서 Time: 뒤에 시:분을 쓰고 줄을 바꿉니다.
+3. Noise: 뒤에 소음 값을 쓰고 1초 기다립니다.
+@toc 프로젝트2 블록
+---
+text|13|프로젝트 2 · 환경 소음 측정|자바스크립트 코드|
+C OLED.init(64, 128)
+C RTC_DS1307.setTime(RTC_DS1307.TimeType.HOUR, 14)
+C RTC_DS1307.setTime(RTC_DS1307.TimeType.MINUTE, 15)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Time:")
+C     OLED.writeNum(RTC_DS1307.getTime(RTC_DS1307.TimeType.HOUR))
+C     OLED.writeString(":")
+C     OLED.writeNum(RTC_DS1307.getTime(RTC_DS1307.TimeType.MINUTE))
+C     OLED.newLine()
+C     OLED.writeString("Noise:")
+C     OLED.writeNum(Environment.ReadNoise(AnalogPin.P1))
+C     basic.pause(1000)
+C })
+L 원문 MakeCode 프로그램 열기|https://makecode.microbit.org/_2jvctXPa0heW
+@toc 프로젝트2 코드
+---
+text|13|프로젝트 2 · 환경 소음 측정|해 보기|
+: 하루 중 어느 시간에 소음이 가장 클까요? 시간별로 기록해 봅시다.
+F 시간별 소음 값|여기에 적어 보세요
+@toc 프로젝트2 해 보기
+---
+text|14|프로젝트 3 · 환경 품질 관측소|환경 품질 관측소|
+: 밝기, 온도, 습도를 한꺼번에 재서 보여 주는 작은 관측소를 만듭니다.
+- 준비물 — IoT:bit, OLED, 조도 센서, BME280
+@toc 프로젝트3 환경 품질 관측소
+---
+text|14|프로젝트 3 · 환경 품질 관측소|배선하기|
+- 조도 센서는 P1에 연결합니다.
+- BME280은 IIC 단자(SCL P19, SDA P20)에 연결합니다.
+- 보드의 RTC는 IIC에 이미 연결되어 있습니다.
+@toc 프로젝트3 배선
+---
+text|14|프로젝트 3 · 환경 품질 관측소|블록으로 만들기|
+1. ‘시작할 때’ OLED를 켭니다.
+2. 무한 반복에서 Light: 뒤에 밝기를 씁니다.
+3. 줄을 바꾸고 Temperature: 뒤에 BME280 온도를, 이어서 Humidity: 뒤에 습도를 씁니다.
+4. 6초 기다려 천천히 새로 읽습니다.
+@toc 프로젝트3 블록
+---
+text|14|프로젝트 3 · 환경 품질 관측소|자바스크립트 코드|
+C OLED.init(64, 128)
+C basic.forever(function () {
+C     OLED.clear()
+C     OLED.writeString("Light:")
+C     OLED.writeNum(Environment.ReadLightIntensity(AnalogPin.P1))
+C     OLED.newLine()
+C     OLED.writeString("Temperature:")
+C     OLED.writeNum(Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C))
+C     OLED.newLine()
+C     OLED.writeString("Humidity:")
+C     OLED.writeNum(Environment.octopus_BME280(Environment.BME280_state.BME280_humidity))
+C     basic.pause(6000)
+C })
+L 원문 MakeCode 프로그램 열기|https://makecode.microbit.org/_ePDLFuUwqUhK
+@toc 프로젝트3 코드
+---
+text|14|프로젝트 3 · 환경 품질 관측소|해 보기|
+: 교실 안과 창가, 햇빛 아래의 값을 비교해 우리 학교 관측 결과를 정리해 봅시다.
+F 장소별 관측 결과|여기에 적어 보세요
+@toc 프로젝트3 해 보기
+---
+text|15|프로젝트 4 · 자동 물주기|자동 물주기|
+: 흙이 마르면 서보가 움직이고, 물통의 물이 부족하면 소리로 알려 주는 장치를 만듭니다.
+- 준비물 — IoT:bit, 토양습도 센서, 수위 센서, 180° 서보
+@toc 프로젝트4 자동 물주기
+---
+text|15|프로젝트 4 · 자동 물주기|배선하기|
+- 토양습도 센서는 P1, 수위 센서는 P2, 서보는 P10에 연결합니다(배선 그림 기준).
+@toc 프로젝트4 배선
+---
+text|15|프로젝트 4 · 자동 물주기|블록으로 만들기|
+1. 변수 ‘흙 습도’와 ‘물 높이’를 만들고, 시작할 때 서보를 0도로 둡니다.
+2. 무한 반복에서 두 센서 값을 각각 읽어 변수에 넣습니다.
+3. 물 높이가 10보다 작으면 소리를 냅니다.
+4. 흙 습도가 50보다 작으면 서보를 90도로, 아니면 0도로 움직입니다.
+* 원문 프로그램은 센서 핀 번호(수위 P1, 토양 P2)가 배선 그림과 달라, 이 책은 배선 그림에 맞게 고쳤습니다.
+@toc 프로젝트4 블록
+---
+text|15|프로젝트 4 · 자동 물주기|자바스크립트 코드|
+C let soil_humidity = 0
+C let water_level = 0
+C pins.servoWritePin(AnalogPin.P10, 0)
+C basic.forever(function () {
+C     soil_humidity = Environment.ReadSoilHumidity(AnalogPin.P1)
+C     water_level = Environment.ReadWaterLevel(AnalogPin.P2)
+C     if (water_level < 10) {
+C         music.beginMelody(music.builtInMelody(Melodies.BaDing), MelodyOptions.Once)
+C     }
+C     if (soil_humidity < 50) {
+C         pins.servoWritePin(AnalogPin.P10, 90)
+C     } else {
+C         pins.servoWritePin(AnalogPin.P10, 0)
+C     }
+C })
+L 원문 MakeCode 프로그램 열기|https://makecode.microbit.org/_dxTF0K1be0w0
+@toc 프로젝트4 코드
+---
+text|15|프로젝트 4 · 자동 물주기|해 보기|
+: 서보에 물 호스를 연결한다면 어떤 순서로 물을 주면 좋을까요? 장치 그림을 그려 봅시다.
+F 나의 자동 물주기 설계|여기에 적어 보세요
+@toc 프로젝트4 해 보기
+---
+text|16|프로젝트 5 · 방범 감시 장치|방범 감시 장치|
+: 사람이 가까이 오면 거리를 재고, 30cm 안으로 들어오면 경보를 울립니다.
+- 준비물 — IoT:bit, 인체감지(PIR) 센서, 초음파 센서
+@toc 프로젝트5 방범 감시 장치
+---
+text|16|프로젝트 5 · 방범 감시 장치|배선하기|
+- 초음파 센서는 P1, PIR 센서는 P10에 연결합니다(배선 그림 기준).
+- 경보는 보드의 부저로 냅니다(P0).
+@toc 프로젝트5 배선
+---
+text|16|프로젝트 5 · 방범 감시 장치|블록으로 만들기|
+1. PIR 센서 값을 읽어 변수 ‘사람’에 넣습니다.
+2. 사람이 감지되면(1) 초음파로 거리를 잽니다.
+3. 거리가 30cm보다 가까우면 경보 소리를 냅니다.
+* 원문 프로그램은 핀 번호(PIR P1, 초음파 P2)가 배선 그림과 달라, 이 책은 배선 그림에 맞게 고쳤습니다.
+@toc 프로젝트5 블록
+---
+text|16|프로젝트 5 · 방범 감시 장치|자바스크립트 코드|
+C let distance = 0
+C let person = 0
+C basic.forever(function () {
+C     person = pins.digitalReadPin(DigitalPin.P10)
+C     if (person == 1) {
+C         distance = Environment.sonarbit_distance(Environment.Distance_Unit.Distance_Unit_cm, DigitalPin.P1)
+C         if (distance < 30) {
+C             music.beginMelody(music.builtInMelody(Melodies.BaDing), MelodyOptions.Once)
+C         }
+C     }
+C })
+L 원문 MakeCode 프로그램 열기|https://makecode.microbit.org/_05sYuyciH93g
+@toc 프로젝트5 코드
+---
+text|16|프로젝트 5 · 방범 감시 장치|해 보기|
+: 경보 대신 OLED에 글자를 띄우거나 불빛을 켜게 바꾸어 봅시다.
+F 내가 바꾼 경보 방법|여기에 적어 보세요
+@toc 프로젝트5 해 보기
+---
+text|17|클라우드 · ThingSpeak|ThingSpeak 가입하고 채널 만들기|
+: ThingSpeak는 센서 값을 인터넷에 저장하고 그래프로 보여 주는 서비스입니다.
+1. thingspeak 사이트에서 무료로 시작해 MathWorks 계정을 만듭니다.
+2. 이메일 인증 후 로그인합니다.
+3. 새 채널(New Channel)을 만들고 필드 이름을 적은 뒤 저장합니다.
+4. ‘API Keys’ 탭의 Write API Key를 메모합니다(남에게 보이지 않게).
+L ThingSpeak 열기|https://thingspeak.com/
+@toc ThingSpeak 시작
+---
+text|17|클라우드 · ThingSpeak|블록으로 데이터 올리기|
+1. IoT:bit를 micro:bit에 꽂습니다.
+2. ‘시작할 때’ 와이파이(RX P8, TX P12, 115200)를 설정합니다.
+3. 와이파이 이름과 비밀번호를 넣습니다. 2.4GHz 와이파이만 됩니다.
+4. 무한 반복에서 ThingSpeak에 연결 → 값 정하기 → 올리기를 합니다.
+@toc 블록으로 올리기
+---
+text|17|클라우드 · ThingSpeak|자바스크립트 코드|
+C ESP8266_IoT.initWIFI(SerialPin.P8, SerialPin.P12, BaudRate.BaudRate115200)
+C ESP8266_IoT.connectWifi("와이파이이름", "비밀번호")
+C basic.forever(function () {
+C     ESP8266_IoT.connectThingSpeak()
+C     ESP8266_IoT.setData(
+C     "내 Write API Key",
+C     randint(0, 9)
+C     )
+C     ESP8266_IoT.uploadData()
+C })
+* 따옴표 안에 내 와이파이와 키를 넣습니다. 이 값은 공개된 곳에 쓰지 마세요.
+* randint(0, 9) 자리에 센서 값(예: 온도)을 넣으면 실제 데이터가 올라갑니다.
+@toc ThingSpeak 코드
+---
+text|17|클라우드 · ThingSpeak|그래프로 보기|
+- 채널 화면에서 Add Visualizations를 눌러 보기 방식을 고릅니다: 그래프, 숫자 표시, 임계값 표시등
+- 이름과 필드, 최댓값·최솟값을 적으면 그래프와 숫자가 함께 바뀝니다.
+* 값이 올라오는 데 몇 초가 걸릴 수 있습니다.
+@toc 그래프로 보기
+---
+text|18|클라우드 · 이메일 알림|온도가 높으면 이메일 받기|
+: ThingSpeak에 올린 온도가 기준(예: 30℃)을 넘으면 IFTTT가 이메일을 보내 줍니다.
+1. IFTTT에 가입하고 새 Applet을 만듭니다.
+2. ‘this’에서 Webhooks를 고르고 이름을 정합니다(예: microbit_temperature_alarm).
+3. ‘that’에서 Email을 고르고 보낼 내용을 적습니다. {{ }} 자리에 값이 채워집니다.
+4. Webhooks의 Documentation에서 내 주소(Private Key)를 확인합니다.
+@toc IFTTT 만들기
+---
+text|18|클라우드 · 이메일 알림|ThingSpeak와 연결하고 시험하기|
+1. ThingSpeak의 React 앱으로 ‘온도 > 기준값이면’ 조건을 만듭니다.
+2. 조건이 맞을 때 IFTTT 주소로 보내도록 설정합니다(Content type은 안내에 맞춥니다).
+3. 온도를 기준보다 높게 만들어 시험합니다.
+4. ThingSpeak 값과 이메일 도착을 확인합니다.
+* 개인 이메일 주소와 키를 공개하지 않도록 합니다.
+L 원문 안내 보기(영어)|https://learn-en.readthedocs.io/en/latest/microbitKit/iot_kit/how_to_use_IFTTT.html
+@toc 연결하고 시험
+---
+text|19|마무리|핵심 질문|
+: 센서가 모은 값을 우리는 어떻게 읽고, 판단하고, 멀리 있는 사람에게 알릴 수 있을까요?
+1. 센서로 읽기(빛·소리·거리·습도)
+2. 조건으로 판단하기(기준값)
+3. 표시·소리·움직임으로 알리기
+4. 클라우드로 보내 기록하고 그래프로 보기
+@toc 핵심 질문
+---
+text|19|마무리|공식 자료|
+L 키트 소개와 사례(영어)|https://wiki.elecfreaks.com/en/microbit/wisdom-life/microbit-smart-science-iot-kit/
+L ELECFREAKS 위키 — IoT 키트 목차|https://learn-en.readthedocs.io/en/latest/microbitKit/iot_kit/index.html
+L MakeCode|https://makecode.microbit.org/
+* 이 책은 위 자료를 참고해 새로 쓴 안내서입니다. 원문 이미지는 원문 사이트에서 불러옵니다.
+@toc 공식 자료
+`;
+
+/* ---------- 쪽 만들기 ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const FK = "dkbook:" + location.pathname;   // 입력칸 저장 키 (이 브라우저에만 저장)
+const typing = t => t && t.closest && t.closest("textarea,input");
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cpy")) { const mk = t.classList.contains("mk"); const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { if (mk) return; t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
+  if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
+});
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.cplk"); if (!a) return; e.preventDefault(); const txt = a.dataset.copy, em = a.querySelector("em"); const ok = () => { em.textContent = "복사됨 ✓"; setTimeout(() => em.textContent = "주소 복사", 1600); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (y) {} t.remove(); ok(); } });
+document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
+const $ = s => document.querySelector(s);
+/* ---------- 적응형 퀴즈 ---------- */
+const QMEM = {};
+const qget = id => { let v = QMEM[id]; if (!v) { try { v = JSON.parse(localStorage.getItem(FK + ":q:" + id) || "null"); } catch (e) {} } return v || { r: 0, c: null }; };
+const qset = (id, v) => { QMEM[id] = v; try { localStorage.setItem(FK + ":q:" + id, JSON.stringify(v)); } catch (e) {} };
+function quizHTML(id, n) {
+  const Q = QUIZ[id], s = qget(id), rd = Q.rounds[s.r] || Q.rounds[0];
+  const dots = Q.rounds.map((_, i) => `<i class="${i < s.r ? "done" : i === s.r ? "on" : ""}"></i>`).join("");
+  let h = `<div class="qmeta"><span class="rd">${s.r + 1}차 도전</span><span class="dots">${dots}</span></div>`;
+  if (s.c === null || !rd.o[s.c]) {
+    return h + `<div class="opts${Q.cols === 1 ? " one" : ""}">${rd.o.map((o, i) => `<button type="button" class="opt" data-qa="pick" data-q="${id}" data-i="${i}">${esc(o.t)}</button>`).join("")}</div>`;
+  }
+  const o = rd.o[s.c], f = Q.fb[o.f], last = s.r >= Q.rounds.length - 1;
+  h += `<div class="fbk ${f.ok ? "ok" : "no"}"><div class="vd">${f.ok ? "정답입니다" : "정답이 아닙니다"}<small>내가 고른 답 · ${esc(o.t)}</small></div>`;
+  f.t.forEach(x => { h += `<p>${esc(x)}</p>`; });
+  f.v.forEach(v => { h += `<div class="vrow"><button type="button" class="play" data-yt="${v.yt}" aria-label="실험 영상 재생"><img src="https://i.ytimg.com/vi/${v.yt}/hqdefault.jpg" alt="" loading="lazy"><span class="tri"></span></button><p>${esc(v.t).replace(/\n/g, "<br>")}</p></div>`; });
+  if (f.k.length) h += `<div class="kbox">${f.k.map(x => `<p>${esc(x)}</p>`).join("")}</div>`;
+  h += `</div><div class="qact">`;
+  if (!f.ok && !last) h += `<button type="button" data-qa="retry" data-q="${id}">다시 풀어보기 (${s.r + 2}차)</button>`;
+  if (f.ok || last) h += `<button type="button" data-qa="reset" data-q="${id}">처음부터 다시</button>`;
+  if (f.ok || last) h += `<button type="button" class="go" data-go="${n + 1}">다음으로 →</button>`;
+  return h + `</div>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-qa]"); if (!b) return;
+  const id = b.dataset.q, s = qget(id), a = b.dataset.qa;
+  if (a === "pick") qset(id, { r: s.r, c: +b.dataset.i });
+  else if (a === "retry") qset(id, { r: s.r + 1, c: null });
+  else if (a === "reset") qset(id, { r: 0, c: null });
+  render();
+});
+
+
+const pages = DATA.trim().split(/\n---\n/).map(blk => {
+  const lines = blk.trim().split("\n");
+  const [kind, chap, eb, title, num] = lines.shift().split("|");
+  const pg = { kind, chap: +chap, eb, title, num, lines: [], toc: null };
+  lines.forEach(l => { if (l.startsWith("@toc ")) pg.toc = l.slice(5); else pg.lines.push(l); });
+  return pg;
+});
+pages.push({ kind: "end", chap: 0, eb: "", title: "", lines: [], toc: null });   // 뒤표지
+const N = pages.length;
+
+function chipHTML(label, n, urlOverride) {
+  const url = urlOverride || (label === "영상" ? MEDIA.video[n] : MEDIA.links[n] && MEDIA.links[n][label]);
+  const icon = label === "영상" ? "▶" : label.indexOf("AR") === 0 ? "◎" : label === "공유하기" ? "↗" : "✎";
+  return url ? `<a class="chip" href="${esc(url)}" target="_blank" rel="noopener">${icon} ${esc(label)}</a>` : `<span class="chip">${icon} ${esc(label)}</span>`;
+}
+function mediaHTML(n, skipImg) {
+  let h = "";
+  if (ILLU[n]) h += `<figure class="fig svg${ILLU[n].indexOf("data-dark") > 0 ? " dark" : ""}">${ILLU[n]}</figure>`;
+  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"></figure>`; });
+  const v = MEDIA.video[n];
+  if (v) {
+    const m = String(v).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+    h += m ? `<figure class="fig vid"><button type="button" class="play" data-yt="${m[1]}" aria-label="영상 재생"><img src="https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg" alt=""><span class="tri"></span></button></figure>`
+           : `<figure class="fig vid"><video src="${esc(v)}" controls playsinline></video></figure>`;
+  }
+  return h;
+}
+function partsHTML(n, bl) {
+  const imgs = MEDIA.img[n] || [], map = PARTS[n];
+  const items = bl.split("</li>").filter(Boolean).map(x => x + "</li>");
+  return items.map((li, k) => {
+    const th = map && map[k] ? map[k].map(j => `<img src="${esc(imgs[j])}" alt="">`).join("") : "";
+    return th ? li.replace("</li>", `<span class="th">${th}</span></li>`) : li;
+  }).join("");
+}
+function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=18)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
+function pageHTML(i) {
+  if (i < 0 || i >= N) return `<div class="page blank"></div>`;
+  const p = pages[i], n = i + 1, ch = CHAPS[p.chap], c = ch.c;
+  const foot = `<div class="pfoot"><span>${esc(p.kind === "cover" || p.kind === "end" ? "" : ch.n)}</span><span>${n}</span></div>`;
+  if (p.kind === "cover") {
+    return `<div class="page cover" style="--c:${c}"><div class="cv-e">${esc(p.eb)}</div><div class="rgb cvart">${COVER}</div>
+      <div class="cv-t">${esc(p.title)}</div><div class="cv-s">${esc(p.lines[0] ? p.lines[0].slice(2) : "")}</div></div>`;
+  }
+  if (p.kind === "end") {
+    return `<div class="page endp" style="--c:${c}"><div class="mini" style="width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.4);gap:calc(var(--u)*.9);padding:calc(var(--u)*2)"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div>
+      <div class="ttl" style="font-size:calc(var(--u)*4.4)">스마트 과학 IoT 키트</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
+  }
+  if (p.kind === "divider") {
+    const body = p.lines.map(l => /^[:\-*] /.test(l) ? `<p>${esc(l.slice(2))}</p>` : "").join("");
+    return `<div class="page divider" style="--c:${c}">${mediaHTML(n)}<div class="no">${esc(p.eb)}</div><div class="bar"></div><div class="big">${esc(p.title)}</div>${body ? `<div class="body" style="margin-top:calc(var(--u)*3)">${body}</div>` : ""}${foot}</div>`;
+  }
+  if (p.kind === "quiz") {
+    const qid = (p.lines.find(l => l.startsWith("QZ ")) || "").slice(3);
+    return `<div class="page quiz" style="--c:${c}"><div class="eb">${esc(p.eb)}</div><h2 class="ttl qt">${esc(p.title)}</h2><div class="body">${quizHTML(qid, n)}</div>${foot}</div>`;
+  }
+  let done = "", code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
+  p.lines.forEach(l => {
+    let m;
+    if (l.startsWith("F ")) {
+      const [lab, ph] = l.slice(2).split("|"), key = FK + ":" + n + ":" + (fi++);
+      let v = ""; try { v = localStorage.getItem(key) || ""; } catch (e) {}
+      fields += `<label class="ff"><span>${esc(lab)}</span><textarea data-k="${esc(key)}" placeholder="${esc(ph || "")}">${esc(v)}</textarea></label>`;
+    }
+    else if (l.startsWith("- ")) bl += `<li>${esc(l.slice(2))}</li>`;
+    else if (l.startsWith("* ")) nt += `<li>${esc(l.slice(2))}</li>`;
+    else if (l.startsWith("+ ")) { const [lab, url] = l.slice(2).split("|"); chips += chipHTML(lab, n, url); }
+    else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
+    else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
+    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += /github\.com/.test(url) ? `<a href="#" class="cplk" data-copy="${esc(url)}"><b>${esc(lab)} <em>주소 복사</em></b><span>${esc(url)}</span></a>` : `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
+    else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
+    else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
+    else if ((m = l.match(/^(\d+)\. (.*)$/))) nums += `<li><span class="n">${m[1]}</span><span>${esc(m[2])}</span></li>`;
+  });
+  let title;
+  if (p.kind === "step") {
+    const sz = p.title.length > 150 ? 3.1 : p.title.length > 100 ? 3.6 : 0;
+    title = `<div class="stepno">${esc(p.num)}</div><div class="stm"${sz ? ` style="font-size:calc(var(--u)*${sz})"` : ""}>${esc(p.title)}</div>`;
+    return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
+      <div class="body">${bl ? `<ul class="bl">${bl}</ul>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${mediaHTML(n)}</div>${foot}</div>`;
+  }
+  const longTitle = p.title.length > 26 && p.lines.length > 0;
+  title = `<h2 class="ttl" ${p.lines.length===0 ? `style="font-size:calc(var(--u)*8.2);margin-top:calc(var(--u)*10)"` : longTitle ? `style="font-size:calc(var(--u)*4.2)"` : ""}>${esc(p.title)}</h2>`;
+  return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
+    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<div class="codewrap">${typeof CODE_LINK !== "undefined" ? `<a class="cpy mk" href="${CODE_LINK}" target="_blank" rel="noopener">MakeCode ↗</a>` : ""}<button class="cpy" type="button">복사</button><pre class="code"${codeStyle(code)}>${esc(code)}</pre></div>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${done}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
+}
+function fillQR(root) {
+  root.querySelectorAll(".qr").forEach(el => {
+    try { const q = qrcode(0, "M"); q.addData(el.dataset.url); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) {}
+  });
+}
+function put(el, i, side) {   // side: 'l' | 'r'
+  el.innerHTML = pageHTML(i);
+  fillQR(el);
+  const f = el.querySelector(".pfoot"); void f;
+}
+
+/* ---------- 책 크기 · 보기 방식 ---------- */
+const book = $("#book"), L = $("#L"), R = $("#R"), F = $("#F"), Ff = $("#Ff"), Fb = $("#Fb");
+let two = true, cur = 0, busy = false;   // cur: 지금 보이는 첫 쪽(0부터)
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const ZOOM0 = window.devicePixelRatio || 1;   // 브라우저 확대(Ctrl+스크롤)를 책 크기에 반영
+function layout() {
+  const zm = Math.min(4, Math.max(.5, (window.devicePixelRatio || 1) / ZOOM0));
+  const st = $("#stage").getBoundingClientRect();
+  const aw = st.width * zm - 24, ah = zm * innerHeight - (innerHeight - st.height) - 16;
+  two = aw >= 860 && aw / ah > 1.15;
+  const ratio = 0.78;
+  let pw, ph;
+  if (two) { pw = Math.min(aw / 2, ah * ratio, 760 * zm); ph = pw / ratio; }
+  else { pw = Math.min(aw, 560 * zm); ph = Math.min(ah, pw / 0.62); }
+  book.style.width = (two ? pw * 2 : pw) + "px";
+  book.style.height = ph + "px";
+  book.classList.toggle("one", !two);
+  book.style.setProperty("--u", (pw / 100) + "px");
+  document.documentElement.style.setProperty("--u", (pw / 100) + "px");
+  if (two && cur % 2) cur -= 1;
+  render();
+}
+function render() {
+  if (two) { put(L, cur); put(R, cur + 1); }
+  else { put(R, cur); }
+  ui();
+}
+function step() { return two ? 2 : 1; }
+function ui() {
+  const last = Math.min(cur + step(), N);
+  $("#pos").textContent = two ? `${cur + 1}–${last} / ${N}` : `${cur + 1} / ${N}`;
+  $("#rng").max = N; $("#rng").value = cur + 1;
+  $("#prev").disabled = cur <= 0;
+  $("#next").disabled = cur + step() >= N;
+  const h = "#p" + (cur + 1);
+  if (location.hash !== h) history.replaceState(null, "", h);
+}
+
+/* ---------- 넘기기 ---------- */
+function go(target) {
+  if (busy) return;
+  target = Math.max(0, Math.min(N - 1, target));
+  if (two) target -= target % 2;
+  if (target === cur) return;
+  const forward = target > cur;
+  if (!two || reduce || Math.abs(target - cur) > 2 && false) { cur = target; render(); return; }
+  busy = true;
+  F.classList.add("on");
+  if (forward) {
+    // 아래에 새 오른쪽 쪽, 넘어가는 장: 앞면=예전 오른쪽, 뒷면=새 왼쪽
+    put(R, target + 1);
+    Ff.className = "face front r"; Fb.className = "face back l";
+    put(Ff, cur + 1); put(Fb, target);
+    F.style.left = "50%"; F.style.transformOrigin = "left center";
+  } else {
+    put(L, target);
+    Ff.className = "face front l"; Fb.className = "face back r";
+    put(Ff, cur); put(Fb, target + 1);
+    F.style.left = "0"; F.style.transformOrigin = "right center";
+  }
+  F.style.transition = "none"; F.style.transform = "rotateY(0deg)";
+  void F.offsetWidth;
+  F.style.transition = "transform .75s cubic-bezier(.45,.05,.25,1)";
+  F.style.transform = `rotateY(${forward ? -180 : 180}deg)`;
+  const done = () => {
+    F.removeEventListener("transitionend", done);
+    cur = target; render();
+    F.classList.remove("on"); F.style.transition = "none"; F.style.transform = "rotateY(0deg)";
+    busy = false;
+  };
+  F.addEventListener("transitionend", done);
+}
+const next = () => go(cur + step()), prev = () => go(cur - step());
+
+$("#next").onclick = next; $("#prev").onclick = prev;
+$("#rng").oninput = e => go(+e.target.value - 1);
+addEventListener("keydown", e => {
+  if (typing(e.target)) return;
+  if ($("#toc").classList.contains("on")) { if (e.key === "Escape") closeToc(); return; }
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); next(); }
+  else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); prev(); }
+  else if (e.key === "Home") go(0); else if (e.key === "End") go(N - 1);
+});
+let sx = null, sy = null;
+$("#stage").addEventListener("pointerdown", e => { if (typing(e.target)) { sx = null; return; } sx = e.clientX; sy = e.clientY; });
+$("#stage").addEventListener("pointerup", e => {
+  if (sx == null) return;
+  const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) (dx < 0 ? next : prev)();
+});
+document.addEventListener("click", e => {
+  const pl = e.target.closest(".play");
+  if (pl) {
+    if (!/^https?:$/.test(location.protocol)) { window.open(`https://www.youtube.com/watch?v=${pl.dataset.yt}`, "_blank", "noopener"); return; }
+    const f = document.createElement("iframe"); f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin"); f.src = `https://www.youtube-nocookie.com/embed/${pl.dataset.yt}?autoplay=1&rel=0&playsinline=1`; f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin"); f.title = "영상"; f.allow = "autoplay; encrypted-media; picture-in-picture"; f.allowFullscreen = true; pl.replaceWith(f); return; }
+  const g = e.target.closest("[data-go]"); if (g) { e.preventDefault(); go(+g.dataset.go - 1); }
+});
+
+/* ---------- 목차 ---------- */
+const tocEl = $("#toc");
+function tocLabel(p, prevKind) {
+  if (p.toc) return [p.toc, true];
+  const k = p.kind;
+  if (k === "parts") return ["필요한 부품", false];
+  if (k === "video") return [/코딩/.test(p.eb) ? "코딩 영상 시청" : p.eb.indexOf("영상") === 0 ? p.title : "회로 영상 시청", false];
+  if (k === "step" && prevKind !== "step") return ["회로 만들기 · 순서대로 따라하기", false];
+  if (k === "done") return ["완성된 회로", false];
+  if (k === "code" && prevKind !== "code") return ["코딩 순서", false];
+  if (k === "run") return [p.title, false];
+  if (k === "text" && /^개념 정리하기/.test(p.eb)) return [p.title, false];
+  if (k === "text" && /^(과학적 상황|학습문제|확인하기|평가하기|공유하기|유의사항|실험 순서|실험 방법|실험 영상|실험 장치의 조건|코딩 살펴보기|회로 구성 및 *코딩하기|주요 부품 설명|추가 코딩 설명|사용될 코딩 설명)/.test(p.title)) return [p.title, false];
+  return null;
+}
+function buildToc() {
+  const groups = [];
+  pages.forEach((p, i) => {
+    if (p.kind === "end") return;
+    const lab = i === 0 ? ["표지", true] : tocLabel(p, i ? pages[i - 1].kind : "");
+    let g = groups[groups.length - 1];
+    if (!g || g.chap !== p.chap || p.kind === "divider") { g = { chap: p.chap, from: i, to: i, items: [] }; groups.push(g); }
+    g.to = i;
+    if (lab && p.kind !== "divider") g.items.push({ i, t: lab[0] });
+  });
+  $("#tocList").innerHTML = groups.map(g => {
+    const c = CHAPS[g.chap].c;
+    return `<section class="ch" style="--c:${c}" data-from="${g.from}" data-to="${g.to}"><button type="button" class="chap" aria-expanded="false">${esc(CHAPS[g.chap].n)}<span class="rg">${g.from + 1}–${g.to + 1}쪽</span><i class="chev"></i></button><ol>${g.items.map(it => `<li><button type="button" data-i="${it.i}">${esc(it.t)}<span class="pg">${it.i + 1}쪽</span></button></li>`).join("")}</ol></section>`;
+  }).join("");
+}
+function markToc() {
+  const bs = [...document.querySelectorAll("#tocList button[data-i]")];
+  let best = null;
+  bs.forEach(b => { b.classList.remove("cur"); if (+b.dataset.i <= cur + (two ? 1 : 0)) best = b; });
+  if (best) best.classList.add("cur");
+  document.querySelectorAll("#tocList .ch").forEach(sec => {
+    const on = best && sec.contains(best);
+    sec.classList.toggle("open", !!on);
+    sec.querySelector(".chap").setAttribute("aria-expanded", on ? "true" : "false");
+  });
+  return best;
+}
+function openToc() { tocEl.classList.add("on"); const b = markToc(); if (b) b.scrollIntoView({ block: "center" }); }
+function closeToc() { tocEl.classList.remove("on"); }
+$("#btnToc").onclick = openToc; $("#tocOpen").onclick = openToc; $("#tocX").onclick = closeToc;
+tocEl.addEventListener("click", e => { if (e.target === tocEl) closeToc(); });
+$("#tocList").addEventListener("click", e => {
+  const h = e.target.closest(".chap");
+  if (h) { const sec = h.parentElement, on = !sec.classList.contains("open"); sec.classList.toggle("open", on); h.setAttribute("aria-expanded", on); return; }
+  const b = e.target.closest("button[data-i]"); if (!b) return; closeToc(); go(+b.dataset.i);
+});
+
+/* ---------- 시작 ---------- */
+buildToc();
+const h0 = (location.hash.match(/^#p(\d+)$/) || [])[1];
+if (h0) cur = Math.max(0, Math.min(N - 1, +h0 - 1));
+layout();
+addEventListener("resize", layout);
+addEventListener("hashchange", () => { const m = location.hash.match(/^#p(\d+)$/); if (m && +m[1] - 1 !== cur) go(+m[1] - 1); });
+</script>
+<!--dkui--><style>.fig img,.fig svg{cursor:zoom-in}#lb{position:fixed;inset:0;z-index:99999;background:rgba(10,12,18,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:2vmin}#lb img,#lb svg{width:min(96vw,1200px);max-height:94vh;object-fit:contain;height:auto;background:#fff;border-radius:10px}#lb svg{width:96vw;height:auto}#lb b{position:absolute;top:10px;right:16px;color:#fff;font:700 28px/1 sans-serif}@media(min-width:901px){.tocbtn{display:none}.stage{margin:0 86px}.ctrl{position:fixed;inset:0;display:block;padding:0;min-height:0;pointer-events:none;z-index:15}.ctrl .prog{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(420px,38vw);pointer-events:auto;z-index:21}#prev,#next{position:fixed;top:50%;transform:translateY(-50%);pointer-events:auto;width:60px;height:60px;border-radius:50%;padding:0;font-size:0;display:grid;place-items:center;box-shadow:0 6px 22px rgba(20,16,50,.18)}#prev::before,#next::before{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-9.4px 0 0 -8px;border-top:4px solid currentColor;border-left:4px solid currentColor;border-radius:2px}#prev::before{transform:translateX(4px) rotate(-45deg)}#next::before{transform:translateX(-7.6px) rotate(135deg)}#prev{left:clamp(12px,2vw,30px)}#next{right:clamp(12px,2vw,30px)}#prev:disabled,#next:disabled{opacity:.25}}.hbtns{display:flex;gap:8px;align-items:center}</style><script>try{var _o=render;window._dkKey=cur+"|"+two;render=function(){var k=cur+"|"+two;if(k===window._dkKey&&document.querySelector("#book iframe")){ui();return}window._dkKey=k;return _o.apply(this,arguments)}}catch(e){}(function(){var h=document.querySelector("header"),tb=document.getElementById("btnToc");if(h&&tb){var w=document.createElement("div");w.className="hbtns";tb.parentNode.insertBefore(w,tb);if(document.fullscreenEnabled){var f=document.createElement("button");f.className="pill";f.type="button";f.id="fsb";f.textContent="전체화면";f.onclick=function(){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(function(){})};var mine=false;f.addEventListener("click",function(){mine=true});document.addEventListener("fullscreenchange",function(){var fe=document.fullscreenElement;if(fe&&fe!==document.documentElement)return;if(!fe&&!mine)return;f.textContent=fe?"전체화면 닫기":"전체화면";if(!fe){mine=false}window.dispatchEvent(new Event("resize"))});w.appendChild(f);document.addEventListener("keydown",function(e){if((e.key==="f"||e.key==="F")&&!/INPUT|TEXTAREA/.test((e.target||{}).tagName||"")){f.click()}})}w.appendChild(tb)}})();</script><script>(function(){function close(){var l=document.getElementById("lb");if(l)l.remove()}document.addEventListener("click",function(e){var el=e.target.closest&&e.target.closest(".fig img,.fig svg");if(!el)return;e.stopPropagation();e.preventDefault();close();var l=document.createElement("div");l.id="lb";var c=el.cloneNode(true);c.removeAttribute("style");l.appendChild(c);l.insertAdjacentHTML("beforeend","<b>×</b>");l.onclick=close;document.body.appendChild(l)},true);document.addEventListener("keydown",function(e){if(e.key==="Escape")close()},true)})();</script><!--/dkui--></body>
+</html>
