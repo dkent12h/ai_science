@@ -51,7 +51,9 @@ model-viewer{width:100%;height:100%;border-radius:0;--poster-color:transparent;b
 .bpm{position:absolute;right:16px;top:14px;z-index:2;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.85)}
 .bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;border-top:1.5px solid var(--line)}
 .bar .pill{background:rgba(255,255,255,.9);padding:8px 14px;font-size:14px}
-.bar .pill[aria-pressed="true"]{background:var(--ink);color:#fff}
+.bar .pill[aria-pressed="true"],.bar .pill:hover{background:var(--ink);color:#fff}
+.bar .pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}.bar .pill.acc:hover{background:var(--ink);border-color:var(--ink)}
+mv-flow .hs,#mv.isflow .hs{display:none}
 .bar .sep{width:1.5px;background:var(--line);margin:0 2px}
 #arBtn{position:absolute;right:16px;bottom:14px;z-index:3;border-radius:999px;border:0;background:var(--acc);color:#fff;font-weight:800;font-size:15px;padding:11px 18px;cursor:pointer;box-shadow:0 10px 24px rgba(249,115,22,.35)}
 
@@ -113,6 +115,25 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;paddin
 footer a{text-decoration:none;border-bottom:1.5px solid var(--ink)}
 footer span{color:var(--muted)}
 
+
+.vw{height:clamp(460px,74vh,820px)}
+#flowsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:none;overflow:visible}
+#flowsvg .seg{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#flowsvg .flt{fill:#0b0b10;font:800 15px "Noto Sans KR","Inter Tight",sans-serif;stroke:#fff;stroke-width:5px;paint-order:stroke;text-anchor:middle}
+@keyframes flow{to{stroke-dashoffset:-30}}
+#flowsvg .dots{stroke:#fff;stroke-width:5;stroke-dasharray:1 29;animation:flow .8s linear infinite}
+.wp{display:block;width:1px;height:1px}
+.hs.show .t{display:block}
+.legend{left:auto;right:16px;top:54px;bottom:auto}
+.cap{display:none;padding:10px 16px;border-top:1.5px solid var(--line);font-size:15px;line-height:1.55;font-weight:500;background:rgba(255,255,255,.7)}
+.cap b{margin-right:8px;font-size:16px}.cap.on{display:block}
+.grp{display:contents}
+.card.fs{position:fixed;inset:0;z-index:100;border-radius:0;display:flex;flex-direction:column;background:#f4f4f8;border:0}
+.card.fs .stage{flex:1;display:flex;flex-direction:column;min-height:0}
+.card.fs .vw{flex:1;height:auto;min-height:0}
+.card.fs model-viewer{height:100%}
+body.nofs{overflow:hidden}
+
 /* 인쇄: 내 탐구 기록만 */
 #print{display:none}
 @media print{
@@ -125,8 +146,7 @@ footer span{color:var(--muted)}
 
 @media (max-width:980px){
   main{grid-template-columns:1fr}.qs{grid-template-columns:1fr}
-  .vw{height:clamp(340px,54vh,520px)}
-  .legend{display:none}
+  .vw{height:clamp(380px,62vh,560px)}.legend{top:auto;bottom:10px;right:10px;font-size:12px}
   nav .pill:first-child{display:none}
 }
 @media (max-width:520px){
@@ -147,33 +167,43 @@ footer span{color:var(--muted)}
 </section>
 
 <main id="top">
-  <section class="card">
+  <section class="card" id="stageCard">
     <div class="tabs" role="tablist">
-      <button class="pill" role="tab" id="t0" aria-selected="true">① 외형 관찰</button>
-      <button class="pill" role="tab" id="t1" aria-selected="false">② 내부 구조</button>
+      <button class="pill" role="tab" id="t0" aria-selected="true">① 겉모습</button>
+      <button class="pill" role="tab" id="t1" aria-selected="false">② 심장 속</button>
       <button class="pill" role="tab" id="t2" aria-selected="false">③ 혈액 흐름</button>
+      <span class="sp"></span>
+      <button class="pill acc" id="fsBtn">⛶ 크게 보기</button>
     </div>
     <div class="stage">
       <div class="vw">
-      <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
-        interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.95" environment-image="neutral"
-        camera-orbit="0.01deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.4m"
-        ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 심장 모형" animation-name="beat" autoplay>
-        <button slot="ar-button" id="arBtn">📱 AR로 보기</button>
-      </model-viewer>
-      <span class="badge"><i></i><span id="badge">3D · 사실적 외형</span></span>
-      <span class="bpm" id="bpm">72회/분 · 쉬는 중</span>
-      <div class="legend"><span><i style="background:var(--red)"></i>산소 많은 피</span><span><i style="background:var(--blue)"></i>산소 적은 피</span></div>
+        <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
+          interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.95" environment-image="neutral"
+          camera-orbit="0.01deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.6m"
+          ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 심장 모형" animation-name="beat" autoplay>
+          <button slot="ar-button" id="arBtn">📱 AR로 보기</button>
+        </model-viewer>
+        <svg id="flowsvg" aria-hidden="true"></svg>
+        <span class="badge"><i></i><span id="badge">3D · 사실적 외형</span></span>
+        <span class="bpm" id="bpm">72회/분 · 쉬는 중</span>
+        <div class="legend"><span><i style="background:var(--red)"></i>산소가 많은 혈액</span><span><i style="background:var(--blue)"></i>산소가 적은 혈액</span></div>
       </div>
+      <div class="cap" id="cap"><b id="capT"></b><span id="capD"></span></div>
       <div class="bar">
+        <span id="flowbar" class="grp" style="display:none">
+          <button class="pill" id="prevBtn">◀ 이전</button>
+          <button class="pill acc" id="playFlow">▶ 흐름 재생</button>
+          <button class="pill" id="nextBtn">다음 ▶</button>
+          <span class="sep"></span>
+        </span>
         <button class="pill" id="beatBtn" aria-pressed="true">💓 박동</button>
         <button class="pill" id="feelBtn" aria-pressed="false">🔊 소리·진동</button>
         <button class="pill" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
         <button class="pill" id="runBtn" aria-pressed="false">🏃 운동 후</button>
-        <button class="pill" id="slowBtn" aria-pressed="false">🐢 느리게 0.5×</button>
+        <button class="pill" id="slowBtn" aria-pressed="false">🐢 느리게</button>
         <span class="sep"></span>
         <button class="pill" id="rotBtn" aria-pressed="true">🔄 회전</button>
-        <button class="pill" id="lblBtn" aria-pressed="true">🔢 구조 표시</button>
+        <button class="pill" id="lblBtn" aria-pressed="true">🔢 번호</button>
         <button class="pill" id="resetBtn">🎯 처음</button>
       </div>
     </div>
@@ -183,13 +213,7 @@ footer span{color:var(--muted)}
     <span class="step" id="step"></span>
     <h2 id="h"></h2>
     <p class="intro" id="intro"></p>
-    <ul class="facts" id="facts"></ul>
-    <div class="flowctl" id="flowctl">
-      <button class="pill acc" id="playFlow">▶ 흐름 재생</button>
-      <small><span class="dot" style="background:var(--blue)"></span>산소가 적은 피 <span class="dot" style="background:var(--red);margin-left:8px"></span>산소가 많은 피</small>
-    </div>
     <div class="list" id="list"></div>
-    <div class="info" id="info"><b id="iName"></b><p id="iDesc"></p></div>
     <div class="think"><b>생각해 볼까요?</b><p id="think"></p></div>
     <p class="intro" style="font-size:13px" id="arnote"></p>
   </aside>
@@ -199,9 +223,9 @@ footer span{color:var(--muted)}
   <h3>탐구 미션</h3>
   <p class="lead">모형을 관찰한 내용으로 답을 써 보세요. 쓴 내용은 이 기기에 저장되고, 아래 버튼으로 PDF 기록으로 만들 수 있어요.</p>
   <div class="qs">
-    <div class="q"><span class="qn">미션 1 · 외형 관찰</span><p>① 외형 관찰에서 심장에 연결된 큰 혈관 4개(대동맥, 대정맥, 폐동맥, 폐정맥) 중 산소가 많은 피가 흐르는 혈관을 모두 쓰고, 모형의 어떤 색을 보고 알았는지 함께 써 보세요.</p><textarea id="a1" placeholder="예) ○○, ○○ — 모형에서 ○색으로 표시되어 있어서"></textarea></div>
-    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② 혈액 흐름에서 ‘흐름 재생’을 눌러 보고, 피가 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 방과 방 사이에서 지나는 판막 이름도 써 보세요.</p><textarea id="a2" placeholder="예) 오른심방 → … (사이의 판막: …)"></textarea></div>
-    <div class="q"><span class="qn">미션 3 · 박동 비교</span><p>③ ‘쉬는 중’과 ‘운동 후’를 번갈아 눌러 박동 빠르기를 비교하고, 운동할 때 심장이 더 빨리 뛰어야 하는 까닭을 ‘산소’라는 낱말을 넣어 써 보세요.</p><textarea id="a3" placeholder="예) 운동하면 근육이 ○○가 더 필요해서"></textarea></div>
+    <div class="q"><span class="qn">미션 1 · 외형 관찰</span><p>① ‘겉모습’에서 심장에 연결된 큰 혈관 4개(대동맥, 대정맥, 폐동맥, 폐정맥) 중 산소가 많은 혈액이 흐르는 혈관을 모두 쓰고, 모형의 어떤 색을 보고 알았는지 함께 써 보세요.</p><textarea id="a1" placeholder="예) ○○, ○○ — 모형에서 ○색으로 표시되어 있어서"></textarea></div>
+    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② ‘혈액 흐름’에서 ‘흐름 재생’을 눌러 보고, 혈액이 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 혈액이 폐에서 하는 일도 한 문장으로 써 보세요.</p><textarea id="a2" placeholder="예) 오른쪽 위 방 → … / 폐에서는 ○○를 받아요"></textarea></div>
+    <div class="q"><span class="qn">미션 3 · 박동 비교</span><p>③ ‘쉬는 중’과 ‘운동 후’를 번갈아 눌러 심장 박동 빠르기를 비교하고, 운동할 때 심장이 더 빨리 뛰어야 하는 까닭을 ‘산소’라는 낱말을 넣어 써 보세요.</p><textarea id="a3" placeholder="예) 운동하면 근육이 ○○가 더 필요해서"></textarea></div>
   </div>
   <div class="mrow">
     <input type="text" id="who" placeholder="이름 (예: 3모둠 김하늘)" aria-label="이름">
@@ -215,7 +239,7 @@ footer span{color:var(--muted)}
   <h3>사용 안내</h3>
   <ul>
     <li><b>돌리기·확대</b> 손가락(마우스)으로 끌면 돌아가고, 두 손가락으로 벌리거나 스크롤하면 확대·축소돼요. ‘처음’을 누르면 정면으로 돌아와요.</li>
-    <li><b>번호 표지</b> 모형 위 번호나 오른쪽 목록을 누르면 그 부위로 다가가서 설명이 나와요. ‘구조 표시’로 번호를 숨길 수 있어요.</li>
+    <li><b>번호 표지</b> 모형 위 번호나 오른쪽 목록을 누르면 그 부위의 이름과 설명이 아래에 나와요. ‘번호’ 버튼으로 이름표를 숨길 수 있어요.</li>
     <li><b>박동 느끼기</b> ‘소리·진동’을 켜면 심장이 뛸 때마다 “쿵-쿵” 소리가 나고, 안드로이드 기기에서는 진동도 와요. ‘운동 후’는 2배 빠르게, ‘느리게’는 절반 속도로 보여 줘요.</li>
     <li><b>AR 보기</b> 스마트폰·태블릿(Chrome·Safari)에서 ‘AR로 보기’를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요. 아이폰 AR에서는 박동이 멈춘 모습으로 보여요.</li>
     <li><b>크기</b> 모형은 실제 심장(약 12 cm)의 약 3.3배예요. 성인 심장은 휴식 시 1분에 약 60~100회, 하루 약 10만 회 뛰어요.</li>
@@ -238,113 +262,167 @@ footer span{color:var(--muted)}
 
 <script>
 (async function(){
-  const $=id=>document.getElementById(id), mv=$('mv');
-  let models=[];
-  try{ models=await (await fetch('models.json')).json(); }
+  const $=id=>document.getElementById(id), mv=$('mv'), svg=$('flowsvg'), vw=document.querySelector('.vw');
+  let D;
+  try{ D=await (await fetch('models.json')).json(); }
   catch(e){ $('intro').textContent='models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
-  const outer=models[0], cut=models[1];
+  const B='#1f5fe0', R='#e0241b';
 
-  /* 세 단계 정의 */
+  /* ── 혈액 흐름 경로: 단계마다 지나는 점들 ── */
+  const num=s=>s.split(' ').map(parseFloat);
+  const add=(s,d)=>{ const p=num(s); return (p[0]+d[0]).toFixed(4)+'m '+(p[1]+d[1]).toFixed(4)+'m '+(p[2]+d[2]).toFixed(4)+'m'; };
+  const Pt=D.pts, pts={
+    bodyIn:add(Pt.svc,[-0.03,0.08,0]), svc:Pt.svc, RA:Pt.RA, tri:Pt.tri, RV:Pt.RV, pv:Pt.pv, lungOut:add(Pt.pv,[0.10,0.085,0]),
+    lungIn:add(Pt.LA,[0.10,0.05,0]), LA:Pt.LA, mit:Pt.mit, LV:Pt.LV, aov:Pt.aov, aorta:Pt.aorta, bodyOut:add(Pt.aorta,[0.035,0.08,0])
+  };
   const flow=[
-    {t:'온몸 → 오른심방', d:'온몸을 돌고 온 산소가 적은 피가 위·아래대정맥을 지나 오른심방으로 들어와요.', a:0, b:2, red:false, note:'위대정맥 → 오른심방'},
-    {t:'오른심방 → 오른심실', d:'오른심방이 모은 피가 삼첨판을 지나 오른심실로 내려가요.', a:2, b:6, via:4, red:false, note:'삼첨판'},
-    {t:'오른심실 → 폐', d:'오른심실이 수축하면 폐동맥판이 열리고 피가 폐동맥을 지나 폐로 가서 산소를 받아요.', a:6, b:11, red:false, note:'폐동맥판'},
-    {t:'폐 → 왼심방', d:'폐에서 산소를 받은 피가 폐정맥을 지나 왼심방으로 돌아와요. 이때부터 피는 산소가 많은 붉은 피예요.', a:11, b:3, red:true, note:'폐정맥(모형에는 일부만 보여요)'},
-    {t:'왼심방 → 왼심실', d:'왼심방의 피가 승모판(이첨판)을 지나 왼심실로 내려가요.', a:3, b:7, via:5, red:true, note:'승모판'},
-    {t:'왼심실 → 온몸', d:'가장 두꺼운 왼심실이 힘차게 수축해 대동맥판을 열고 피를 대동맥으로 내보내 온몸으로 보내요.', a:7, b:1, via:10, red:true, note:'대동맥판'}
+    {t:'온몸 → 오른쪽 위 방', d:'온몸을 돌고 온 산소가 적은 혈액이 대정맥을 따라 심장의 오른쪽 위 방으로 들어와요.', path:['bodyIn','svc','RA'], red:false, lab:['온몸에서','bodyIn']},
+    {t:'오른쪽 위 방 → 오른쪽 아래 방', d:'혈액이 판막(문)을 지나 아래쪽 방으로 내려가요.', path:['RA','tri','RV'], red:false},
+    {t:'오른쪽 아래 방 → 폐', d:'심장이 줄어들면서 혈액을 폐동맥으로 밀어내요. 혈액은 폐로 가서 산소를 받고 이산화 탄소를 내보내요.', path:['RV','pv','lungOut'], red:false, lab:['폐로','lungOut']},
+    {t:'폐 → 왼쪽 위 방', d:'산소를 받은 혈액이 폐정맥을 따라 심장의 왼쪽 위 방으로 돌아와요. 여기서부터는 산소가 많은 혈액이에요.', path:['lungIn','LA'], red:true, lab:['폐에서','lungIn']},
+    {t:'왼쪽 위 방 → 왼쪽 아래 방', d:'혈액이 판막(문)을 지나 왼쪽 아래 방으로 내려가요.', path:['LA','mit','LV'], red:true},
+    {t:'왼쪽 아래 방 → 온몸', d:'가장 두꺼운 왼쪽 아래 방이 힘차게 줄어들어 혈액을 대동맥으로 내보내요. 혈액은 온몸으로 가요.', path:['LV','aov','aorta','bodyOut'], red:true, lab:['온몸으로','bodyOut']}
   ];
   const tabs=[
-    {id:'t0', model:outer, file:'models/heart.glb', badge:'3D · 사실적 외형', step:'STEP 01 · OBSERVE', h:'겉모양 살펴보기',
-     intro:'모형을 돌려 가며 번호를 눌러 큰 혈관과 심장의 방을 찾아보세요. 표면의 노란 부분은 지방, 붉은 가는 줄기는 심장 근육에 피를 주는 관상동맥이에요.',
-     facts:['빨강 혈관: 산소가 많은 피 / 파랑 혈관: 산소가 적은 피','폐동맥은 동맥인데 파랗고, 폐정맥은 정맥인데 빨개요','우심실이 앞쪽에, 좌심실이 왼쪽 아래에 있어요'],
-     think:'심장에 연결된 혈관들은 모두 같은 방향으로 피를 보낼까요? 심장으로 들어오는 혈관과 나가는 혈관을 나눠 보세요.'},
-    {id:'t1', model:cut, file:'models/heart-cut.glb', badge:'3D · 단면 보기', step:'STEP 02 · STRUCTURE', h:'심장 속 네 개의 방',
-     intro:'심장을 앞에서 세로로 잘라 본 모습이에요. 네 개의 방, 판막, 판막을 붙잡는 건삭과 유두근을 찾아보세요. 박동하는 모습도 관찰해 보세요.',
-     facts:['위쪽 두 방은 심방, 아래쪽 두 방은 심실','좌심실 벽이 가장 두꺼워요','판막은 피가 한 방향으로만 흐르게 하는 문이에요'],
-     think:'왼심실의 벽이 오른심실보다 훨씬 두꺼운 까닭은 무엇일까요? 두 심실이 피를 보내는 곳을 비교해 보세요.'},
-    {id:'t2', model:cut, file:'models/heart-cut.glb', badge:'3D · 혈액의 길', step:'STEP 03 · CIRCULATION', h:'혈액의 길 따라가기',
-     intro:'단계를 누르거나 ‘흐름 재생’을 눌러 피가 어떤 순서로 심장의 방과 판막을 지나는지 따라가 보세요. 점멸하는 번호가 출발과 도착이에요.',
-     facts:['몸 → 오른쪽 심장 → 폐: 산소가 적은 피(폐순환)','폐 → 왼쪽 심장 → 몸: 산소가 많은 피(온몸순환)','피는 심장을 두 번 지나 몸을 한 바퀴 돌아요'],
-     think:'피가 심장을 한 바퀴 돌 때 왜 폐를 꼭 거쳐야 할까요? 산소가 적은 피와 많은 피가 어디에서 바뀌는지 찾아보세요.'}
+    {key:'outer', file:'models/heart.glb', badge:'3D · 사실적 외형', step:'STEP 01 · OBSERVE', h:'겉모습 살펴보기',
+     intro:'모형을 돌려 보며 번호를 눌러 심장과 큰 혈관을 찾아보세요.',
+     think:'심장에 연결된 혈관은 모두 같은 방향으로 혈액을 보낼까요? 심장으로 들어오는 혈관과 심장에서 나가는 혈관을 나눠 보세요.'},
+    {key:'inner', file:'models/heart-cut.glb', badge:'3D · 심장 속', step:'STEP 02 · INSIDE', h:'심장 속 살펴보기',
+     intro:'심장을 반으로 잘라 본 모습이에요. 심장 속은 네 개의 방으로 나뉘어 있어요. (정면에서 본 그림이라 화면의 왼쪽이 몸의 오른쪽이에요.)',
+     think:'왼쪽 아래 방의 벽이 가장 두꺼워요. 이 방이 혈액을 어디로 보내는지 생각하며 까닭을 말해 보세요.'},
+    {key:'flow', file:'models/heart-cut.glb', badge:'3D · 혈액의 길', step:'STEP 03 · CIRCULATION', h:'혈액의 길 따라가기',
+     intro:'단계를 누르거나 ‘흐름 재생’을 눌러 혈액이 지나는 길을 따라가 보세요. 파란 길은 산소가 적은 혈액, 빨간 길은 산소가 많은 혈액이에요.',
+     think:'혈액은 왜 꼭 폐를 지나야 할까요? 폐에서 혈액에 일어나는 변화를 말해 보세요.'}
   ];
-  let cur=-1, active=-1, labelsOn=innerWidth>0, beating=true, speed=1, flowTimer=null, flowIdx=-1, feel=false, actx=null, lastPh=0;
+  let cur=-1, labelsOn=true, beating=true, speed=1, flowTimer=null, flowIdx=-1, feel=false, actx=null, lastPh=0;
 
-  function pos(s){return s.split(' ').map(x=>parseFloat(x));}
-  function hotspotsFor(i){ return i===0?outer.hotspots:cut.hotspots; }
-  function setBpm(){ $('bpm').textContent=(Math.round(72*speed))+'회/분 · '+(speed>1?'운동 후':speed<1?'느리게(관찰용)':'쉬는 중'); }
-  function setSpeed(s,which){
-    speed=s; mv.timeScale=s; setBpm();
-    $('restBtn').setAttribute('aria-pressed',which==='rest'); $('runBtn').setAttribute('aria-pressed',which==='run'); $('slowBtn').setAttribute('aria-pressed',which==='slow');
-  }
+  const hsFor=i=>i===0?D.outer:D.inner;
+  function setBpm(){ $('bpm').textContent=Math.round(72*speed)+'회/분 · '+(speed>1?'운동 후':speed<1?'느리게 보기':'쉬는 중'); }
+  function setSpeed(s,w){ speed=s; mv.timeScale=s; setBpm(); $('restBtn').setAttribute('aria-pressed',w==='rest'); $('runBtn').setAttribute('aria-pressed',w==='run'); $('slowBtn').setAttribute('aria-pressed',w==='slow'); }
   function setBeat(on){ beating=on; $('beatBtn').setAttribute('aria-pressed',on); if(on) mv.play({repetitions:Infinity}); else mv.pause(); }
+  function cap(t,d){ $('capT').textContent=t||''; $('capD').textContent=d||''; $('cap').classList.toggle('on',!!t); }
 
-  function clearFlow(){ mv.querySelectorAll('.hs').forEach(h=>h.classList.remove('fa','fb','red')); }
   function selectItem(k){
-    active=k; const hs=hotspotsFor(cur)[k]; if(!hs) return;
+    const hs=hsFor(cur)[k]; if(!hs) return;
     mv.querySelectorAll('.hs').forEach((x,j)=>x.classList.toggle('on',j===k));
     [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
-    $('iName').textContent=hs.name; $('iDesc').textContent=hs.desc; $('info').style.display='block';
-    const p=pos(hs.pos); mv.resetTurntableRotation(0); mv.cameraTarget=`${p[0]}m ${p[1]}m ${p[2]}m`; mv.cameraOrbit='0.01deg 82deg 0.55m';
+    cap(hs.name,hs.d||hs.desc);
+    
+  }
+
+  /* ── 혈액 흐름 그리기(굵은 선 + 흐르는 점 + 화살표) ── */
+  const NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){ const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); (p||svg).appendChild(e); return e; }
+  let segs=[], labs=[];
+  function buildSvg(){
+    svg.innerHTML=''; segs=[]; labs=[];
+    const defs=el('defs',{});
+    [['ab',B],['ar',R]].forEach(([id,c])=>{ const m=el('marker',{id,viewBox:'0 0 10 10',refX:'6',refY:'5',markerUnits:'userSpaceOnUse',markerWidth:'38',markerHeight:'38',orient:'auto'},defs); el('path',{d:'M0,0 L10,5 L0,10 z',fill:c,stroke:'#fff','stroke-width':'1.2'},m); });
+    flow.forEach((s,i)=>{
+      const base=el('path',{class:'seg',stroke:s.red?R:B,'stroke-width':'12',opacity:'.55'});
+      const cas=el('path',{class:'seg',stroke:'#fff','stroke-width':'17',opacity:'0'});
+      const act=el('path',{class:'seg',stroke:s.red?R:B,'stroke-width':'10',opacity:'0','marker-end':'url(#'+(s.red?'ar':'ab')+')'});
+      const dots=el('path',{class:'seg dots',opacity:'0'});
+      const beads=[0,1,2,3].map(()=>el('circle',{r:'0',fill:s.red?R:B,stroke:'#fff','stroke-width':'3',opacity:'0'}));
+      segs.push({base,cas,act,dots,s,beads});
+      if(s.lab){ const t=el('text',{class:'flt'}); t.textContent=s.lab[0]; labs.push({t,pt:s.lab[1]}); }
+    });
+  }
+  function curve(P){
+    if(P.length<2) return '';
+    if(P.length===2) return 'M'+P[0][0]+','+P[0][1]+' L'+P[1][0]+','+P[1][1];
+    let d='M'+P[0][0]+','+P[0][1];
+    for(let i=0;i<P.length-1;i++){
+      const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||P[i+1];
+      d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+','+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+','+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+','+p2[1];
+    }
+    return d;
+  }
+  function wpPos(name){ const e=mv.querySelector('[slot="hotspot-wp-'+name+'"]'); if(!e) return null; const r=e.getBoundingClientRect(), v=vw.getBoundingClientRect(); return [r.left-v.left+r.width/2, r.top-v.top+r.height/2]; }
+  function drawFlow(){
+    if(cur!==2||!segs.length) return;
+    segs.forEach((g,i)=>{
+      const P=g.s.path.map(wpPos); if(P.some(p=>!p)) return;
+      const d=curve(P); [g.base,g.cas,g.act,g.dots].forEach(p=>p.setAttribute('d',d));
+      const on=flowIdx===i, anyOn=flowIdx>=0;
+      g.base.setAttribute('opacity', on?0:(anyOn?.28:.7));
+      g.cas.setAttribute('opacity', on?.95:0);
+      const L=g.act.getTotalLength?g.act.getTotalLength():0, tt=performance.now()/2600;
+      g.beads.forEach((c,bi)=>{ if(!on||!L){ c.setAttribute('opacity','0'); return; }
+        const f=((tt-bi*0.07)%1+1)%1, q=g.act.getPointAtLength(f*L); c.setAttribute('cx',q.x); c.setAttribute('cy',q.y);
+        c.setAttribute('r',String(14-bi*3)); c.setAttribute('opacity',String(1-bi*0.22)); });
+       g.act.setAttribute('opacity', on?1:0); g.dots.setAttribute('opacity', on?1:0);
+    });
+    labs.forEach(l=>{ const p=wpPos(l.pt); if(p){ l.t.setAttribute('x',p[0]); l.t.setAttribute('y',p[1]-18); } });
   }
   function showStep(k){
-    flowIdx=k; const s=flow[k]; clearFlow();
-    const els=[...mv.querySelectorAll('.hs')];
-    els.forEach(e=>e.classList.remove('on'));
-    [els[s.a],els[s.b]].forEach(e=>{ if(e){e.classList.add('fa'); if(s.red) e.classList.add('red');} });
-    if(s.via!=null && els[s.via]) els[s.via].classList.add('fb','on');
+    flowIdx=k; const s=flow[k];
     [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
-    $('iName').textContent=(k+1)+'단계 · '+s.t; $('iDesc').textContent=s.d+(s.note?' ('+s.note+')':''); $('info').style.display='block';
-    const pa=pos(cut.hotspots[s.a].pos), pb=pos(cut.hotspots[s.b].pos);
-    const m=pa.map((v,i)=>(v+pb[i])/2); mv.resetTurntableRotation(0); mv.cameraTarget=`${m[0]}m ${m[1]}m ${m[2]}m`; mv.cameraOrbit='0.01deg 82deg 0.75m';
+    cap((k+1)+'단계 · '+s.t, s.d);
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on'));
   }
   function stopFlow(){ if(flowTimer){clearInterval(flowTimer); flowTimer=null;} $('playFlow').textContent='▶ 흐름 재생'; }
   function playFlow(){
     if(flowTimer){ stopFlow(); return; }
     $('playFlow').textContent='■ 멈춤'; let k=(flowIdx+1)%flow.length; showStep(k);
-    flowTimer=setInterval(()=>{ k=(k+1)%flow.length; showStep(k); },3200);
+    flowTimer=setInterval(()=>{ k=(k+1)%flow.length; showStep(k); },3400);
   }
+  function step(dlt){ stopFlow(); showStep(((flowIdx<0?(dlt>0?-1:0):flowIdx)+dlt+flow.length)%flow.length); }
 
   function build(i){
-    const T=tabs[i]; cur=i; active=-1; stopFlow(); flowIdx=-1;
+    const T=tabs[i]; cur=i; stopFlow(); flowIdx=-1; cap('');
     ['t0','t1','t2'].forEach((id,j)=>$(id).setAttribute('aria-selected',j===i));
-    $('badge').textContent=T.badge; $('step').textContent=T.step; $('h').textContent=T.h; $('intro').textContent=T.intro;
-    $('facts').innerHTML=T.facts.map(f=>'<li>'+f+'</li>').join(''); $('think').textContent=T.think;
-    $('info').style.display='none'; $('flowctl').style.display=i===2?'flex':'none';
-    mv.querySelectorAll('.hs').forEach(h=>h.remove());
-    if(!mv.getAttribute('src')||!mv.getAttribute('src').endsWith(T.file.split('/')[1])){ mv.src=T.file; }
-    mv.resetTurntableRotation(0); mv.cameraOrbit='0.02deg 82deg auto'; mv.cameraTarget='auto auto auto';
+    $('badge').textContent=T.badge; $('step').textContent=T.step; $('h').textContent=T.h; $('intro').textContent=T.intro; $('think').textContent=T.think;
+    $('flowbar').style.display=i===2?'contents':'none'; svg.style.display=i===2?'block':'none';
+    mv.querySelectorAll('.hs,.wp').forEach(h=>h.remove());
+    const want=T.file.split('/')[1]; if(!(mv.getAttribute('src')||'').endsWith(want)) mv.src=T.file;
+    mv.classList.toggle('isflow',i===2); mv.autoRotate=(i===0); $('rotBtn').setAttribute('aria-pressed',i===0); mv.resetTurntableRotation(0); mv.cameraOrbit=i===2?'0.02deg 82deg 118%':'0.02deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.jumpCameraToGoal();
     const list=$('list'); list.innerHTML='';
-    const hsData=hotspotsFor(i);
-    hsData.forEach((h,k)=>{
-      const b=document.createElement('button'); b.className='hs'+(labelsOn?'':' hide'); b.slot='hotspot-'+k;
+    const data=hsFor(i);
+    data.forEach((h,k)=>{
+      const b=document.createElement('button'); b.className='hs'+(labelsOn?'':' hide')+(i===2?' show':''); b.slot='hotspot-'+k;
       b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 0 1'); b.setAttribute('data-visibility-attribute','data-visible');
       b.innerHTML='<span class="n">'+(k+1)+'</span><span class="t">'+h.name+'</span>';
-      b.onclick=()=>{ if(cur===2) showStep(nearestStep(k)); else selectItem(k); };
+      b.onclick=()=>{ if(i!==2) selectItem(k); };
       mv.appendChild(b);
     });
     if(i===2){
-      flow.forEach((s,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+s.t+'</span><span class="ar">›</span>'; it.onclick=()=>{stopFlow();showStep(k)}; list.appendChild(it); });
+      Object.keys(pts).forEach(n=>{ const w=document.createElement('div'); w.className='wp'; w.slot='hotspot-wp-'+n; w.setAttribute('data-position',pts[n]); w.setAttribute('data-normal','0 0 1'); mv.appendChild(w); });
+      buildSvg();
+      flow.forEach((s,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no" style="border-color:'+(s.red?R:B)+';color:'+(s.red?R:B)+'">'+(k+1)+'</span><span>'+s.t+'</span><span class="ar">›</span>'; it.onclick=()=>{stopFlow();showStep(k)}; list.appendChild(it); });
+      showStep(0);
     } else {
-      hsData.forEach((h,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+h.name+'</span><span class="ar">›</span>'; it.onclick=()=>selectItem(k); list.appendChild(it); });
+      data.forEach((h,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+h.name+'</span><span class="ar">›</span>'; it.onclick=()=>selectItem(k); list.appendChild(it); });
     }
   }
-  function nearestStep(k){ const f=flow.findIndex(s=>s.a===k||s.b===k||s.via===k); return f<0?0:f; }
 
   ['t0','t1','t2'].forEach((id,i)=>$(id).onclick=()=>build(i));
   $('beatBtn').onclick=()=>setBeat(!beating);
   $('restBtn').onclick=()=>setSpeed(1,'rest'); $('runBtn').onclick=()=>setSpeed(2,'run'); $('slowBtn').onclick=()=>setSpeed(0.5,'slow');
   $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
   $('lblBtn').onclick=()=>{ labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn); mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn)); };
-  $('resetBtn').onclick=()=>{ stopFlow(); mv.resetTurntableRotation(0); mv.cameraOrbit='0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
-    clearFlow(); mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('list').children].forEach(x=>x.classList.remove('on')); $('info').style.display='none'; };
-  $('playFlow').onclick=playFlow;
+  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit=cur===2?'0.01deg 82deg 118%':'0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('list').children].forEach(x=>x.classList.remove('on')); if(cur!==2) cap(''); };
+  $('playFlow').onclick=playFlow; $('prevBtn').onclick=()=>step(-1); $('nextBtn').onclick=()=>step(1);
   mv.addEventListener('load',()=>{
     const ok=mv.canActivateAR; $('arBtn').style.display=ok?'':'none';
     $('arnote').textContent= ok?'「AR로 보기」를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요.':'스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
     mv.timeScale=speed; if(!beating) mv.pause();
   });
 
-  /* 박동 소리·진동: 애니메이션 위상(0.8초 주기)에 맞춤 */
+  /* ── 크게 보기(전체 화면) ── */
+  const card=$('stageCard'); let fs=false;
+  function setFs(on){
+    fs=on; card.classList.toggle('fs',on); document.body.classList.toggle('nofs',on); $('fsBtn').textContent=on?'✕ 닫기':'⛶ 크게 보기';
+    if(on&&card.requestFullscreen&&!document.fullscreenElement){ card.requestFullscreen().catch(()=>{}); }
+    if(!on&&document.fullscreenElement){ document.exitFullscreen().catch(()=>{}); }
+    setTimeout(()=>{ mv.dispatchEvent(new Event('resize')); window.dispatchEvent(new Event('resize')); },120);
+  }
+  $('fsBtn').onclick=()=>setFs(!fs);
+  document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&fs) setFs(false); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&fs) setFs(false); });
+
+  /* ── 박동 소리·진동(애니메이션 위상 0.8초 주기에 맞춤) ── */
   function thump(f,d,g){ if(!actx) return; const t=actx.currentTime,o=actx.createOscillator(),gn=actx.createGain();
     o.type='sine'; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*.55,t+d);
     gn.gain.setValueAtTime(.0001,t); gn.gain.exponentialRampToValueAtTime(g,t+.012); gn.gain.exponentialRampToValueAtTime(.0001,t+d);
@@ -352,10 +430,11 @@ footer span{color:var(--muted)}
   const buzz=ms=>{ try{ navigator.vibrate&&navigator.vibrate(ms);}catch(e){} };
   const lub=()=>{ thump(62,.16,.9); buzz(70); mv.classList.add('pulse'); setTimeout(()=>mv.classList.remove('pulse'),120); };
   const dub=()=>{ thump(78,.11,.55); buzz(40); };
-  (function tick(){ if(feel&&beating){ const D=.8, ph=((mv.currentTime%D)+D)%D; if(ph<lastPh-.4) lub(); else if(lastPh<.42&&ph>=.42) dub(); lastPh=ph; } requestAnimationFrame(tick); })();
+  (function tick(){ if(feel&&beating){ const Dn=.8, ph=((mv.currentTime%Dn)+Dn)%Dn; if(ph<lastPh-.4) lub(); else if(lastPh<.42&&ph>=.42) dub(); lastPh=ph; }
+    drawFlow(); requestAnimationFrame(tick); })();
   $('feelBtn').onclick=()=>{ feel=!feel; $('feelBtn').setAttribute('aria-pressed',feel); if(feel){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); lub(); setTimeout(dub,300); } };
 
-  /* 탐구 미션 저장 */
+  /* ── 탐구 미션 저장 ── */
   const ids=['a1','a2','a3','who'];
   const store={get(k){try{return localStorage.getItem('heartlab_'+k)||''}catch(e){return ''}},set(k,v){try{localStorage.setItem('heartlab_'+k,v)}catch(e){}}};
   ids.forEach(id=>{ $(id).value=store.get(id); $(id).addEventListener('input',()=>{ store.set(id,$(id).value); $('saved').textContent='이 기기에 저장됨'; }); });
