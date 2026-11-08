@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>허스키렌즈2 탐구 · DK AI Science</title>
+<title>허스키렌즈 2 기초 · DK AI Science</title>
 <meta name="description" content="마이크로비트 없이 허스키렌즈2 하나로 배우는 AI 알아보기 기능 스물다섯 가지">
 <meta name="theme-color" content="#eeeef1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -255,12 +255,12 @@ const PARTS = {};
 const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "기초 1 · 만나 보기", "c": "#16a34a"}, {"n": "기초 2 · 사용 순서", "c": "#0d9488"}, {"n": "1장 · 얼굴 인식", "c": "#1e6bff"}, {"n": "2장 · 물체 추적", "c": "#ff8a1f"}, {"n": "3장 · 물체 인식", "c": "#d946ef"}, {"n": "4장 · 선 따라가기", "c": "#ff3b30"}, {"n": "5장 · 색 인식", "c": "#f59e0b"}, {"n": "6장 · 태그 인식", "c": "#8b5cf6"}, {"n": "7장 · 물체 분류", "c": "#06b6d4"}, {"n": "8장 · 얼굴 더 알아보기", "c": "#e11d48"}, {"n": "9장 · 손과 몸 알아보기", "c": "#65a30d"}, {"n": "10장 · 글자와 코드 읽기", "c": "#2563eb"}, {"n": "11장 · 내 물체 배우고 윤곽 따기", "c": "#7c4dff"}, {"n": "보조 기능", "c": "#7c4dff"}, {"n": "마무리", "c": "#16a34a"}];
 const QUIZ = {};
 const DATA = `
-cover|0||허스키렌즈2 탐구|
+cover|0||허스키렌즈 2 기초|
 : 마이크로비트 없이 허스키렌즈2 하나로 알아보는 스물다섯 가지 AI 카메라
 @toc 표지
 ---
 text|0|이 책은|학습 순서|
-: 허스키렌즈2를 먼저 알고, 알아보기 기능을 하나씩 해 봅니다. 1~7장은 허스키렌즈 탐구와 같은 순서입니다.
+: 허스키렌즈2를 먼저 알고, 알아보기 기능을 하나씩 해 봅니다. 1~7장은 허스키렌즈 기초와 같은 순서입니다.
 - 기초 — 겉모습, 화면, 터치 사용법
 - 1장 — 얼굴 인식
 - 2장 — 물체 추적
@@ -768,7 +768,7 @@ function pageHTML(i) {
   }
   if (p.kind === "end") {
     return `<div class="page endp" style="--c:${c}"><div class="mini" style="width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.4);gap:calc(var(--u)*.9);padding:calc(var(--u)*2)"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div>
-      <div class="ttl" style="font-size:calc(var(--u)*4.4)">허스키렌즈2 탐구</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
+      <div class="ttl" style="font-size:calc(var(--u)*4.4)">허스키렌즈 2 기초</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
   }
   if (p.kind === "divider") {
     const body = p.lines.map(l => /^[:\-*] /.test(l) ? `<p>${esc(l.slice(2))}</p>` : "").join("");
