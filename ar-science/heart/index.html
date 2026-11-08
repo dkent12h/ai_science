@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>심장과 혈액 순환 · AR 3D 모형 | DK Digital Science</title>
+<meta name="description" content="사실적인 3D 심장 모형을 돌려 보고, 박동·내부 구조·혈액 흐름을 관찰하며 AR로 교실에 띄우는 과학 웹페이지">
+<meta name="theme-color" content="#eeeef1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="../lib/model-viewer.min.js"></script>
+<style>
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#f97316;--red:#d8332b;--blue:#3e6ccd;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);overflow-x:hidden;
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+a{color:inherit}
+button{font-family:inherit;color:inherit}
+
+header{display:flex;justify-content:space-between;align-items:center;padding:20px clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+nav{display:flex;gap:10px}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:15px;text-decoration:none;background:transparent;cursor:pointer;transition:background .25s,color .25s,border-color .25s;white-space:nowrap}
+.pill:hover,.pill:focus-visible{background:var(--ink);color:#fff;outline:none}
+.pill[aria-pressed="true"],.pill[aria-selected="true"]{background:var(--ink);color:#fff}
+.pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.pill.acc:hover{background:var(--ink);border-color:var(--ink)}
+
+.hero{padding:clamp(8px,2vh,24px) clamp(16px,3vw,40px) clamp(16px,2.4vh,28px)}
+.eyebrow{margin:0 0 12px;font-size:clamp(14px,1.3vw,19px);font-weight:700;color:var(--muted)}
+.eyebrow b{color:var(--acc)}
+h1{margin:0;font-size:clamp(38px,7.2vw,112px);line-height:1.04;letter-spacing:-.055em;font-weight:800}
+h1 em{font-style:normal;color:var(--acc)}
+.sub{margin:12px 0 0;max-width:60ch;font-size:clamp(15px,1.35vw,20px);line-height:1.6;font-weight:500;color:var(--muted)}
+
+main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr);gap:clamp(14px,2vw,28px);padding:0 clamp(16px,3vw,40px)}
+.card{border:1.5px solid var(--line);border-radius:22px;background:rgba(255,255,255,.62);backdrop-filter:blur(6px)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1.5px solid var(--line);align-items:center}
+.tabs .sp{flex:1}
+.stage{position:relative}.vw{position:relative;height:clamp(380px,60vh,640px)}
+model-viewer{width:100%;height:100%;border-radius:0;--poster-color:transparent;background:radial-gradient(70% 60% at 50% 45%,#ffffff 0%,#f1f1f5 70%,#e6e6ee 100%)}
+.badge{position:absolute;left:16px;top:14px;z-index:2;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.85)}
+.badge i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc);margin-right:7px}
+.legend{position:absolute;left:16px;bottom:14px;z-index:2;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;background:rgba(255,255,255,.85);border:1.5px solid var(--line);padding:8px 12px;border-radius:14px}
+.legend span{display:flex;gap:8px;align-items:center}.legend i{width:10px;height:10px;border-radius:50%}
+.bpm{position:absolute;right:16px;top:14px;z-index:2;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.85)}
+.bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;border-top:1.5px solid var(--line)}
+.bar .pill{background:rgba(255,255,255,.9);padding:8px 14px;font-size:14px}
+.bar .pill[aria-pressed="true"],.bar .pill:hover{background:var(--ink);color:#fff}
+.bar .pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}.bar .pill.acc:hover{background:var(--ink);border-color:var(--ink)}
+mv-flow .hs,#mv.isflow .hs{display:none}
+.bar .sep{width:1.5px;background:var(--line);margin:0 2px}
+#arBtn{position:absolute;right:16px;bottom:14px;z-index:3;border-radius:999px;border:0;background:var(--acc);color:#fff;font-weight:800;font-size:15px;padding:11px 18px;cursor:pointer;box-shadow:0 10px 24px rgba(249,115,22,.35)}
+
+aside{padding:22px;display:flex;flex-direction:column;gap:14px}
+.step{font-size:13px;font-weight:800;color:var(--acc);letter-spacing:.06em}
+h2{margin:0;font-size:clamp(28px,3.2vw,44px);line-height:1.05;letter-spacing:-.04em;font-weight:800}
+.intro{margin:0;font-size:16px;line-height:1.65;font-weight:500;color:var(--muted)}
+.facts{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.facts li{font-size:15px;line-height:1.5;font-weight:700;padding-left:20px;position:relative}
+.facts li:before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--acc)}
+.list{display:grid;gap:8px;max-height:340px;overflow:auto;padding-right:2px}
+.item{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:9px 12px;cursor:pointer;font-weight:800;font-size:15px;transition:border-color .2s,background .2s}
+.item .no{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:13px}
+.item:hover{border-color:var(--ink)}
+.item.on{border-color:var(--acc);background:#fff5ec}.item.on .no{background:var(--acc);border-color:var(--acc);color:#fff}
+.item .ar{color:var(--muted);font-size:18px}
+.info{display:none;border-radius:16px;border:1.5px solid var(--acc);background:#fff5ec;padding:14px 16px}
+.info b{display:block;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
+.info p{margin:0;font-size:15px;line-height:1.65;font-weight:500}
+.think{border-left:4px solid var(--acc);background:rgba(255,255,255,.7);padding:12px 14px;border-radius:0 14px 14px 0}
+.think b{display:block;font-size:13px;color:var(--acc);margin-bottom:4px}
+.think p{margin:0;font-size:15px;line-height:1.6;font-weight:700}
+.flowctl{display:none;gap:8px;align-items:center;flex-wrap:wrap}
+.flowctl .pill{padding:8px 14px;font-size:14px}
+.flowctl small{font-size:13px;font-weight:700;color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+
+/* 모형 위 번호 표지 */
+.hs{display:block;border:0;background:none;padding:0;cursor:pointer;transition:opacity .2s}
+.hs .n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid var(--ink);font-weight:800;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.28)}
+.hs .t{display:none;position:absolute;left:50%;bottom:34px;transform:translateX(-50%);white-space:nowrap;background:var(--ink);color:#fff;font-weight:800;font-size:13px;padding:5px 10px;border-radius:999px}
+.hs.on .n{background:var(--acc);border-color:var(--acc);color:#fff}
+.hs.on .t,.hs:hover .t,.hs:focus-visible .t{display:block}
+.hs.hide{opacity:0;pointer-events:none}.hs.hide.on{opacity:1;pointer-events:auto}
+.hs.fa .n{background:var(--blue);border-color:var(--blue);color:#fff;animation:pl 1s infinite}
+.hs.fb .n{background:var(--blue);border-color:var(--blue);color:#fff;animation:pl 1s infinite}
+.hs.red.fa .n,.hs.red.fb .n{background:var(--red);border-color:var(--red)}
+.hs.fa .t,.hs.fb .t{display:block}
+@keyframes pl{50%{box-shadow:0 0 0 9px rgba(249,115,22,.0),0 3px 10px rgba(0,0,0,.28)}0%{box-shadow:0 0 0 0 rgba(249,115,22,.55),0 3px 10px rgba(0,0,0,.28)}}
+#mv.pulse{filter:brightness(1.1)}#mv{transition:filter .12s}
+
+/* 미션 */
+.mission{margin:clamp(18px,3vw,36px) clamp(16px,3vw,40px) 0;padding:clamp(20px,3vw,36px)}
+.mission h3{margin:0 0 6px;font-size:clamp(26px,3.4vw,48px);letter-spacing:-.045em;line-height:1.05}
+.mission .lead{margin:0 0 22px;color:var(--muted);font-weight:500;font-size:16px}
+.qs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.q{border:1.5px solid var(--line);border-radius:18px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:10px}
+.q .qn{font-size:13px;font-weight:800;color:var(--acc)}
+.q p{margin:0;font-size:16px;line-height:1.6;font-weight:700}
+textarea,input[type=text]{width:100%;font:inherit;font-weight:500;font-size:15px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fafafc;resize:vertical;min-height:92px}
+input[type=text]{min-height:0}
+textarea:focus,input:focus{outline:2px solid var(--acc);outline-offset:1px}
+.mrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.mrow input{max-width:220px}
+.guide{margin:clamp(18px,3vw,36px) clamp(16px,3vw,40px) 0;padding:clamp(18px,2.4vw,28px)}
+.guide h3{margin:0 0 12px;font-size:22px;letter-spacing:-.03em}
+.guide ul{margin:0;padding-left:20px;display:grid;gap:6px;font-weight:500;line-height:1.6}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:5vh clamp(16px,3vw,40px) 5vh;font-weight:700;font-size:15px}
+footer a{text-decoration:none;border-bottom:1.5px solid var(--ink)}
+footer span{color:var(--muted)}
+
+
+.vw{height:clamp(460px,74vh,820px)}
+#flowsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:none;overflow:visible}
+#flowsvg .seg{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#flowsvg .flt{fill:#0b0b10;font:800 15px "Noto Sans KR","Inter Tight",sans-serif;stroke:#fff;stroke-width:5px;paint-order:stroke;text-anchor:middle}
+@keyframes flow{to{stroke-dashoffset:-30}}
+#flowsvg .dots{stroke:#fff;stroke-width:5;stroke-dasharray:1 29;animation:flow .8s linear infinite}
+.wp{display:block;width:1px;height:1px}
+.hs.show .t{display:block}
+.legend{left:auto;right:16px;top:54px;bottom:auto}
+.cap{display:none;padding:10px 16px;border-top:1.5px solid var(--line);font-size:15px;line-height:1.55;font-weight:500;background:rgba(255,255,255,.7)}
+.cap b{margin-right:8px;font-size:16px}.cap.on{display:block}
+.grp{display:contents}
+.card.fs{position:fixed;inset:0;z-index:100;border-radius:0;display:flex;flex-direction:column;background:#f4f4f8;border:0}
+.card.fs .stage{flex:1;display:flex;flex-direction:column;min-height:0}
+.card.fs .vw{flex:1;height:auto;min-height:0}
+.card.fs model-viewer{height:100%}
+body.nofs{overflow:hidden}
+
+/* 인쇄: 내 탐구 기록만 */
+#print{display:none}
+@media print{
+  body{background:#fff}header,.hero,main,.mission,.guide,footer{display:none!important}
+  #print{display:block;padding:24px;font-family:"Noto Sans KR",sans-serif}
+  #print h1{font-size:26px;line-height:1.3;letter-spacing:0}
+  #print .pq{margin:18px 0}#print .pq b{display:block;margin-bottom:6px}
+  #print .pa{white-space:pre-wrap;border:1px solid #999;border-radius:6px;padding:10px;min-height:90px}
+}
+
+@media (max-width:980px){
+  main{grid-template-columns:1fr}.qs{grid-template-columns:1fr}
+  .vw{height:clamp(380px,62vh,560px)}.legend{top:auto;bottom:10px;right:10px;font-size:12px}
+  nav .pill:first-child{display:none}
+}
+@media (max-width:520px){
+  .bar .pill{padding:7px 10px;font-size:13px}.bpm{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="../../science/"><span class="mini" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></span>DK Digital Science</a>
+  <nav><a class="pill" href="../../science/">← 과학 목록</a><a class="pill" href="#guide">사용 안내</a><a class="pill" href="#mission">탐구 미션</a></nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow"><b>●</b> 생명과학 · 인체 탐구 · AR 3D 모형</p>
+  <h1>심장과 혈액 순환<em>.</em></h1>
+  <p class="sub">심장의 겉과 속을 돌려 보고, 박동을 느끼고, 피가 온몸을 한 바퀴 도는 길을 따라가 보세요. 스마트폰·태블릿에서는 AR로 교실에 띄울 수 있어요.</p>
+</section>
+
+<main id="top">
+  <section class="card" id="stageCard">
+    <div class="tabs" role="tablist">
+      <button class="pill" role="tab" id="t0" aria-selected="true">① 겉모습</button>
+      <button class="pill" role="tab" id="t1" aria-selected="false">② 심장 속</button>
+      <button class="pill" role="tab" id="t2" aria-selected="false">③ 혈액 흐름</button>
+      <span class="sp"></span>
+      <button class="pill acc" id="fsBtn">⛶ 크게 보기</button>
+    </div>
+    <div class="stage">
+      <div class="vw">
+        <model-viewer id="mv" camera-controls touch-action="pan-y" rotation-per-second="14deg"
+          interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.95" environment-image="neutral"
+          camera-orbit="0.01deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.6m"
+          ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 심장 모형" animation-name="beat" autoplay>
+          <button slot="ar-button" id="arBtn">📱 AR로 보기</button>
+        </model-viewer>
+        <svg id="flowsvg" aria-hidden="true"></svg>
+        <span class="badge"><i></i><span id="badge">3D · 사실적 외형</span></span>
+        <span class="bpm" id="bpm">72회/분 · 쉬는 중</span>
+        <div class="legend"><span><i style="background:var(--red)"></i>산소가 많은 혈액</span><span><i style="background:var(--blue)"></i>산소가 적은 혈액</span></div>
+      </div>
+      <div class="cap" id="cap"><b id="capT"></b><span id="capD"></span></div>
+      <div class="bar">
+        <span id="flowbar" class="grp" style="display:none">
+          <button class="pill" id="prevBtn">◀ 이전</button>
+          <button class="pill acc" id="playFlow">▶ 흐름 재생</button>
+          <button class="pill" id="nextBtn">다음 ▶</button>
+          <span class="sep"></span>
+        </span>
+        <button class="pill" id="beatBtn" aria-pressed="true">💓 박동</button>
+        <button class="pill" id="feelBtn" aria-pressed="false">🔊 소리·진동</button>
+        <button class="pill" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
+        <button class="pill" id="runBtn" aria-pressed="false">🏃 운동 후</button>
+        <button class="pill" id="slowBtn" aria-pressed="false">🐢 느리게</button>
+        <span class="sep"></span>
+        <button class="pill" id="rotBtn" aria-pressed="true">🔄 회전</button>
+        <button class="pill" id="lblBtn" aria-pressed="true">🔢 번호</button>
+        <button class="pill" id="resetBtn">🎯 처음</button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="card">
+    <span class="step" id="step"></span>
+    <h2 id="h"></h2>
+    <p class="intro" id="intro"></p>
+    <div class="list" id="list"></div>
+    <div class="think"><b>생각해 볼까요?</b><p id="think"></p></div>
+    <p class="intro" style="font-size:13px" id="arnote"></p>
+  </aside>
+</main>
+
+<section class="card mission" id="mission">
+  <h3>탐구 미션</h3>
+  <p class="lead">모형을 관찰한 내용으로 답을 써 보세요. 쓴 내용은 이 기기에 저장되고, 아래 버튼으로 PDF 기록으로 만들 수 있어요.</p>
+  <div class="qs">
+    <div class="q"><span class="qn">미션 1 · 외형 관찰</span><p>① ‘겉모습’에서 심장에 연결된 큰 혈관 4개(대동맥, 대정맥, 폐동맥, 폐정맥) 중 산소가 많은 혈액이 흐르는 혈관을 모두 쓰고, 모형의 어떤 색을 보고 알았는지 함께 써 보세요.</p><textarea id="a1" placeholder="예) ○○, ○○ — 모형에서 ○색으로 표시되어 있어서"></textarea></div>
+    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② ‘혈액 흐름’에서 ‘흐름 재생’을 눌러 보고, 혈액이 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 혈액이 폐에서 하는 일도 한 문장으로 써 보세요.</p><textarea id="a2" placeholder="예) 오른쪽 위 방(우심방) → … / 폐에서는 ○○를 받아요"></textarea></div>
+    <div class="q"><span class="qn">미션 3 · 박동 비교</span><p>③ ‘쉬는 중’과 ‘운동 후’를 번갈아 눌러 심장 박동 빠르기를 비교하고, 운동할 때 심장이 더 빨리 뛰어야 하는 까닭을 ‘산소’라는 낱말을 넣어 써 보세요.</p><textarea id="a3" placeholder="예) 운동하면 근육이 ○○가 더 필요해서"></textarea></div>
+  </div>
+  <div class="mrow">
+    <input type="text" id="who" placeholder="이름 (예: 3모둠 김하늘)" aria-label="이름">
+    <button class="pill acc" id="printBtn">📄 내 기록 PDF로 저장</button>
+    <button class="pill" id="clearBtn">지우기</button>
+    <small style="color:var(--muted);font-weight:700" id="saved"></small>
+  </div>
+</section>
+
+<section class="card guide" id="guide">
+  <h3>사용 안내</h3>
+  <ul>
+    <li><b>돌리기·확대</b> 손가락(마우스)으로 끌면 돌아가고, 두 손가락으로 벌리거나 스크롤하면 확대·축소돼요. ‘처음’을 누르면 정면으로 돌아와요.</li>
+    <li><b>번호 표지</b> 모형 위 번호나 오른쪽 목록을 누르면 그 부위의 이름과 설명이 아래에 나와요. ‘번호’ 버튼으로 이름표를 숨길 수 있어요.</li>
+    <li><b>박동 느끼기</b> ‘소리·진동’을 켜면 심장이 뛸 때마다 “쿵-쿵” 소리가 나고, 안드로이드 기기에서는 진동도 와요. ‘운동 후’는 2배 빠르게, ‘느리게’는 절반 속도로 보여 줘요.</li>
+    <li><b>AR 보기</b> 스마트폰·태블릿(Chrome·Safari)에서 ‘AR로 보기’를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요. 아이폰 AR에서는 박동이 멈춘 모습으로 보여요.</li>
+    <li><b>크기</b> 모형은 실제 심장(약 12 cm)의 약 3.3배예요. 성인 심장은 휴식 시 1분에 약 60~100회, 하루 약 10만 회 뛰어요.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>3D 모델: <a href="https://grab3d.com/models/anatomy/human-heart/" target="_blank" rel="noopener">외형(Human Heart)</a> · <a href="https://grab3d.com/models/anatomy/human-heart-cutaway/" target="_blank" rel="noopener">단면(Human Heart Cutaway)</a> — Grab3D, CC0 1.0. 폴리곤 축소·박동 애니메이션을 더해 가공했습니다.</span>
+  <a href="https://www.nhlbi.nih.gov/health/heart/anatomy" target="_blank" rel="noopener">심장 구조 참고 자료(NHLBI)</a>
+  <a href="../../science/">DK Digital Science로 돌아가기</a>
+</footer>
+
+<div id="print" aria-hidden="true">
+  <h1>탐구 미션 기록 — 심장과 혈액 순환</h1>
+  <p id="pwho"></p><p id="pdate"></p>
+  <div class="pq"><b>미션 1 · 산소가 많은 피가 흐르는 혈관과 까닭</b><div class="pa" id="p1"></div></div>
+  <div class="pq"><b>미션 2 · 피가 지나는 방의 순서와 판막</b><div class="pa" id="p2"></div></div>
+  <div class="pq"><b>미션 3 · 운동할 때 심장이 더 빨리 뛰는 까닭</b><div class="pa" id="p3"></div></div>
+</div>
+
+<script>
+(async function(){
+  const $=id=>document.getElementById(id), mv=$('mv'), svg=$('flowsvg'), vw=document.querySelector('.vw');
+  let D;
+  try{ D=await (await fetch('models.json')).json(); }
+  catch(e){ $('intro').textContent='models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
+  const B='#1f5fe0', R='#e0241b';
+
+  /* ── 혈액 흐름 경로: 단계마다 지나는 점들 ── */
+  const num=s=>s.split(' ').map(parseFloat);
+  const add=(s,d)=>{ const p=num(s); return (p[0]+d[0]).toFixed(4)+'m '+(p[1]+d[1]).toFixed(4)+'m '+(p[2]+d[2]).toFixed(4)+'m'; };
+  const Pt=D.pts, pts={
+    bodyIn:add(Pt.svc,[-0.03,0.08,0]), svc:Pt.svc, RA:Pt.RA, tri:Pt.tri, RV:Pt.RV, pv:Pt.pv, lungOut:add(Pt.pv,[0.10,0.085,0]),
+    lungIn:add(Pt.LA,[0.10,0.05,0]), LAm:add(Pt.LA,[0.0,0.05,0]), RVm:add(Pt.RV,[0.005,0.01,0]), LVm:add(Pt.LV,[-0.005,0.0,0]), LVl:add(Pt.LV,[0.012,-0.03,0]), LA:Pt.LA, mit:Pt.mit, LV:Pt.LV, aov:Pt.aov, aorta:Pt.aorta, bodyOut:add(Pt.aorta,[0.035,0.08,0])
+  };
+  const flow=[
+    {t:'온몸 → 오른쪽 위 방(우심방)', d:'온몸을 돌고 온 산소가 적은 혈액이 대정맥을 따라 심장의 오른쪽 위 방으로 들어와요.', path:['bodyIn','svc','RA'], red:false, lab:['온몸에서','bodyIn']},
+    {t:'오른쪽 위 방(우심방) → 오른쪽 아래 방(우심실)', d:'혈액이 판막(문)을 지나 아래쪽 방으로 내려가요.', path:['RA','tri','RVm'], red:false},
+    {t:'오른쪽 아래 방(우심실) → 폐', d:'심장이 줄어들면서 혈액을 폐동맥으로 밀어내요. 혈액은 폐로 가서 산소를 받고 이산화 탄소를 내보내요.', path:['RV','pv','lungOut'], red:false, lab:['폐로','lungOut']},
+    {t:'폐 → 왼쪽 위 방(좌심방)', d:'산소를 받은 혈액이 폐정맥을 따라 심장의 왼쪽 위 방으로 돌아와요. 여기서부터는 산소가 많은 혈액이에요.', path:['lungIn','LA'], red:true, lab:['폐에서','lungIn']},
+    {t:'왼쪽 위 방(좌심방) → 왼쪽 아래 방(좌심실)', d:'혈액이 판막(문)을 지나 왼쪽 아래 방으로 내려가요.', path:['LAm','mit','LVm'], red:true},
+    {t:'왼쪽 아래 방(좌심실) → 온몸', d:'가장 두꺼운 왼쪽 아래 방이 힘차게 줄어들어 혈액을 대동맥으로 내보내요. 혈액은 온몸으로 가요.', path:['LVl','LVm','aov','aorta','bodyOut'], red:true, lab:['온몸으로','bodyOut']}
+  ];
+  const tabs=[
+    {key:'outer', file:'models/heart.glb', badge:'3D · 사실적 외형', step:'STEP 01 · OBSERVE', h:'겉모습 살펴보기',
+     intro:'모형을 돌려 보며 번호를 눌러 심장과 큰 혈관을 찾아보세요.',
+     think:'심장에 연결된 혈관은 모두 같은 방향으로 혈액을 보낼까요? 심장으로 들어오는 혈관과 심장에서 나가는 혈관을 나눠 보세요.'},
+    {key:'inner', file:'models/heart-cut.glb', badge:'3D · 심장 속', step:'STEP 02 · INSIDE', h:'심장 속 살펴보기',
+     intro:'심장을 반으로 잘라 본 모습이에요. 심장 속은 네 개의 방으로 나뉘어 있어요. (정면에서 본 그림이라 화면의 왼쪽이 몸의 오른쪽이에요.)',
+     think:'왼쪽 아래 방의 벽이 가장 두꺼워요. 이 방이 혈액을 어디로 보내는지 생각하며 까닭을 말해 보세요.'},
+    {key:'flow', file:'models/heart-cut.glb', badge:'3D · 혈액의 길', step:'STEP 03 · CIRCULATION', h:'혈액의 길 따라가기',
+     intro:'단계를 누르거나 ‘흐름 재생’을 눌러 혈액이 지나는 길을 따라가 보세요. 파란 길은 산소가 적은 혈액, 빨간 길은 산소가 많은 혈액이에요.',
+     think:'혈액은 왜 꼭 폐를 지나야 할까요? 폐에서 혈액에 일어나는 변화를 말해 보세요.'}
+  ];
+  let cur=-1, labelsOn=true, beating=true, speed=1, flowTimer=null, flowIdx=-1, feel=false, actx=null, lastPh=0;
+
+  const hsFor=i=>i===0?D.outer:D.inner;
+  function setBpm(){ $('bpm').textContent=Math.round(72*speed)+'회/분 · '+(speed>1?'운동 후':speed<1?'느리게 보기':'쉬는 중'); }
+  function setSpeed(s,w){ speed=s; mv.timeScale=s; setBpm(); $('restBtn').setAttribute('aria-pressed',w==='rest'); $('runBtn').setAttribute('aria-pressed',w==='run'); $('slowBtn').setAttribute('aria-pressed',w==='slow'); }
+  function setBeat(on){ beating=on; $('beatBtn').setAttribute('aria-pressed',on); if(on) mv.play({repetitions:Infinity}); else mv.pause(); }
+  function cap(t,d){ $('capT').textContent=t||''; $('capD').textContent=d||''; $('cap').classList.toggle('on',!!t); }
+
+  function selectItem(k){
+    const hs=hsFor(cur)[k]; if(!hs) return;
+    mv.querySelectorAll('.hs').forEach((x,j)=>x.classList.toggle('on',j===k));
+    [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
+    cap(hs.name,hs.d||hs.desc);
+    
+  }
+
+  /* ── 혈액 흐름 그리기(굵은 선 + 흐르는 점 + 화살표) ── */
+  const NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){ const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); (p||svg).appendChild(e); return e; }
+  let segs=[], labs=[];
+  function buildSvg(){
+    svg.innerHTML=''; segs=[]; labs=[];
+    flow.forEach((s,i)=>{
+      const path=el('path',{fill:'none',stroke:'none'});
+      const col=s.red?R:B, beads=[];
+      for(let k=0;k<8;k++) beads.push(el('circle',{r:'0',fill:col,stroke:'#fff','stroke-width':'2.5',opacity:'0'}));
+      let t=null; if(s.lab){ t=el('text',{class:'flt',opacity:'0'}); t.textContent=s.lab[0]; labs.push({t,pt:s.lab[1],i}); }
+      segs.push({path,beads,s});
+    });
+  }
+  function curve(P){
+    if(P.length<2) return '';
+    if(P.length===2) return 'M'+P[0][0]+','+P[0][1]+' L'+P[1][0]+','+P[1][1];
+    let d='M'+P[0][0]+','+P[0][1];
+    for(let i=0;i<P.length-1;i++){
+      const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||P[i+1];
+      d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+','+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+','+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+','+p2[1];
+    }
+    return d;
+  }
+  function wpPos(name){ const e=mv.querySelector('[slot="hotspot-wp-'+name+'"]'); if(!e) return null; const r=e.getBoundingClientRect(), v=vw.getBoundingClientRect(); return [r.left-v.left+r.width/2, r.top-v.top+r.height/2]; }
+  function drawFlow(){
+    if(cur!==2||!segs.length) return;
+    const tt=performance.now()/2400;
+    segs.forEach((g,i)=>{
+      const on=flowIdx===i;
+      if(!on){ g.beads.forEach(c=>c.setAttribute('opacity','0')); return; }
+      const P=g.s.path.map(wpPos); if(P.some(p=>!p)) return;
+      g.path.setAttribute('d',curve(P)); const L=g.path.getTotalLength(); if(!L) return;
+      const sp=Math.min(.07,22/L);
+      g.beads.forEach((c,k)=>{
+        const f=(((tt-k*sp)%1)+1)%1, q=g.path.getPointAtLength(f*L);
+        c.setAttribute('cx',q.x); c.setAttribute('cy',q.y); c.setAttribute('r',String(14-k*0.9));
+        c.setAttribute('opacity',String(Math.max(.25,1-k*.09)));
+      });
+    });
+    labs.forEach(l=>{ const p=wpPos(l.pt); if(p){ l.t.setAttribute('x',p[0]); l.t.setAttribute('y',p[1]-18); l.t.setAttribute('opacity',flowIdx===l.i?1:0); } });
+  }
+  function showStep(k){
+    flowIdx=k; const s=flow[k];
+    [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
+    cap((k+1)+'단계 · '+s.t, s.d);
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on'));
+  }
+  function stopFlow(){ if(flowTimer){clearInterval(flowTimer); flowTimer=null;} $('playFlow').textContent='▶ 흐름 재생'; }
+  function playFlow(){
+    if(flowTimer){ stopFlow(); return; }
+    $('playFlow').textContent='■ 멈춤'; let k=(flowIdx+1)%flow.length; showStep(k);
+    flowTimer=setInterval(()=>{ k=(k+1)%flow.length; showStep(k); },3400);
+  }
+  function step(dlt){ stopFlow(); showStep(((flowIdx<0?(dlt>0?-1:0):flowIdx)+dlt+flow.length)%flow.length); }
+
+  function build(i){
+    const T=tabs[i]; cur=i; stopFlow(); flowIdx=-1; cap('');
+    ['t0','t1','t2'].forEach((id,j)=>$(id).setAttribute('aria-selected',j===i));
+    $('badge').textContent=T.badge; $('step').textContent=T.step; $('h').textContent=T.h; $('intro').textContent=T.intro; $('think').textContent=T.think;
+    $('flowbar').style.display=i===2?'contents':'none'; svg.style.display=i===2?'block':'none';
+    mv.querySelectorAll('.hs,.wp').forEach(h=>h.remove());
+    const want=T.file.split('/')[1]; if(!(mv.getAttribute('src')||'').endsWith(want)) mv.src=T.file;
+    mv.classList.toggle('isflow',i===2); mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed',false); mv.resetTurntableRotation(0); mv.cameraOrbit=i===2?'0.02deg 82deg 118%':(i===0?'-26deg 82deg auto':'0.02deg 82deg auto'); mv.cameraTarget='auto auto auto'; mv.jumpCameraToGoal();
+    const list=$('list'); list.innerHTML='';
+    const data=hsFor(i);
+    data.forEach((h,k)=>{
+      const b=document.createElement('button'); b.className='hs'+(labelsOn?'':' hide')+(i===2?' show':''); b.slot='hotspot-'+k;
+      b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 0 1'); b.setAttribute('data-visibility-attribute','data-visible');
+      b.innerHTML='<span class="n">'+(k+1)+'</span><span class="t">'+h.name+'</span>';
+      b.onclick=()=>{ if(i!==2) selectItem(k); };
+      mv.appendChild(b);
+    });
+    if(i===2){
+      Object.keys(pts).forEach(n=>{ const w=document.createElement('div'); w.className='wp'; w.slot='hotspot-wp-'+n; w.setAttribute('data-position',pts[n]); w.setAttribute('data-normal','0 0 1'); mv.appendChild(w); });
+      buildSvg();
+      flow.forEach((s,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no" style="border-color:'+(s.red?R:B)+';color:'+(s.red?R:B)+'">'+(k+1)+'</span><span>'+s.t+'</span><span class="ar">›</span>'; it.onclick=()=>{stopFlow();showStep(k)}; list.appendChild(it); });
+      showStep(0);
+    } else {
+      data.forEach((h,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+h.name+'</span><span class="ar">›</span>'; it.onclick=()=>selectItem(k); list.appendChild(it); });
+    }
+  }
+
+  ['t0','t1','t2'].forEach((id,i)=>$(id).onclick=()=>build(i));
+  $('beatBtn').onclick=()=>setBeat(!beating);
+  $('restBtn').onclick=()=>setSpeed(1,'rest'); $('runBtn').onclick=()=>setSpeed(2,'run'); $('slowBtn').onclick=()=>setSpeed(0.5,'slow');
+  $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
+  $('lblBtn').onclick=()=>{ labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn); mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn)); };
+  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit=cur===2?'0.01deg 82deg 118%':(cur===0?'-26deg 82deg auto':'0.01deg 82deg auto'); mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('list').children].forEach(x=>x.classList.remove('on')); if(cur!==2) cap(''); };
+  $('playFlow').onclick=playFlow; $('prevBtn').onclick=()=>step(-1); $('nextBtn').onclick=()=>step(1);
+  mv.addEventListener('load',()=>{
+    const ok=mv.canActivateAR; $('arBtn').style.display=ok?'':'none';
+    $('arnote').textContent= ok?'「AR로 보기」를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요.':'스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
+    mv.timeScale=speed; if(!beating) mv.pause();
+  });
+
+  /* ── 크게 보기(전체 화면) ── */
+  const card=$('stageCard'); let fs=false;
+  function setFs(on){
+    fs=on; card.classList.toggle('fs',on); document.body.classList.toggle('nofs',on); $('fsBtn').textContent=on?'✕ 닫기':'⛶ 크게 보기';
+    if(on&&card.requestFullscreen&&!document.fullscreenElement){ card.requestFullscreen().catch(()=>{}); }
+    if(!on&&document.fullscreenElement){ document.exitFullscreen().catch(()=>{}); }
+    setTimeout(()=>{ mv.dispatchEvent(new Event('resize')); window.dispatchEvent(new Event('resize')); },120);
+  }
+  $('fsBtn').onclick=()=>setFs(!fs);
+  document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&fs) setFs(false); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&fs) setFs(false); });
+
+  /* ── 박동 소리·진동(애니메이션 위상 0.8초 주기에 맞춤) ── */
+  function thump(f,d,g){ if(!actx) return; const t=actx.currentTime,o=actx.createOscillator(),gn=actx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*.55,t+d);
+    gn.gain.setValueAtTime(.0001,t); gn.gain.exponentialRampToValueAtTime(g,t+.012); gn.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(gn).connect(actx.destination); o.start(t); o.stop(t+d+.02); }
+  const buzz=ms=>{ try{ navigator.vibrate&&navigator.vibrate(ms);}catch(e){} };
+  const lub=()=>{ thump(62,.16,.9); buzz(70); mv.classList.add('pulse'); setTimeout(()=>mv.classList.remove('pulse'),120); };
+  const dub=()=>{ thump(78,.11,.55); buzz(40); };
+  (function tick(){ if(feel&&beating){ const Dn=.8, ph=((mv.currentTime%Dn)+Dn)%Dn; if(ph<lastPh-.4) lub(); else if(lastPh<.42&&ph>=.42) dub(); lastPh=ph; }
+    drawFlow(); requestAnimationFrame(tick); })();
+  $('feelBtn').onclick=()=>{ feel=!feel; $('feelBtn').setAttribute('aria-pressed',feel); if(feel){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); lub(); setTimeout(dub,300); } };
+
+  /* ── 탐구 미션 저장 ── */
+  const ids=['a1','a2','a3','who'];
+  const store={get(k){try{return localStorage.getItem('heartlab_'+k)||''}catch(e){return ''}},set(k,v){try{localStorage.setItem('heartlab_'+k,v)}catch(e){}}};
+  ids.forEach(id=>{ $(id).value=store.get(id); $(id).addEventListener('input',()=>{ store.set(id,$(id).value); $('saved').textContent='이 기기에 저장됨'; }); });
+  $('printBtn').onclick=()=>{
+    $('pwho').textContent='이름: '+($('who').value||'(쓰지 않음)'); $('pdate').textContent='날짜: '+new Date().toLocaleDateString('ko-KR');
+    ['1','2','3'].forEach(n=>$('p'+n).textContent=$('a'+n).value||'(답을 쓰지 않았어요)'); window.print();
+  };
+  $('clearBtn').onclick=()=>{ if(!confirm('쓴 내용을 모두 지울까요?')) return; ids.forEach(id=>{$(id).value='';store.set(id,'')}); $('saved').textContent=''; };
+
+  setBpm(); build(0);
+})();
+</script>
+</body>
+</html>
