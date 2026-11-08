@@ -247,9 +247,10 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
    MEDIA.video[페이지번호] = "https://www.youtube.com/watch?v=..." 또는 "video/12.mp4"
    MEDIA.links[페이지번호] = { "활동지": "https://...", "AR 보기": "https://..." }
    ============================================================ */
+const CODE_LINK = "https://makecode.microbit.org/";
 const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="허스키렌즈가 얼굴을 인식해 마이크로비트로 결과를 보내는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
 <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="125" fill="#7fb0ff" opacity=".18" filter="url(#g)"/><rect x="90" y="110" width="220" height="170" rx="22" fill="#1b1b22" stroke="#3a3a46" stroke-width="5"/><rect x="108" y="128" width="184" height="104" rx="12" fill="#10242e" stroke="#3ccfc2" stroke-width="3"/><path d="M140 150h26M140 150v26M260 150h-26M260 150v26M140 210h26M140 210v-26M260 210h-26M260 210v-26" stroke="#ffe83a" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="200" cy="178" r="22" fill="#f6d6b8"/><circle cx="192" cy="174" r="3.4" fill="#222"/><circle cx="208" cy="174" r="3.4" fill="#222"/><path d="M191 186Q200 193 209 186" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/><text x="200" y="224" text-anchor="middle" font-family="Arial" font-weight="800" font-size="13" fill="#3ccfc2">ID1</text><circle cx="200" cy="256" r="16" fill="#0b0b10" stroke="#e8e9ee" stroke-width="4"/><circle cx="200" cy="256" r="7" fill="#ff8a1f"/><rect x="130" y="312" width="140" height="56" rx="10" fill="#22222a" stroke="#7fb0ff" stroke-width="3"/><circle cx="160" cy="330" r="4.5" fill="#ff3b30"/><circle cx="180" cy="330" r="4.5" fill="#33333d"/><circle cx="200" cy="330" r="4.5" fill="#ff3b30"/><circle cx="220" cy="330" r="4.5" fill="#33333d"/><circle cx="240" cy="330" r="4.5" fill="#ff3b30"/><circle cx="160" cy="348" r="4.5" fill="#33333d"/><circle cx="180" cy="348" r="4.5" fill="#ff3b30"/><circle cx="200" cy="348" r="4.5" fill="#33333d"/><circle cx="220" cy="348" r="4.5" fill="#ff3b30"/><circle cx="240" cy="348" r="4.5" fill="#33333d"/><path d="M200 280V312" stroke="#9fdcff" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/></svg>`;
-const MEDIA = {"img": {"6": ["https://dfimg.dfrobot.com/nobody/wiki/f69408363f19bc0dcdb214db1394e4fc_0x0.png.webp"], "7": ["https://dfimg.dfrobot.com/nobody/wiki/072f12a79851118bc053209a4e1432d4_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/1350390572a2c1a33c1ec9683d0c2b1c_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/8a801989ed8a87bb798ad151e919818e_0x0.png.webp"], "8": ["https://dfimg.dfrobot.com/nobody/wiki/7a25c52257267277c961a72d6dd50bfc_0x0.png.webp"], "9": ["https://dfimg.dfrobot.com/nobody/wiki/e9aefd9433b3e7c35d6de0d89cbcd980_0x0.png.webp"], "10": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/82c4be3234695210a81d5cbbb64629f0.png"], "11": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/df140cc71b68c377e8b403763dfbf26e.png"], "12": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a75fc34a76f0191df01e144a09db61d1.png"], "13": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/5098b839c912adf38b499d70c449cec8.png"], "14": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/345ead740f724663f37e56442186750e.png"], "15": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ac73823bd16d1ad07a1572d9f1851ce3.png"], "19": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e82b19ac18590f739e1e99a7a3aecd2e.png"], "20": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fb14f0b09f714c39e2af50fa40d8f518.png"], "21": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fc286538500b32528f546ff872bce618.png"], "22": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/d64b17b029056d304f2c5c8d39214394.png"], "23": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/eff41cace416152f2b242b9ba99270f8.png"], "24": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c13f9195b8a7ce51dd8a5e82050537c3.png"], "25": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dbfa7eee6defe98b8025b59a74a7e7a4.png"], "26": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ae4791de8d785c41eeff5b53d3e6ffc3.png"], "27": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/9509347b0c64ed92da8229f3bd8c490f.png"], "28": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e40f973bf7687567a20b6bb7c9ddbbf3.png"], "29": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/f1b9695b282e0bc2cb75714b94a936c4.png"], "30": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1cd2db6e31c7f2d4171380fbb3b6fa3d.png"], "31": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/37dd5ba5d79277686cec8fb1a40f1843.png"], "32": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6d9e45c4087b7f8c1195093f1dd0d532.png"], "33": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e531ee373787f458487df22dd6b683f3.png"], "34": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a6340ab9cd9bd5d4510e99896e6a81cf.png"], "35": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c8613dfb96a99063043fe5d5e519bffe.png"], "36": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8693f9cce3ebaba8e1a9ba1458878134.png"], "37": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8740400c8ecf2a1acfae43fd9b9bbf7b.png"], "38": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/de3d084c6d79c0dd68608bde07f35d8a.png"], "39": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6dd67bd4a0bfdec5c98b6e4d77162719.png"], "40": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1d584f9186b24ea31c845641832266ff.png"], "41": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3ff1f996b686fdf5e88d204472fc6b6a.png"], "42": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3b2838f12e74bcfbf0f4fbe971c7b70d.png"], "43": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/83d9fd37c4a1bf0163f0d0808e8ee179.png"], "44": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/7923af702212f5c1f5ce2da782d12898.png"], "45": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dcd0810045e97990607d084c28e5335d.png"]}, "video": {}, "links": {}};
+const MEDIA = {"img": {"6": ["https://dfimg.dfrobot.com/nobody/wiki/f69408363f19bc0dcdb214db1394e4fc_0x0.png.webp"], "7": ["https://dfimg.dfrobot.com/nobody/wiki/072f12a79851118bc053209a4e1432d4_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/1350390572a2c1a33c1ec9683d0c2b1c_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/8a801989ed8a87bb798ad151e919818e_0x0.png.webp"], "8": ["https://dfimg.dfrobot.com/nobody/wiki/7a25c52257267277c961a72d6dd50bfc_0x0.png.webp"], "9": ["https://dfimg.dfrobot.com/nobody/wiki/e9aefd9433b3e7c35d6de0d89cbcd980_0x0.png.webp"], "10": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/82c4be3234695210a81d5cbbb64629f0.png"], "11": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/df140cc71b68c377e8b403763dfbf26e.png"], "13": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a75fc34a76f0191df01e144a09db61d1.png"], "14": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/5098b839c912adf38b499d70c449cec8.png"], "15": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/345ead740f724663f37e56442186750e.png"], "17": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ac73823bd16d1ad07a1572d9f1851ce3.png"], "22": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e82b19ac18590f739e1e99a7a3aecd2e.png"], "23": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fb14f0b09f714c39e2af50fa40d8f518.png"], "25": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fc286538500b32528f546ff872bce618.png"], "26": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/d64b17b029056d304f2c5c8d39214394.png"], "27": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/eff41cace416152f2b242b9ba99270f8.png"], "29": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c13f9195b8a7ce51dd8a5e82050537c3.png"], "30": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dbfa7eee6defe98b8025b59a74a7e7a4.png"], "31": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ae4791de8d785c41eeff5b53d3e6ffc3.png"], "33": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/9509347b0c64ed92da8229f3bd8c490f.png"], "34": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e40f973bf7687567a20b6bb7c9ddbbf3.png"], "35": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/f1b9695b282e0bc2cb75714b94a936c4.png"], "37": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1cd2db6e31c7f2d4171380fbb3b6fa3d.png"], "38": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/37dd5ba5d79277686cec8fb1a40f1843.png"], "39": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6d9e45c4087b7f8c1195093f1dd0d532.png"], "41": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e531ee373787f458487df22dd6b683f3.png"], "42": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a6340ab9cd9bd5d4510e99896e6a81cf.png"], "43": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c8613dfb96a99063043fe5d5e519bffe.png"], "45": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8693f9cce3ebaba8e1a9ba1458878134.png"], "46": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8740400c8ecf2a1acfae43fd9b9bbf7b.png"], "47": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/de3d084c6d79c0dd68608bde07f35d8a.png"], "49": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6dd67bd4a0bfdec5c98b6e4d77162719.png"], "50": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1d584f9186b24ea31c845641832266ff.png"], "51": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3ff1f996b686fdf5e88d204472fc6b6a.png"], "53": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3b2838f12e74bcfbf0f4fbe971c7b70d.png"], "54": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/83d9fd37c4a1bf0163f0d0808e8ee179.png"], "55": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/7923af702212f5c1f5ce2da782d12898.png"], "57": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dcd0810045e97990607d084c28e5335d.png"]}, "video": {}, "links": {}};
 const ILLU = {};
 const PARTS = {};
 const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "기초 1 · 연결하기", "c": "#ff8a1f"}, {"n": "기초 2 · 확장 추가", "c": "#16a34a"}, {"n": "기초 3 · 통신 방식", "c": "#1e6bff"}, {"n": "기초 4 · 첫 프로그램", "c": "#d946ef"}, {"n": "응용 1 · 음악 마법 거울", "c": "#ff8a1f"}, {"n": "응용 2 · 얼굴 인식 출입 통제", "c": "#16a34a"}, {"n": "응용 3 · 알록달록 피아노", "c": "#1e6bff"}, {"n": "응용 4 · 길고양이·강아지 급식기", "c": "#d946ef"}, {"n": "응용 5 · 물체 추적기", "c": "#0d9488"}, {"n": "응용 6 · 셀프 계산대", "c": "#ff3b30"}, {"n": "응용 7 · 에너지 수확", "c": "#f59e0b"}, {"n": "응용 8 · 스마트 버스 요금기", "c": "#8b5cf6"}, {"n": "응용 9 · 안전모 알림이", "c": "#06b6d4"}, {"n": "응용 10 · 2진수 해독기", "c": "#e11d48"}, {"n": "응용 11 · 허스키렌즈 카메라", "c": "#65a30d"}, {"n": "응용 12 · 비상차로 감시견", "c": "#2563eb"}, {"n": "마무리", "c": "#7c4dff"}];
@@ -338,6 +339,50 @@ text|5|응용 1 · 음악 마법 거울|프로그램 만들기|
 5. 과제 2: 음표 블록으로 학습한 얼굴에는 캐럴 한 소절을, 낯선 얼굴에는 다른 동요를 부저로 연주합니다.
 @toc 응용 1 프로그램
 ---
+text|5|응용 1 · 음악 마법 거울|코드|
+C // 음악 마법 거울 (과제 2)
+C // 아래 두 연주 함수는 원본에 없어 채운 부분입니다.
+C function jingleBells() {
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 500)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.E, 500)
+C     music.playTone(Note.E, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.C, 375)
+C     music.playTone(Note.D, 125)
+C     music.playTone(Note.E, 500)
+C }
+C function littleStar() {
+C     music.playTone(Note.C, 250)
+C     music.playTone(Note.C, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.G, 250)
+C     music.playTone(Note.A, 250)
+C     music.playTone(Note.A, 250)
+C     music.playTone(Note.G, 500)
+C }
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_FACE_RECOGNITION)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear_s(HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C                 basic.showIcon(IconNames.Happy)
+C                 jingleBells()
+C             } else {
+C                 basic.showIcon(IconNames.Sad)
+C                 littleStar()
+C             }
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 1 코드
+---
 text|5|응용 1 · 음악 마법 거울|해 보기|
 : 일상에서 얼굴 인식이 쓰이는 곳을 더 찾아 적어 봅시다. 부저 경보는 다음 장의 출입 통제로 이어집니다.
 F 얼굴 인식이 쓰이는 곳|여기에 적어 보세요
@@ -358,6 +403,36 @@ text|6|응용 2 · 얼굴 인식 출입 통제|프로그램 만들기|
 5. 서보 각도는 10°~170° 안에서 쓰는 것이 부품을 지키는 데 좋습니다.
 @toc 응용 2 프로그램
 ---
+text|6|응용 2 · 얼굴 인식 출입 통제|코드|
+C // 얼굴 인식 출입 통제 (과제 2)
+C // 서보 값 30(닫힘)·150(열림)과 5초 대기는 원본 그대로입니다.
+C function autoDoor() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(5000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_FACE_RECOGNITION)
+C pins.analogWritePin(AnalogPin.P0, 30)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear_s(HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(4, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C                 basic.showIcon(IconNames.Yes)
+C                 basic.pause(100)
+C                 autoDoor()
+C             } else {
+C                 basic.showIcon(IconNames.No)
+C                 basic.pause(100)
+C             }
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 2 코드
+---
 text|6|응용 2 · 얼굴 인식 출입 통제|해 보기|
 : 얼굴 인식을 우리 학교 관리에 쓴다면 어떤 문제를 풀 수 있을까요? 허스키렌즈는 어디에 둘까요?
 F 우리 학교 적용 아이디어|여기에 적어 보세요
@@ -376,6 +451,30 @@ text|7|응용 3 · 알록달록 피아노|프로그램 만들기|
 3. 과제 1: 인식한 색의 ID 숫자를 LED에 보여 줍니다.
 4. 과제 2: ID마다 음 블록을 연결합니다(예: ID1 빨강은 ‘도’). 색 블록을 보여 주면 그 음이 연주됩니다.
 @toc 응용 3 프로그램
+---
+text|7|응용 3 · 알록달록 피아노|코드|
+C // 알록달록 피아노 (과제 2)
+C // 원본에 코드 그림이 없어 새로 만든 프로그램입니다.
+C // 색마다 배운 순서대로 ID가 붙고, ID마다 한 음이 나옵니다. (ID 1~7 = 도 레 미 파 솔 라 시)
+C let notes = [Note.C, Note.D, Note.E, Note.F, Note.G, Note.A, Note.B]
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear_s(HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             let id = huskylens.readBox_s(Content3.ID)
+C             basic.showNumber(id)
+C             if (id >= 1 && id <= 7) {
+C                 music.playTone(notes[id - 1], 300)
+C             }
+C         } else {
+C             basic.clearScreen()
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 3 코드
 ---
 text|7|응용 3 · 알록달록 피아노|해 보기|
 : 비슷한 색이 같은 색으로 읽히면 ‘인식 틀 문턱값’을 조절해 봅시다. 낮추면 민감해지지만 정확도는 떨어집니다. 건반 수를 늘리려면 A·B 버튼으로 음의 높이를 바꿔 봅시다.
@@ -396,6 +495,47 @@ text|8|응용 4 · 길고양이·강아지 급식기|프로그램 만들기|
 4. 과제 2: 고양이면 서보로 고양이 사료를, 강아지면 강아지 사료를 내보냅니다. 기다리는 시간을 다르게 해 양을 조절합니다.
 5. 다 내보내면 하트 그림을 보여 줍니다.
 @toc 응용 4 프로그램
+---
+text|8|응용 4 · 길고양이·강아지 급식기|코드|
+C // 길고양이·강아지 급식기 (과제 2)
+C // 사료 내보내는 두 함수는 원본에 없어 채운 부분입니다.
+C // 서보 값 30(닫힘)·150(열림), 기다리는 시간으로 사료 양을 조절합니다.
+C function dispenseCatFood() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(1000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C function dispenseDogFood() {
+C     pins.analogWritePin(AnalogPin.P0, 150)
+C     basic.pause(2000)
+C     pins.analogWritePin(AnalogPin.P0, 30)
+C     basic.pause(1000)
+C }
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_OBJECT_RECOGNITION)
+C pins.analogWritePin(AnalogPin.P0, 30)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear_s(HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C                 basic.showString("cat")
+C                 basic.pause(500)
+C                 dispenseCatFood()
+C                 basic.showIcon(IconNames.Heart)
+C             }
+C             if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C                 basic.showString("dog")
+C                 basic.pause(500)
+C                 dispenseDogFood()
+C                 basic.showIcon(IconNames.Heart)
+C             }
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 4 코드
 ---
 text|8|응용 4 · 길고양이·강아지 급식기|해 보기|
 : 같은 동물이 계속 보일 때 사료가 반복해서 나오지 않게 하려면 어떻게 할까요? 하루 방문 횟수를 기록해 사료를 나누는 아이디어도 생각해 봅시다.
@@ -418,6 +558,31 @@ text|9|응용 5 · 물체 추적기|프로그램 만들기|
 6. 과제 2: X와 Y가 모두 -1이면 진동 모듈을 켜고, 아니면 끕니다. PWM으로 진동 세기를 조절할 수도 있습니다.
 @toc 응용 5 프로그램
 ---
+text|9|응용 5 · 물체 추적기|코드|
+C // 물체 추적기 (과제 2)
+C let X = 0
+C let Y = 0
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_OBJECT_TRACKING)
+C huskylens.clearOSD()
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         X = huskylens.readeBox(1, Content1.xCenter)
+C         Y = huskylens.readeBox(1, Content1.yCenter)
+C         huskylens.writeOSD("X=" + X, 20, 20)
+C         huskylens.writeOSD("Y=" + Y, 20, 50)
+C         if (X == -1 && Y == -1) {
+C             // 물체가 사라지면 진동 모듈 끄기
+C             pins.digitalWritePin(DigitalPin.P1, 0)
+C         } else {
+C             pins.digitalWritePin(DigitalPin.P1, 1)
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 5 코드
+---
 text|9|응용 5 · 물체 추적기|해 보기|
 : 목표의 위치를 화면에 표시해 봅시다. 물체가 가까울수록 진동이 세지고 멀어질수록 약해지게 PWM을 써 보면 어떨까요?
 F 나의 확장 아이디어|여기에 적어 보세요
@@ -436,6 +601,52 @@ text|10|응용 6 · 셀프 계산대|프로그램 만들기|
 3. 과제 2: 스위치를 켜(1) 계산을 시작하면 인식한 상품이 표시되고, 끄면(0) 합계를 보여 줍니다.
 4. 끝낸 뒤 스캔한 상품은 다음 손님이 새로 시작할 때까지 보이지 않습니다.
 @toc 응용 6 프로그램
+---
+text|10|응용 6 · 셀프 계산대|코드|
+C // 셀프 계산대 (과제 2) — 버튼(P1)을 누르는 동안 물건을 읽고, 떼면 합계를 보여 줍니다.
+C let totalPrice = 0
+C function endScan() {
+C     huskylens.writeOSD("Total price " + totalPrice, 20, 30)
+C     basic.pause(5000)
+C     totalPrice = 0
+C }
+C function startScanning() {
+C     if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C         music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C         huskylens.writeOSD("price " + 7, 20, 30)
+C         totalPrice += 7
+C         basic.pause(1000)
+C     }
+C     if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C         music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C         huskylens.writeOSD("price " + 4, 20, 30)
+C         totalPrice += 4
+C         basic.pause(1000)
+C     }
+C     if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C         music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C         huskylens.writeOSD("price " + 15, 20, 30)
+C         totalPrice += 15
+C         basic.pause(1000)
+C     }
+C }
+C huskylens.initI2c()
+C // 원본 블록은 바코드 인식(EDU 전용)을 쓰지만, 이 책에서는 태그 인식을 씁니다.
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+C huskylens.clearOSD()
+C totalPrice = 0
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+C             startScanning()
+C         } else {
+C             endScan()
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 6 코드
 ---
 text|10|응용 6 · 셀프 계산대|해 보기|
 : 인쇄한 바코드로 알맞은 사물함이 열리는 사물함 시스템을 허스키렌즈로 어떻게 만들까요?
@@ -457,6 +668,46 @@ text|11|응용 7 · 에너지 수확|프로그램 만들기|
 5. A 버튼을 누르면 화면과 에너지가 지워져 새 판을 시작합니다.
 @toc 응용 7 프로그램
 ---
+text|11|응용 7 · 에너지 수확|코드|
+C // 에너지 수확 (과제 2)
+C let energyValue = 0
+C let sumOfEnergy = 0
+C let ID = 0
+C input.onButtonPressed(Button.A, function () {
+C     energyValue = 0
+C     sumOfEnergy = 0
+C     basic.clearScreen()
+C     huskylens.clearOSD()
+C })
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+C huskylens.clearOSD()
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         // 배운 태그 번호를 큰 번호부터 하나씩 확인합니다.
+C         ID = huskylens.getIds()
+C         while (ID >= 1) {
+C             huskylens.request()
+C             if (huskylens.isAppear(ID, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C                 music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C                 energyValue = randint(0, 9)
+C                 basic.showNumber(energyValue)
+C                 sumOfEnergy += energyValue
+C                 huskylens.writeOSD("Sum of energy " + sumOfEnergy, 30, 30)
+C                 basic.pause(100)
+C                 if (sumOfEnergy >= 50) {
+C                     basic.showIcon(IconNames.Heart)
+C                     music.startMelody(music.builtInMelody(Melodies.PowerUp), MelodyOptions.Once)
+C                 }
+C             }
+C             ID += -1
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 7 코드
+---
 text|11|응용 7 · 에너지 수확|해 보기|
 : 허스키렌즈를 더 적게 사용한 사람이 이기는 시합을 해 봅시다. 같으면 시간이 짧은 사람이 이깁니다.
 F 시합 기록|여기에 적어 보세요
@@ -476,6 +727,32 @@ text|12|응용 8 · 스마트 버스 요금기|프로그램 만들기|
 4. 과제 2: 카드마다 잔액 20위안에서 시작합니다. 인식하면 요금을 빼고 요금과 잔액을 보여 준 뒤 ‘결제되었습니다, 타세요’ 음성을 들려 줍니다.
 5. 예시 프로그램은 학생 카드만 다룹니다. 일반 카드는 숙제입니다.
 @toc 응용 8 프로그램
+---
+text|12|응용 8 · 스마트 버스 요금기|코드|
+C // 스마트 버스 요금기 (과제 1) — QR 코드 카드를 읽고 요금을 깎아 보여 줍니다.
+C let cost = 2
+C let spend = 0
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.QRRECOGMITION)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             spend = cost * 0.5
+C             huskylens.writeOSD("Payment of fees -" + spend, 30, 30)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C         }
+C         if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             spend = cost * 0.75
+C             huskylens.writeOSD("Payment of fees -" + spend, 30, 30)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 8 코드
 ---
 text|12|응용 8 · 스마트 버스 요금기|해 보기|
 : 카드 잔액이 모자랄 때 어떻게 알려 줄까요? 조건문과 부저, 또는 음성 모듈과 스피커로 설계해 봅시다.
@@ -497,6 +774,30 @@ text|13|응용 9 · 안전모 알림이|프로그램 만들기|
 5. 과제 2: 과제 1의 인식을 그대로 쓰고, NeoPixel 확장으로 LED 띠를, 서보로 차단기를 ID마다 정해 제어합니다.
 @toc 응용 9 프로그램
 ---
+text|13|응용 9 · 안전모 알림이|코드|
+C // 안전모 알림이 (과제 1)
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1) && huskylens.isLearned(2) && huskylens.isLearned(3)) {
+C         huskylens.clearOSD()
+C         if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeName(1, "background")
+C         }
+C         if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeName(2, "wear safety helmet")
+C         }
+C         if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeName(3, "no helmet")
+C         }
+C     } else {
+C         huskylens.writeOSD("please learn", 200, 30)
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 9 코드
+---
 text|13|응용 9 · 안전모 알림이|해 보기|
 : 골판지로 안전모 인식 문을 만들어 봅시다. 또 K=3일 때와 K=6일 때 새로운 점이 어느 쪽으로 분류되는지 그림에서 따져 보세요.
 F K=3, K=6 분류 결과|여기에 적어 보세요
@@ -516,6 +817,35 @@ text|14|응용 10 · 2진수 해독기|프로그램 만들기|
 4. 100101을 넣으면 37이 나와야 합니다.
 @toc 응용 10 프로그램
 ---
+text|14|응용 10 · 2진수 해독기|코드|
+C // 2진수 해독기 (과제 1) — ID1 = 1, ID2 = 0
+C let X = 20
+C let Binary = ""
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+C huskylens.clearOSD()
+C basic.forever(function () {
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeOSD("1", X, 30)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C             X += 20
+C             Binary = "" + Binary + "1"
+C         }
+C         if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeOSD("0", X, 30)
+C             music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C             basic.pause(1000)
+C             X += 20
+C             Binary = "" + Binary + "0"
+C         }
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 10 코드
+---
 text|14|응용 10 · 2진수 해독기|해 보기|
 : 친구에게 2진수 문제를 내 봅시다. 2진수와 문자를 짝지은 표를 만들어 글자로 읽어 보는 확장도 해 볼 수 있습니다.
 F 내가 낸 2진수 문제|여기에 적어 보세요
@@ -534,6 +864,37 @@ text|15|응용 11 · 허스키렌즈 카메라|프로그램 만들기|
 3. 타이머 촬영: A 버튼을 누르면 3, 2, 1 카운트다운을 허스키렌즈 화면에 보여 주고 촬영합니다. 찍으면 LED에 하트가 나타납니다.
 @toc 응용 11 프로그램
 ---
+text|15|응용 11 · 허스키렌즈 카메라|코드|
+C // 허스키렌즈 카메라 — 터치·소리·타이머 세 가지 촬영 방법
+C // 원본 그림에는 터치 촬영만 있어 소리·타이머 촬영은 채운 부분입니다.
+C huskylens.initI2c()
+C // 1) 터치 촬영: micro:bit 로고를 만지면 촬영하고 '도' 음으로 알립니다.
+C input.onLogoEvent(TouchButtonEvent.Touched, function () {
+C     huskylens.takePhotoToSDCard(HUSKYLENSphoto.PHOTO)
+C     music.playTone(Note.C, music.beat(BeatFraction.Whole))
+C })
+C // 2) 소리 촬영: 소리가 크면 촬영하고 진동 모듈(P1)을 울립니다.
+C input.setSoundThreshold(SoundThreshold.Loud, 100)
+C input.onSound(DetectedSound.Loud, function () {
+C     huskylens.takePhotoToSDCard(HUSKYLENSphoto.PHOTO)
+C     pins.digitalWritePin(DigitalPin.P1, 1)
+C     basic.pause(300)
+C     pins.digitalWritePin(DigitalPin.P1, 0)
+C })
+C // 3) 타이머 촬영: A 버튼을 누르면 3, 2, 1 센 뒤 촬영하고 하트를 보여 줍니다.
+C input.onButtonPressed(Button.A, function () {
+C     for (let i = 3; i >= 1; i--) {
+C         huskylens.clearOSD()
+C         huskylens.writeOSD("" + i, 150, 100)
+C         basic.pause(1000)
+C     }
+C     huskylens.clearOSD()
+C     huskylens.takePhotoToSDCard(HUSKYLENSphoto.PHOTO)
+C     basic.showIcon(IconNames.Heart)
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 11 코드
+---
 text|15|응용 11 · 허스키렌즈 카메라|해 보기|
 : 셔터 버튼 말고 사진 찍기를 시작하게 할 수 있는 장치에는 또 무엇이 있을까요? 강아지를 배워 강아지가 보일 때만 찍는 카메라도 생각해 봅시다.
 F 카메라를 켜는 새로운 방법|여기에 적어 보세요
@@ -551,6 +912,29 @@ text|16|응용 12 · 비상차로 감시견|프로그램 만들기|
 2. 과제 1: 허스키렌즈가 감지한 차는 모두 불법 주차로 봅니다. 차를 인식하면 화면에 ‘촬영 중’을 (230, 10) 위치에 보여 주고 사진을 SD 카드에 저장합니다.
 3. 과제 2: 과제 1에 RGB 불빛 깜빡임과 경보음을 더해 차가 비켜 가도록 알리면서 사진도 찍습니다.
 @toc 응용 12 프로그램
+---
+text|16|응용 12 · 비상차로 감시견|코드|
+C // 비상차로 감시견 (과제 1)
+C huskylens.initI2c()
+C huskylens.initMode(protocolAlgorithm.ALGORITHM_OBJECT_RECOGNITION)
+C huskylens.clearOSD()
+C basic.forever(function () {
+C     huskylens.clearOSD()
+C     huskylens.request()
+C     if (huskylens.isLearned(1)) {
+C         if (huskylens.isAppear(1, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+C             huskylens.writeOSD("shooting", 230, 10)
+C             huskylens.takePhotoToSDCard(HUSKYLENSphoto.PHOTO)
+C             basic.pause(1000)
+C             huskylens.clearOSD()
+C         }
+C     } else {
+C         huskylens.writeOSD("Please learn", 200, 35)
+C         basic.pause(1000)
+C     }
+C })
+* MakeCode에 허스키렌즈 확장을 먼저 추가한 뒤 붙여 넣으세요. // 설명이 달린 부분은 원본에 없어 채운 부분입니다.
+@toc 응용 12 코드
 ---
 text|16|응용 12 · 비상차로 감시견|해 보기|
 : 골판지로 차로를 완성해 위에 허스키렌즈를 달고 차가 잘 감지되는지 확인해 봅시다.
@@ -647,7 +1031,7 @@ function partsHTML(n, bl) {
     return th ? li.replace("</li>", `<span class="th">${th}</span></li>`) : li;
   }).join("");
 }
-function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=21)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
+function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=18)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
 function pageHTML(i) {
   if (i < 0 || i >= N) return `<div class="page blank"></div>`;
   const p = pages[i], n = i + 1, ch = CHAPS[p.chap], c = ch.c;
