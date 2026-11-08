@@ -99,11 +99,14 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 }
 .row.soon{cursor:default}.row.soon:hover .name{transform:none;color:inherit}.row.soon .go{width:auto;height:auto;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:800;color:var(--muted);border-color:var(--line)}.row.soon:hover .go{background:none;color:var(--muted);border-color:var(--line);transform:none}
 .hero{touch-action:pan-y}body.grabbing,body.grabbing *{cursor:grabbing!important}
+
+.dev{position:absolute;z-index:2;right:clamp(16px,7vw,130px);top:clamp(70px,10vh,110px);height:min(76vh,760px);aspect-ratio:470/780;transform:rotate(5deg);filter:drop-shadow(0 30px 40px rgba(40,50,110,.22))}
+.dev svg{width:100%;height:100%;display:block;overflow:visible;touch-action:none}
+.dev .knob{cursor:grab}
+@media (max-width:900px){.dev{height:auto;width:min(52vw,300px);top:78px;right:14px}}
 </style>
 </head>
 <body>
-<canvas id="gl" aria-hidden="true"></canvas>
-<div class="cursor" aria-hidden="true"></div>
 
 <header>
   <a class="brand" href="#top" aria-label="DK Digital Science">
@@ -119,12 +122,87 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 
 <main id="top">
   <section class="hero">
-    <div class="fb" aria-hidden="true"><span class="lz"></span><div class="sc"><b></b></div><em>HUSKYLENS</em></div>
+    <div class="dev" aria-hidden="false"><svg id="lightdev" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 780" role="img" aria-label="빛의 합성 장치: 아두이노, 가변저항 3개(빨강·초록·파랑), OLED, 9V 배터리, 탁구공 LED">
+<defs>
+<linearGradient id="plate" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e9ebf0"/></linearGradient>
+<linearGradient id="pad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f7f9"/><stop offset="1" stop-color="#e7e9ee"/></linearGradient>
+<linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1c22"/><stop offset="1" stop-color="#0d0e12"/></linearGradient>
+<linearGradient id="uno" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#11857a"/><stop offset="1" stop-color="#0a5d57"/></linearGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f5f7"/><stop offset=".5" stop-color="#b9bec6"/><stop offset="1" stop-color="#8a9099"/></linearGradient>
+<linearGradient id="bat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d3482"/><stop offset="1" stop-color="#171b4e"/></linearGradient>
+<radialGradient id="knobbody" cx=".38" cy=".32" r=".9"><stop offset="0" stop-color="#4b4e57"/><stop offset=".55" stop-color="#26282d"/><stop offset="1" stop-color="#0d0e11"/></radialGradient>
+<radialGradient id="ballg" cx=".36" cy=".3" r=".85"><stop id="bs0" offset="0" stop-color="#ffffff"/><stop id="bs1" offset=".55" stop-color="#e9ebef"/><stop id="bs2" offset="1" stop-color="#c5c9d1"/></radialGradient>
+<radialGradient id="glowg"><stop id="gs0" offset="0" stop-color="#fff" stop-opacity=".9"/><stop id="gs1" offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="blur2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="blur10" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="14"/></filter>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#2a2f55" flood-opacity=".28"/></filter>
+<filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".35"/></filter>
+</defs>
+<g filter="url(#sh)"><rect x="26" y="34" width="424" height="730" rx="42" fill="#c8ccd5"/><rect x="20" y="20" width="424" height="730" rx="42" fill="url(#plate)" stroke="#d3d6dd" stroke-width="2"/></g>
+<rect x="32" y="32" width="400" height="706" rx="32" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+<rect x="30" y="540" width="404" height="196" rx="28" fill="url(#pad)" stroke="#d6d9df" stroke-width="2"/><rect x="36" y="546" width="392" height="184" rx="24" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/>
+<rect x="92" y="34" width="214" height="136" rx="20" fill="url(#pad)" stroke="#d6d9df" stroke-width="2"/>
+<rect x="318" y="40" width="116" height="170" rx="26" fill="url(#pad)" stroke="#d6d9df" stroke-width="2"/>
+<circle cx="64" cy="82" r="31" fill="url(#pad)" stroke="#d0d3da" stroke-width="2"/><circle cx="64" cy="82" r="20" fill="#eceef2" stroke="#d6d9df"/>
+<g filter="url(#sh2)"><rect x="56" y="232" width="304" height="216" rx="10" fill="url(#uno)" stroke="#07403c" stroke-width="2"/></g>
+<circle cx="72" cy="246" r="5" fill="#0a3b37" stroke="#9fb7b3"/>
+<circle cx="72" cy="434" r="5" fill="#0a3b37" stroke="#9fb7b3"/>
+<circle cx="340" cy="434" r="5" fill="#0a3b37" stroke="#9fb7b3"/>
+<rect x="36" y="262" width="72" height="64" rx="3" fill="url(#steel)" stroke="#6b7078" stroke-width="1.5"/><rect x="46" y="272" width="52" height="44" rx="2" fill="#2b2d31" opacity=".85"/><rect x="52" y="282" width="40" height="24" fill="#c9ccd2" opacity=".5"/>
+<rect x="38" y="374" width="56" height="46" rx="4" fill="#15161a" stroke="#000"/><rect x="44" y="382" width="40" height="30" rx="2" fill="#0b0b0d"/>
+<circle cx="112" cy="246" r="10" fill="#e9eaee" stroke="#9aa0a8" stroke-width="2"/><circle cx="112" cy="246" r="5" fill="#fafafa"/>
+<rect x="80" y="330" width="26" height="14" rx="2" fill="#d9dbe0"/><rect x="82" y="396" width="24" height="12" rx="2" fill="#0d0e10"/>
+<text x="190" y="440" font-size="7" fill="#d3ece8" font-family="Inter Tight,Arial,sans-serif" font-weight="700" letter-spacing="1.2">ARDUINO</text>
+<rect x="150" y="230" width="218" height="220" rx="8" fill="#17181c" stroke="#000" stroke-width="1.5"/>
+<circle cx="166.0" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="177.4" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="188.8" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="200.2" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="211.6" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="223.0" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="234.4" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="245.8" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="257.2" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="268.6" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="280.0" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="291.4" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="302.8" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="314.20000000000005" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="325.6" cy="242" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="166.0" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="177.4" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="188.8" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="200.2" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="211.6" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="223.0" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="234.4" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="245.8" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="257.2" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="268.6" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="280.0" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="291.4" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="302.8" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="314.20000000000005" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/><circle cx="325.6" cy="436" r="3.1" fill="#aab0b8" stroke="#6c727b" stroke-width=".8"/>
+<rect x="174" y="262.5" width="45" height="11" rx="1.5" fill="#f2c200" stroke="#a88500" stroke-width=".7"/><circle cx="180" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="174" y="274.5" width="45" height="11" rx="1.5" fill="#d8261d" stroke="#8f140f" stroke-width=".7"/><circle cx="180" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="174" y="286.5" width="45" height="11" rx="1.5" fill="#202226" stroke="#000" stroke-width=".7"/><circle cx="180" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><text x="180" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">13</text><text x="191" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">12</text><text x="202" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">11</text><text x="213" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">10</text><rect x="234" y="262.5" width="45" height="11" rx="1.5" fill="#f2c200" stroke="#a88500" stroke-width=".7"/><circle cx="240" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="251" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="262" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="273" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="234" y="274.5" width="45" height="11" rx="1.5" fill="#d8261d" stroke="#8f140f" stroke-width=".7"/><circle cx="240" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="251" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="262" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="273" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="234" y="286.5" width="45" height="11" rx="1.5" fill="#202226" stroke="#000" stroke-width=".7"/><circle cx="240" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="251" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="262" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="273" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><text x="240" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">9</text><text x="251" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">8</text><text x="262" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">7</text><text x="273" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">6</text><rect x="294" y="262.5" width="45" height="11" rx="1.5" fill="#f2c200" stroke="#a88500" stroke-width=".7"/><circle cx="300" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="268" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="294" y="274.5" width="45" height="11" rx="1.5" fill="#d8261d" stroke="#8f140f" stroke-width=".7"/><circle cx="300" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="280" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="294" y="286.5" width="45" height="11" rx="1.5" fill="#202226" stroke="#000" stroke-width=".7"/><circle cx="300" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="292" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><text x="300" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">5</text><text x="311" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">4</text><text x="322" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">3</text><text x="333" y="259" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">2</text>
+<rect x="174" y="376.5" width="45" height="11" rx="1.5" fill="#f2c200" stroke="#a88500" stroke-width=".7"/><circle cx="180" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="174" y="388.5" width="45" height="11" rx="1.5" fill="#d8261d" stroke="#8f140f" stroke-width=".7"/><circle cx="180" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="174" y="400.5" width="45" height="11" rx="1.5" fill="#202226" stroke="#000" stroke-width=".7"/><circle cx="180" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="191" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="202" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="213" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><text x="180" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">A0</text><text x="191" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">A1</text><text x="202" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">A2</text><text x="213" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">A3</text><rect x="294" y="376.5" width="45" height="11" rx="1.5" fill="#f2c200" stroke="#a88500" stroke-width=".7"/><circle cx="300" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="382" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="294" y="388.5" width="45" height="11" rx="1.5" fill="#d8261d" stroke="#8f140f" stroke-width=".7"/><circle cx="300" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="394" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><rect x="294" y="400.5" width="45" height="11" rx="1.5" fill="#202226" stroke="#000" stroke-width=".7"/><circle cx="300" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="311" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="322" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><circle cx="333" cy="406" r="2.1" fill="#e8d9a0" stroke="#3a3a3a" stroke-width=".6"/><text x="300" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif"></text><text x="311" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif"></text><text x="322" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif"></text><text x="333" y="373" font-size="6.6" font-weight="700" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif"></text>
+<text x="262" y="340" font-size="9" fill="#f0f0f4" font-weight="800" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" letter-spacing="1">IO Sensor Shield</text>
+<rect x="226" y="350" width="40" height="22" rx="2.5" fill="#f1f1f3" stroke="#9a9ea6"/><rect x="231.0" y="354" width="3.4" height="14" fill="#9a8a40"/><rect x="239.5" y="354" width="3.4" height="14" fill="#9a8a40"/><rect x="248.0" y="354" width="3.4" height="14" fill="#9a8a40"/><rect x="256.5" y="354" width="3.4" height="14" fill="#9a8a40"/>
+<text x="246" y="347" font-size="6" fill="#e9e9ee" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">I2C</text>
+<rect x="98" y="42" width="204" height="124" rx="14" fill="#f3f4f7" stroke="#d3d6dc" stroke-width="2"/>
+<g filter="url(#sh2)"><rect x="112" y="52" width="178" height="102" rx="7" fill="url(#bat)" stroke="#0e1136"/></g>
+<path d="M112,128 L186,60 L196,52 L170,52 L112,108 Z" fill="#f2c200" opacity=".95"/><path d="M112,140 L226,52 L238,52 L112,154 Z" fill="#e4261c" opacity=".92"/>
+<text x="214" y="80" font-size="10" fill="#fff" font-weight="800" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">Super Heavy Duty</text>
+<text x="214" y="112" font-size="30" fill="#fff" font-style="italic" font-weight="900" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" letter-spacing="-1">FAIRMAN</text>
+<text x="214" y="136" font-size="9" fill="#e8e9f2" font-weight="700" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif">6F22(FC-1)9V</text>
+<rect x="92" y="66" width="30" height="72" rx="6" fill="#101114" stroke="#000"/><circle cx="108" cy="82" r="8" fill="url(#steel)" stroke="#555"/><circle cx="108" cy="122" r="9" fill="url(#steel)" stroke="#555"/>
+<path d="M92,84 C40,40 18,130 94,112" fill="none" stroke="#0e0e0e" stroke-width="3.4" stroke-linecap="round"/><path d="M92,76 C38,26 6,120 96,90" fill="none" stroke="#d8261d" stroke-width="3.4" stroke-linecap="round"/>
+<g transform="rotate(-28 64 82)"><rect x="40" y="70" width="52" height="24" rx="6" fill="#16171a" stroke="#000"/><line x1="48" y1="71" x2="48" y2="93" stroke="#3a3c42" stroke-width="2"/><line x1="55" y1="71" x2="55" y2="93" stroke="#3a3c42" stroke-width="2"/><line x1="62" y1="71" x2="62" y2="93" stroke="#3a3c42" stroke-width="2"/><line x1="69" y1="71" x2="69" y2="93" stroke="#3a3c42" stroke-width="2"/><line x1="76" y1="71" x2="76" y2="93" stroke="#3a3c42" stroke-width="2"/><line x1="83" y1="71" x2="83" y2="93" stroke="#3a3c42" stroke-width="2"/></g>
+<g transform="rotate(8 410 190)"><rect x="378" y="150" width="56" height="66" rx="4" fill="#0f1013" stroke="#000"/><circle cx="390" cy="160" r="4" fill="#cfd2d8"/><circle cx="424" cy="160" r="4" fill="#cfd2d8"/><rect x="394" y="206" width="28" height="22" rx="3" fill="#25262b"/></g>
+<circle cx="372" cy="100" r="92" fill="url(#glowg)" id="glow" opacity=".55"/>
+<g filter="url(#sh2)"><circle cx="372" cy="108" r="58" fill="#000" opacity=".12" filter="url(#blur2)"/></g>
+<circle cx="372" cy="100" r="58" fill="url(#ballg)" id="ball" stroke="#bfc3cc" stroke-width="1.2"/>
+<ellipse cx="352" cy="78" rx="22" ry="13" fill="#fff" opacity=".55" transform="rotate(-30 352 78)"/><ellipse cx="392" cy="136" rx="26" ry="9" fill="#fff" opacity=".16" transform="rotate(-25 392 136)"/>
+<path d="M408,226 C408,290 368,276 362,318" fill="none" stroke="#2e9b3a" stroke-width="3" stroke-linecap="round"/>
+<path d="M411,226 C411,290 371,276 365,318" fill="none" stroke="#2a62d9" stroke-width="3" stroke-linecap="round"/>
+<path d="M414,226 C414,290 374,276 368,318" fill="none" stroke="#f08a1c" stroke-width="3" stroke-linecap="round"/>
+<path d="M417,226 C417,290 377,276 371,318" fill="none" stroke="#6b4a2f" stroke-width="3" stroke-linecap="round"/>
+<rect x="390" y="224" width="34" height="14" rx="3" fill="#25262b"/><rect x="346" y="316" width="30" height="12" rx="3" fill="#1a1b1f" stroke="#000"/>
+<path d="M89,540 C89,471.0 204,471.0 204,402" transform="translate(-3.4,0)" fill="none" stroke="#161616" stroke-width="3.3" stroke-linecap="round"/><path d="M89,540 C89,471.0 204,471.0 204,402" transform="translate(0,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-linecap="round"/><path d="M89,540 C89,471.0 204,471.0 204,402" transform="translate(3.4,0)" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-linecap="round"/><path d="M89,540 C89,471.0 204,471.0 204,402" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-dasharray="5 7" stroke-linecap="round" transform="translate(0,0)"/><path d="M89,540 C89,471.0 204,471.0 204,402" transform="translate(3.4,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-dasharray="5 7" stroke-dashoffset="6" stroke-linecap="round"/>
+<path d="M191,540 C191,471.0 246,471.0 246,402" transform="translate(-3.4,0)" fill="none" stroke="#161616" stroke-width="3.3" stroke-linecap="round"/><path d="M191,540 C191,471.0 246,471.0 246,402" transform="translate(0,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-linecap="round"/><path d="M191,540 C191,471.0 246,471.0 246,402" transform="translate(3.4,0)" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-linecap="round"/><path d="M191,540 C191,471.0 246,471.0 246,402" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-dasharray="5 7" stroke-linecap="round" transform="translate(0,0)"/><path d="M191,540 C191,471.0 246,471.0 246,402" transform="translate(3.4,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-dasharray="5 7" stroke-dashoffset="6" stroke-linecap="round"/>
+<path d="M293,540 C293,471.0 288,471.0 288,402" transform="translate(-3.4,0)" fill="none" stroke="#161616" stroke-width="3.3" stroke-linecap="round"/><path d="M293,540 C293,471.0 288,471.0 288,402" transform="translate(0,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-linecap="round"/><path d="M293,540 C293,471.0 288,471.0 288,402" transform="translate(3.4,0)" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-linecap="round"/><path d="M293,540 C293,471.0 288,471.0 288,402" fill="none" stroke="#f2c200" stroke-width="3.3" stroke-dasharray="5 7" stroke-linecap="round" transform="translate(0,0)"/><path d="M293,540 C293,471.0 288,471.0 288,402" transform="translate(3.4,0)" fill="none" stroke="#d8261d" stroke-width="3.3" stroke-dasharray="5 7" stroke-dashoffset="6" stroke-linecap="round"/>
+<path d="M356,598 C356,540 352,470 350,452" fill="none" stroke="#f4f4f6" stroke-width="3" stroke-linecap="round"/>
+<path d="M359,598 C359,540 355,470 353,452" fill="none" stroke="#9aa0a8" stroke-width="3" stroke-linecap="round"/>
+<path d="M362,598 C362,540 358,470 356,452" fill="none" stroke="#7a4f8f" stroke-width="3" stroke-linecap="round"/>
+<path d="M365,598 C365,540 361,470 359,452" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+<rect x="40" y="566" width="98" height="130" rx="9" fill="url(#pcb)" stroke="#2c2e35" stroke-width="1.6"/><circle cx="52" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="52" cy="580" r="2.6" fill="#101114"/><circle cx="126" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="126" cy="580" r="2.6" fill="#101114"/><circle cx="52" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="52" cy="684" r="2.6" fill="#101114"/><circle cx="126" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="126" cy="684" r="2.6" fill="#101114"/><rect x="72" y="540" width="34" height="40" rx="5" fill="#111216" stroke="#000"/><rect x="78" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="80.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="87" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="89.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="96" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="98.5" cy="580" r="2.6" fill="#d8b24a"/><text x="75" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">OUT</text><text x="89" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">VCC</text><text x="103" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">GND</text><text transform="translate(49,666) rotate(-90)" font-size="9.5" fill="#eceef2" font-weight="800" font-family="Noto Sans KR,Arial,sans-serif">회전센서</text><text transform="translate(132,616) rotate(90)" font-size="7.2" fill="#c9ccd3" font-weight="700" font-family="Inter Tight,Arial,sans-serif">MechaSolution</text><circle cx="89" cy="638" r="40" fill="#000" opacity=".28" filter="url(#blur2)"/><g class="knob" data-i="0" data-cx="89" data-cy="636" style="cursor:grab" transform="rotate(0 89 636)"><circle cx="89" cy="636" r="39" fill="url(#knobbody)" stroke="#0a0a0c" stroke-width="1.5"/><line x1="122.00" y1="636.00" x2="127.40" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="121.28" y1="642.86" x2="126.56" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="119.15" y1="649.42" x2="124.08" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="115.70" y1="655.40" x2="120.07" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="111.08" y1="660.52" x2="114.69" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="105.50" y1="664.58" x2="108.20" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="99.20" y1="667.38" x2="100.87" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="92.45" y1="668.82" x2="93.01" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="85.55" y1="668.82" x2="84.99" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="78.80" y1="667.38" x2="77.13" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="72.50" y1="664.58" x2="69.80" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="66.92" y1="660.52" x2="63.31" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="62.30" y1="655.40" x2="57.93" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="58.85" y1="649.42" x2="53.92" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="56.72" y1="642.86" x2="51.44" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="56.00" y1="636.00" x2="50.60" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="56.72" y1="629.14" x2="51.44" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><line x1="58.85" y1="622.58" x2="53.92" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="62.30" y1="616.60" x2="57.93" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="66.92" y1="611.48" x2="63.31" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="72.50" y1="607.42" x2="69.80" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="78.80" y1="604.62" x2="77.13" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="85.55" y1="603.18" x2="84.99" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="92.45" y1="603.18" x2="93.01" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="99.20" y1="604.62" x2="100.87" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="105.50" y1="607.42" x2="108.20" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="111.08" y1="611.48" x2="114.69" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="115.70" y1="616.60" x2="120.07" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="119.15" y1="622.58" x2="124.08" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="121.28" y1="629.14" x2="126.56" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><circle cx="89" cy="636" r="29" fill="#1b1c20" stroke="#34363c" stroke-width="1.4"/><circle cx="89" cy="636" r="20.5" fill="#e0302a" stroke="#7e1511" stroke-width="1.6"/><ellipse cx="83" cy="628" rx="9" ry="5" fill="#fff" opacity=".28" transform="rotate(-25 83 628)"/><line x1="89" y1="636" x2="89" y2="617" stroke="#101010" stroke-width="3" stroke-linecap="round"/></g>
+<rect x="142" y="566" width="98" height="130" rx="9" fill="url(#pcb)" stroke="#2c2e35" stroke-width="1.6"/><circle cx="154" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="154" cy="580" r="2.6" fill="#101114"/><circle cx="228" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="228" cy="580" r="2.6" fill="#101114"/><circle cx="154" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="154" cy="684" r="2.6" fill="#101114"/><circle cx="228" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="228" cy="684" r="2.6" fill="#101114"/><rect x="174" y="540" width="34" height="40" rx="5" fill="#111216" stroke="#000"/><rect x="180" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="182.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="189" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="191.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="198" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="200.5" cy="580" r="2.6" fill="#d8b24a"/><text x="177" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">OUT</text><text x="191" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">VCC</text><text x="205" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">GND</text><text transform="translate(151,666) rotate(-90)" font-size="9.5" fill="#eceef2" font-weight="800" font-family="Noto Sans KR,Arial,sans-serif">회전센서</text><text transform="translate(234,616) rotate(90)" font-size="7.2" fill="#c9ccd3" font-weight="700" font-family="Inter Tight,Arial,sans-serif">MechaSolution</text><circle cx="191" cy="638" r="40" fill="#000" opacity=".28" filter="url(#blur2)"/><g class="knob" data-i="1" data-cx="191" data-cy="636" style="cursor:grab" transform="rotate(0 191 636)"><circle cx="191" cy="636" r="39" fill="url(#knobbody)" stroke="#0a0a0c" stroke-width="1.5"/><line x1="224.00" y1="636.00" x2="229.40" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="223.28" y1="642.86" x2="228.56" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="221.15" y1="649.42" x2="226.08" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="217.70" y1="655.40" x2="222.07" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="213.08" y1="660.52" x2="216.69" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="207.50" y1="664.58" x2="210.20" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="201.20" y1="667.38" x2="202.87" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="194.45" y1="668.82" x2="195.01" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="187.55" y1="668.82" x2="186.99" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="180.80" y1="667.38" x2="179.13" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="174.50" y1="664.58" x2="171.80" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="168.92" y1="660.52" x2="165.31" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="164.30" y1="655.40" x2="159.93" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="160.85" y1="649.42" x2="155.92" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="158.72" y1="642.86" x2="153.44" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="158.00" y1="636.00" x2="152.60" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="158.72" y1="629.14" x2="153.44" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><line x1="160.85" y1="622.58" x2="155.92" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="164.30" y1="616.60" x2="159.93" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="168.92" y1="611.48" x2="165.31" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="174.50" y1="607.42" x2="171.80" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="180.80" y1="604.62" x2="179.13" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="187.55" y1="603.18" x2="186.99" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="194.45" y1="603.18" x2="195.01" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="201.20" y1="604.62" x2="202.87" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="207.50" y1="607.42" x2="210.20" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="213.08" y1="611.48" x2="216.69" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="217.70" y1="616.60" x2="222.07" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="221.15" y1="622.58" x2="226.08" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="223.28" y1="629.14" x2="228.56" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><circle cx="191" cy="636" r="29" fill="#1b1c20" stroke="#34363c" stroke-width="1.4"/><circle cx="191" cy="636" r="20.5" fill="#25b04a" stroke="#106026" stroke-width="1.6"/><ellipse cx="185" cy="628" rx="9" ry="5" fill="#fff" opacity=".28" transform="rotate(-25 185 628)"/><line x1="191" y1="636" x2="191" y2="617" stroke="#101010" stroke-width="3" stroke-linecap="round"/></g>
+<rect x="244" y="566" width="98" height="130" rx="9" fill="url(#pcb)" stroke="#2c2e35" stroke-width="1.6"/><circle cx="256" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="256" cy="580" r="2.6" fill="#101114"/><circle cx="330" cy="580" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="330" cy="580" r="2.6" fill="#101114"/><circle cx="256" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="256" cy="684" r="2.6" fill="#101114"/><circle cx="330" cy="684" r="5.2" fill="#d9dce0" stroke="#8b9097" stroke-width="1"/><circle cx="330" cy="684" r="2.6" fill="#101114"/><rect x="276" y="540" width="34" height="40" rx="5" fill="#111216" stroke="#000"/><rect x="282" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="284.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="291" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="293.5" cy="580" r="2.6" fill="#d8b24a"/><rect x="300" y="546" width="5" height="26" rx="1" fill="#2a2b30"/><circle cx="302.5" cy="580" r="2.6" fill="#d8b24a"/><text x="279" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">OUT</text><text x="293" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">VCC</text><text x="307" y="597" font-size="5.6" fill="#e6e7ec" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">GND</text><text transform="translate(253,666) rotate(-90)" font-size="9.5" fill="#eceef2" font-weight="800" font-family="Noto Sans KR,Arial,sans-serif">회전센서</text><text transform="translate(336,616) rotate(90)" font-size="7.2" fill="#c9ccd3" font-weight="700" font-family="Inter Tight,Arial,sans-serif">MechaSolution</text><circle cx="293" cy="638" r="40" fill="#000" opacity=".28" filter="url(#blur2)"/><g class="knob" data-i="2" data-cx="293" data-cy="636" style="cursor:grab" transform="rotate(0 293 636)"><circle cx="293" cy="636" r="39" fill="url(#knobbody)" stroke="#0a0a0c" stroke-width="1.5"/><line x1="326.00" y1="636.00" x2="331.40" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="325.28" y1="642.86" x2="330.56" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="323.15" y1="649.42" x2="328.08" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="319.70" y1="655.40" x2="324.07" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="315.08" y1="660.52" x2="318.69" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="309.50" y1="664.58" x2="312.20" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="303.20" y1="667.38" x2="304.87" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="296.45" y1="668.82" x2="297.01" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="289.55" y1="668.82" x2="288.99" y2="674.19" stroke="#3d4047" stroke-width="2.2"/><line x1="282.80" y1="667.38" x2="281.13" y2="672.52" stroke="#3d4047" stroke-width="2.2"/><line x1="276.50" y1="664.58" x2="273.80" y2="669.26" stroke="#3d4047" stroke-width="2.2"/><line x1="270.92" y1="660.52" x2="267.31" y2="664.54" stroke="#3d4047" stroke-width="2.2"/><line x1="266.30" y1="655.40" x2="261.93" y2="658.57" stroke="#3d4047" stroke-width="2.2"/><line x1="262.85" y1="649.42" x2="257.92" y2="651.62" stroke="#3d4047" stroke-width="2.2"/><line x1="260.72" y1="642.86" x2="255.44" y2="643.98" stroke="#3d4047" stroke-width="2.2"/><line x1="260.00" y1="636.00" x2="254.60" y2="636.00" stroke="#3d4047" stroke-width="2.2"/><line x1="260.72" y1="629.14" x2="255.44" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><line x1="262.85" y1="622.58" x2="257.92" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="266.30" y1="616.60" x2="261.93" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="270.92" y1="611.48" x2="267.31" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="276.50" y1="607.42" x2="273.80" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="282.80" y1="604.62" x2="281.13" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="289.55" y1="603.18" x2="288.99" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="296.45" y1="603.18" x2="297.01" y2="597.81" stroke="#3d4047" stroke-width="2.2"/><line x1="303.20" y1="604.62" x2="304.87" y2="599.48" stroke="#3d4047" stroke-width="2.2"/><line x1="309.50" y1="607.42" x2="312.20" y2="602.74" stroke="#3d4047" stroke-width="2.2"/><line x1="315.08" y1="611.48" x2="318.69" y2="607.46" stroke="#3d4047" stroke-width="2.2"/><line x1="319.70" y1="616.60" x2="324.07" y2="613.43" stroke="#3d4047" stroke-width="2.2"/><line x1="323.15" y1="622.58" x2="328.08" y2="620.38" stroke="#3d4047" stroke-width="2.2"/><line x1="325.28" y1="629.14" x2="330.56" y2="628.02" stroke="#3d4047" stroke-width="2.2"/><circle cx="293" cy="636" r="29" fill="#1b1c20" stroke="#34363c" stroke-width="1.4"/><circle cx="293" cy="636" r="20.5" fill="#2d6be0" stroke="#143a8a" stroke-width="1.6"/><ellipse cx="287" cy="628" rx="9" ry="5" fill="#fff" opacity=".28" transform="rotate(-25 287 628)"/><line x1="293" y1="636" x2="293" y2="617" stroke="#101010" stroke-width="3" stroke-linecap="round"/></g>
+<g filter="url(#sh2)"><rect x="344" y="578" width="92" height="94" rx="5" fill="#1f5ccd" stroke="#123b8c" stroke-width="1.6"/></g>
+<circle cx="354" cy="588" r="4.4" fill="#d9dce0" stroke="#0e2d70"/><circle cx="354" cy="588" r="2" fill="#0b1a40"/>
+<circle cx="426" cy="588" r="4.4" fill="#d9dce0" stroke="#0e2d70"/><circle cx="426" cy="588" r="2" fill="#0b1a40"/>
+<circle cx="354" cy="662" r="4.4" fill="#d9dce0" stroke="#0e2d70"/><circle cx="354" cy="662" r="2" fill="#0b1a40"/>
+<circle cx="426" cy="662" r="4.4" fill="#d9dce0" stroke="#0e2d70"/><circle cx="426" cy="662" r="2" fill="#0b1a40"/>
+<text x="369" y="590" font-size="5.4" fill="#fff" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">GND</text><circle cx="369" cy="597" r="2.2" fill="#d8b24a"/><text x="385" y="590" font-size="5.4" fill="#fff" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">VCC</text><circle cx="385" cy="597" r="2.2" fill="#d8b24a"/><text x="401" y="590" font-size="5.4" fill="#fff" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">SCL</text><circle cx="401" cy="597" r="2.2" fill="#d8b24a"/><text x="417" y="590" font-size="5.4" fill="#fff" text-anchor="middle" font-family="Inter Tight,Arial,sans-serif" font-weight="700">SDA</text><circle cx="417" cy="597" r="2.2" fill="#d8b24a"/>
+<rect x="352" y="604" width="76" height="52" rx="3" fill="#0a0a0c" stroke="#000"/><rect x="357" y="609" width="66" height="42" rx="1.5" fill="#0b1220" stroke="#16284a"/>
+<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" font-weight="700"><text x="361" y="621" fill="#ff7a72" id="tR">R 000</text><rect x="394" y="613" width="26" height="6" fill="#241214"/><rect id="bR" x="394" y="613" width="0" height="6" fill="#ff5a50"/><text x="361" y="633" fill="#6dff8f" id="tG">G 000</text><rect x="394" y="625" width="26" height="6" fill="#112016"/><rect id="bG" x="394" y="625" width="0" height="6" fill="#4dff7a"/><text x="361" y="645" fill="#7aa6ff" id="tB">B 000</text><rect x="394" y="637" width="26" height="6" fill="#11182a"/><rect id="bB" x="394" y="637" width="0" height="6" fill="#5b8dff"/></g>
+</svg></div>
     <p class="eyebrow">과학실험과 과학교육을 잇는 디지털교재 모음</p>
     <h1><span class="ln"><span>DK Digital</span></span><span class="ln"><span>Science</span></span></h1>
     <div class="hero-foot">
-      <span>AI · Science · Physical Computing</span>
-      <span class="hint"><b>드래그</b>하면 360° 돌아가고, <b>클릭</b>하면 얼굴 인식 등 화면 모드가 바뀝니다</span>
+      <span>Light · Color · Physical Computing</span>
+      <span class="hint"><b>손잡이</b>를 돌려 보세요 — 빨강·초록·파랑의 양에 따라 빛의 색이 바뀝니다</span>
       <span class="scroll">scroll to explore <b>↓</b></span>
     </div>
   </section>
@@ -132,14 +210,26 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
   <section class="projects" id="projects">
     <div class="sec-head rv"><div>Projects</div><span>(02)</span></div>
 
-    <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/experiments/" data-pattern="check" data-acc="#0d9488" style="--c:#0d9488">
+    <a class="row rv" href="https://dkent12h.github.io/ai_science/light-adaptive/" data-pattern="square" data-acc="#8b5cf6" style="--c:#8b5cf6">
       <span class="no">01</span>
+      <span><span class="tag">디지털교재 · 적응형 학습</span><span class="name">빛의 합성 적응형 학습</span><span class="desc">진단평가와 형성평가에서 고른 답에 따라 설명과 실험 영상이 달라지는 적응형 학습 교재입니다.</span><span class="progs"><i>진단·형성평가</i><i>맞춤형 영상</i><i>RGB 합성</i></span></span>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+
+    <a class="row rv" href="https://dkent12h.github.io/ai_science/color-perception/" data-pattern="check" data-acc="#16a34a" style="--c:#16a34a">
+      <span class="no">02</span>
+      <span><span class="tag">디지털교재 · 색의 인식</span><span class="name">AI 음성인식 활용 색의 인식 실험</span><span class="desc">아두이노 색 센서와 AI 음성인식으로 색을 인식하는 실험 교재입니다.</span><span class="progs"><i>Arduino 색 센서</i><i>AI 음성인식</i><i>Google Drive 영상</i></span></span>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+
+    <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/experiments/" data-pattern="check" data-acc="#0d9488" style="--c:#0d9488">
+      <span class="no">03</span>
       <span><span class="tag">디지털교재 5종</span><span class="name">피지컬컴퓨팅 과학실험</span><span class="desc">빛의 합성, 물의 증발, 전기전도성, 구름 발생, 자극과 반응 실험 교재입니다.</span><span class="progs"><i>micro:bit</i><i>MakeCode</i><i>센서 · 모듈</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
     <a class="row rv" href="https://dkent12h.github.io/ai_science/science-ai/" data-pattern="arrow" data-acc="#d946ef" style="--c:#d946ef">
-      <span class="no">02</span>
+      <span class="no">04</span>
       <span><span class="tag">디지털교재 · 연수 자료</span><span class="name">과학교육에서 AI 활용</span><span class="desc">피지컬 컴퓨팅, 이미지 AI, 데이터 분석, 생성형 AI 웹앱으로 과학수업에 AI를 활용하는 방법입니다.</span><span class="progs"><i>micro:bit · MakeCode</i><i>BME280</i><i>Teachable Machine</i><i>허스키렌즈 · 엔트리</i><i>엔트리 AI 회귀</i><i>Gemini Canvas</i></span></span>
       <span class="go" aria-hidden="true">→</span>
     </a>
@@ -159,333 +249,45 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
   <a href="https://github.com/dkent12h" target="_blank" rel="noopener">github.com/dkent12h</a>
 </footer>
 
-<script type="importmap">
-{"imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-}}
-</script>
-<script type="module">
-const $ = s => document.querySelector(s);
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+<script>
+document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(function(es,io){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.15}).observe(el)});
 
-/* ---------- 스크롤 등장 효과 ---------- */
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
-document.querySelectorAll('.rv').forEach(el => io.observe(el));
-
-/* ---------- 3D 장면에서 쓰는 상태 (카드 위에 올리면 바뀜) ---------- */
-const state = { hover: null, acc: '#7c4dff', mx: 0, my: 0 };
-
-/* ---------- 커서 ---------- */
-const cursor = $('.cursor');
-let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
-if (finePointer) document.body.classList.add('has-cursor');
-addEventListener('pointermove', e => {
-  tx = e.clientX; ty = e.clientY;
-  state.mx = (e.clientX / innerWidth) * 2 - 1;
-  state.my = (e.clientY / innerHeight) * 2 - 1;
-});
-document.querySelectorAll('.row').forEach(row => {
-  const on = () => {
-    state.hover = row.dataset.pattern; state.acc = row.dataset.acc;
-    document.documentElement.style.setProperty('--acc', row.dataset.acc);
-    cursor.classList.add('big'); cursor.textContent = '열기';
-  };
-  const off = () => { state.hover = null; cursor.classList.remove('big'); cursor.textContent = ''; };
-  row.addEventListener('pointerenter', on); row.addEventListener('pointerleave', off);
-  row.addEventListener('focus', on); row.addEventListener('blur', off);
-});
-let grow = 1;
-document.querySelectorAll('.pill,footer a,.brand').forEach(a => {
-  a.addEventListener('pointerenter', () => { grow = 1.9; });
-  a.addEventListener('pointerleave', () => { grow = 1; });
-});
-
-/* ---------- three.js 불러오기 (실패해도 페이지는 그대로 동작) ---------- */
-let THREE, RoundedBoxGeometry, RoomEnvironment;
-try {
-  THREE = await import('three');
-  ({ RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js'));
-  ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
-} catch (e) { document.documentElement.classList.add('no-webgl'); }
-
-function cursorLoop() {
-  cx += (tx - cx) * .22; cy += (ty - cy) * .22;
-  cursor.style.transform = `translate3d(${cx}px,${cy}px,0) scale(${grow})`;
-  requestAnimationFrame(cursorLoop);
-}
-if (finePointer) cursorLoop();
-
-if (THREE) start();
-
-function start() {
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: true, alpha: true }); }
-  catch (e) { document.documentElement.classList.add('no-webgl'); return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-
-  const scene = new THREE.Scene();
-  scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-  const cam = new THREE.PerspectiveCamera(30, 1, .1, 100);
-  cam.position.set(0, 0, 12);
-
-  const sun = new THREE.DirectionalLight(0xffffff, 2.4); sun.position.set(3, 5, 6); scene.add(sun);
-  const rim = new THREE.PointLight(0x7c4dff, 70, 0, 2); rim.position.set(-4, 1, 3); scene.add(rim);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x9999bb, .5));
-
-  /* ----- 허스키렌즈 2 : 뒷면(카메라·방열판·주황 탭) / 앞면(화면) / 아래 골드 커넥터 ----- */
-  const root = new THREE.Group(), board = new THREE.Group(); root.add(board); scene.add(root);
-  const W = 2.6, H = 1.8, D = .36;
-  const put = (geo, mat, x, y, z, parent) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); (parent || board).add(m); return m; };
-  const rrShape = (x, y, w, h, r) => { const s = new THREE.Shape(); s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
-  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x131418, roughness: .5, metalness: .15, envMapIntensity: .4 });
-  const blackMat = new THREE.MeshStandardMaterial({ color: 0x050507, roughness: .4, metalness: .3, envMapIntensity: .6 });
-  const FZ = D / 2 + .03;
-  const plate = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(-W / 2, -H / 2, W, H, .17), { depth: D, bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 4, curveSegments: 20 }), bodyMat);
-  plate.position.z = -D / 2; board.add(plate);
-  // 아래쪽 커넥터 탭
-  const tab = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(-.46, -H / 2 - .27, .92, .4, .12), { depth: D * .7, bevelEnabled: true, bevelSize: .02, bevelThickness: .02, bevelSegments: 3, curveSegments: 16 }), bodyMat);
-  tab.position.z = -D * .35; board.add(tab);
-
-  // 그리기 도구: 여우 로고 · 골드 패드
-  const fox = (g, cx, cy, s, col, lw) => {
-    g.save(); g.translate(cx, cy); g.scale(s, s); g.strokeStyle = col; g.lineWidth = lw; g.lineJoin = 'round'; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(-1, -1); g.lineTo(-.5, -.3); g.lineTo(.5, -.3); g.lineTo(1, -1); g.lineTo(.95, .15); g.lineTo(0, 1.05); g.lineTo(-.95, .15); g.closePath(); g.stroke();
-    g.beginPath(); g.moveTo(-.55, .2); g.lineTo(-.25, .1); g.moveTo(.55, .2); g.lineTo(.25, .1); g.moveTo(-.2, .62); g.lineTo(0, .78); g.lineTo(.2, .62); g.stroke();
-    g.restore();
-  };
-  const pad = (g, cx, cy, r) => {
-    g.fillStyle = '#d9b24a'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
-    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; g.beginPath(); g.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, r * .17, 0, 7); g.fill(); }
-    g.fillStyle = '#f3dc8a'; g.beginPath(); g.arc(cx, cy, r * .72, 0, 7); g.fill();
-    g.fillStyle = '#0b0b0d'; g.beginPath(); g.arc(cx, cy, r * .42, 0, 7); g.fill();
-  };
-  const mkTex = (w, h, fn) => { const c = document.createElement('canvas'); c.width = w * 500; c.height = h * 500; const g = c.getContext('2d'); g.scale(500, 500); fn(g); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
-  const plane = (w, h, tex, x, y, z, parent) => put(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true }), x, y, z, parent);
-
-  // 커넥터 탭 그림 (패드 2개 + 가운데 여우)
-  const tabTex = mkTex(.92, .4, g => { pad(g, .25, .2, .13); pad(g, .67, .2, .13); fox(g, .46, .2, .085, '#d9b24a', .22); });
-
-  /* 뒷면 (카메라 쪽): 로컬 좌표는 앞면과 같고 y축으로 180도 돌려 붙임 */
-  const back = new THREE.Group(); back.rotation.y = Math.PI; board.add(back);
-  const backTex = mkTex(W, H, g => {
-    g.translate(0, 0);
-    // 방열판 (가로 줄무늬 회색 판)
-    g.save(); g.beginPath(); g.roundRect(.06, .06, W - .12, H - .12, .12); g.clip();
-    g.fillStyle = '#34363c'; g.fillRect(.06, .5, W - .12, H);
-    for (let y = .52; y < H - .06; y += .045) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(.06, y, W - .12, .012); g.fillStyle = 'rgba(255,255,255,.06)'; g.fillRect(.06, y + .014, W - .12, .008); }
-    g.restore();
-    // 윗줄(검정) 라벨
-    g.fillStyle = '#b9bbc2'; g.font = '700 .05px "Inter Tight",Arial,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('A', .62, .17); g.fillText('B', 1.0, .17);
-    g.fillStyle = '#8c8e96'; g.font = '700 .035px Arial'; g.fillText('CAMERA', W / 2, .83);
-    // 오른쪽 위 작은 포트 두 개
-    g.fillStyle = '#d9dbe0'; g.fillRect(1.93, .1, .22, .1); g.fillStyle = '#202228'; for (let i = 0; i < 4; i++) g.fillRect(1.95 + i * .05, .12, .035, .06);
-    g.fillStyle = '#8c8e96'; g.font = '700 .03px Arial'; g.fillText('MODE', 2.05, .26);
-    // 주황 탭 (왼쪽)
-    g.fillStyle = '#f26a1b'; g.beginPath(); g.roundRect(.07, .66, .34, .92, .06); g.fill();
-    g.fillStyle = 'rgba(0,0,0,.22)'; for (let y = .72; y < 1.5; y += .06) g.fillRect(.09, y, .3, .012);
-    // 네 모서리 나사 구멍
-    [[.2, .2], [W - .2, .2], [.2, H - .2], [W - .2, H - .2]].forEach(([x, y]) => {
-      g.fillStyle = '#6c6e75'; g.beginPath(); g.arc(x, y, .085, 0, 7); g.fill();
-      g.fillStyle = '#050507'; g.beginPath(); g.arc(x, y, .055, 0, 7); g.fill();
-      g.strokeStyle = '#a9abb2'; g.lineWidth = .012; g.beginPath(); g.arc(x, y, .085, 0, 7); g.stroke();
-    });
-    // 가운데 로고
-    fox(g, W / 2 + .14, 1.05, .15, '#e6e7ec', .045);
-    g.fillStyle = '#e6e7ec'; g.font = '700 .075px "Inter Tight",Arial,sans-serif'; g.fillText('HUSKYLENS 2', W / 2 + .14, 1.36);
-  });
-  plane(W, H, backTex, 0, 0, FZ + .001, back);
-  plane(.92, .4, tabTex, 0, -H / 2 - .14, D * .35 + .025, back);
-  // 카메라 모듈 (뒷면 위쪽 가운데) : 튀어나온 검정 상자 + 렌즈
-  const cam3 = new THREE.Group(); cam3.position.set(0, H / 2 - .5, FZ); back.add(cam3);
-  put(new THREE.BoxGeometry(.64, .64, .16), blackMat, 0, 0, .08, cam3);
-  const lring = put(new THREE.CylinderGeometry(.22, .24, .06, 40), new THREE.MeshStandardMaterial({ color: 0x1b1d26, roughness: .3, metalness: .6 }), 0, 0, .19, cam3); lring.rotation.x = Math.PI / 2;
-  const lglass = put(new THREE.CircleGeometry(.17, 40), new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: .05, metalness: .85, envMapIntensity: 2.4 }), 0, 0, .225, cam3);
-  const spark = put(new THREE.CircleGeometry(.035, 16), new THREE.MeshBasicMaterial({ color: 0x8fb0ff, transparent: true, opacity: .8 }), -.06, .06, .228, cam3);
-
-  /* 앞면 (화면 쪽) */
-  const SW = 2.4, SH = 1.35, SY = .13;
-  const frontTex = mkTex(W, H, g => {
-    g.fillStyle = '#d9b24a'; // (아래 탭 연결부 없음)
-    g.fillStyle = 'rgba(255,255,255,.06)'; g.beginPath(); g.roundRect(.04, .04, W - .08, H - .08, .15); g.lineWidth = .01; g.strokeStyle = 'rgba(255,255,255,.10)'; g.stroke();
-  });
-  plane(W, H, frontTex, 0, 0, FZ + .001);
-  plane(.92, .4, tabTex, 0, -H / 2 - .14, D * .35 + .025);
-  const scv = document.createElement('canvas'); scv.width = 480; scv.height = 270; const sx = scv.getContext('2d');
-  const stex = new THREE.CanvasTexture(scv); stex.colorSpace = THREE.SRGBColorSpace; stex.anisotropy = 4;
-  put(new THREE.BoxGeometry(SW + .08, SH + .08, .02), blackMat, 0, SY, FZ + .012);
-  put(new THREE.PlaneGeometry(SW, SH), new THREE.MeshBasicMaterial({ map: stex }), 0, SY, FZ + .025);
-  put(new THREE.PlaneGeometry(SW, SH), new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: .05, roughness: .05, envMapIntensity: 1.6 }), 0, SY, FZ + .03);
-
-  const pressables = [];
-  // 화면에 그릴 내용 : 홈(여우 로고 배경) → 인식 모드들
-  const MODES = ['HUSKYLENS 2', '얼굴 인식', '물체 추적', '색상 인식', '선 추적', '물체 분류'];
-  const MODE_OF = { smile: 1, square: 2, heart: 3, arrow: 4, check: 5 };
-  let cur = 0;
-  const box = (x, y, w, h, col, label) => {
-    sx.strokeStyle = col; sx.lineWidth = 3; sx.strokeRect(x, y, w, h);
-    sx.font = '700 16px "Inter Tight",Arial,sans-serif'; const tw = sx.measureText(label).width + 12;
-    sx.fillStyle = col; sx.fillRect(x - 1.5, y - 21, tw, 21); sx.fillStyle = '#04120a'; sx.textBaseline = 'middle'; sx.textAlign = 'left'; sx.fillText(label, x + 4, y - 10);
-  };
-  function drawScreen(t, mode) {
-    const bg = sx.createLinearGradient(0, 0, 480, 270); bg.addColorStop(0, '#0f1a33'); bg.addColorStop(.55, '#1b2f5e'); bg.addColorStop(1, '#0a1020');
-    sx.fillStyle = bg; sx.fillRect(0, 0, 480, 270);
-    if (mode === 0) {          // 홈 화면 (제품 화면과 같은 구성)
-      const sw = sx.createRadialGradient(380, 60, 10, 380, 60, 260); sw.addColorStop(0, 'rgba(120,170,255,.55)'); sw.addColorStop(1, 'rgba(120,170,255,0)');
-      sx.fillStyle = sw; sx.fillRect(0, 0, 480, 270);
-      sx.save(); sx.translate(240, 112); sx.scale(44, 44); sx.strokeStyle = '#f2f4f8'; sx.lineWidth = .1; sx.lineJoin = 'round'; sx.lineCap = 'round';
-      sx.beginPath(); sx.moveTo(-1, -1); sx.lineTo(-.5, -.3); sx.lineTo(.5, -.3); sx.lineTo(1, -1); sx.lineTo(.95, .15); sx.lineTo(0, 1.05); sx.lineTo(-.95, .15); sx.closePath(); sx.stroke();
-      sx.beginPath(); sx.moveTo(-.55, .2); sx.lineTo(-.25, .1); sx.moveTo(.55, .2); sx.lineTo(.25, .1); sx.moveTo(-.2, .62); sx.lineTo(0, .78); sx.lineTo(.2, .62); sx.stroke(); sx.restore();
-      sx.fillStyle = '#f2f4f8'; sx.font = '800 30px "Inter Tight",Arial,sans-serif'; sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText('HUSKYLENS 2', 240, 196);
-      return void (stex.needsUpdate = true);
-    }
-    sx.strokeStyle = 'rgba(255,255,255,.05)'; sx.lineWidth = 1;
-    for (let i = 0; i < 480; i += 40) { sx.beginPath(); sx.moveTo(i, 0); sx.lineTo(i, 270); sx.stroke(); }
-    for (let i = 0; i < 270; i += 40) { sx.beginPath(); sx.moveTo(0, i); sx.lineTo(480, i); sx.stroke(); }
-    const jx = Math.sin(t * 1.7) * 6, jy = Math.cos(t * 1.3) * 5;
-    if (mode === 1) {
-      const cx = 240 + jx * 2, cy = 135 + jy * 2;
-      sx.fillStyle = '#e9b98f'; sx.beginPath(); sx.ellipse(cx, cy, 50, 62, 0, 0, 7); sx.fill();
-      sx.fillStyle = '#2a1d17'; sx.beginPath(); sx.ellipse(cx, cy - 42, 52, 28, 0, Math.PI, 0); sx.fill();
-      [-20, 20].forEach(o => { sx.beginPath(); sx.arc(cx + o, cy - 6, 5, 0, 7); sx.fill(); });
-      sx.strokeStyle = '#8a3b2a'; sx.lineWidth = 4; sx.lineCap = 'round'; sx.beginPath(); sx.arc(cx, cy + 12, 21, .2, Math.PI - .2); sx.stroke();
-      box(cx - 64, cy - 76, 128, 142, '#3bff7a', 'Face ID:1');
-    } else if (mode === 2) {
-      const cx = 240 + Math.sin(t * 1.2) * 130, cy = 135 + Math.sin(t * 2.1) * 40;
-      const gr = sx.createRadialGradient(cx - 10, cy - 10, 4, cx, cy, 34); gr.addColorStop(0, '#ffd1a0'); gr.addColorStop(1, '#ff6a1f');
-      sx.fillStyle = gr; sx.beginPath(); sx.arc(cx, cy, 32, 0, 7); sx.fill();
-      box(cx - 42, cy - 42, 84, 84, '#ffd23b', 'Tracking');
-    } else if (mode === 3) {
-      [['#ff3b30', 110, 130, 1], ['#2f6bff', 240, 165, 2], ['#22c55e', 360, 120, 3]].forEach(([c, x, y, id], i) => {
-        const o = Math.sin(t * 1.5 + i) * 6; sx.fillStyle = c; sx.beginPath(); sx.roundRect(x - 36, y - 32 + o, 72, 64, 12); sx.fill();
-        box(x - 42, y - 38 + o, 84, 76, '#3bff7a', 'Color ID:' + id);
-      });
-    } else if (mode === 4) {
-      sx.strokeStyle = '#f3f4f6'; sx.lineWidth = 24; sx.lineCap = 'round'; sx.beginPath(); sx.moveTo(90, 255); sx.bezierCurveTo(150, 180, 330, 200, 390, 30); sx.stroke();
-      sx.strokeStyle = '#3bff7a'; sx.lineWidth = 5; sx.setLineDash([12, 9]); sx.lineDashOffset = -t * 30; sx.beginPath(); sx.moveTo(90, 255); sx.bezierCurveTo(150, 180, 330, 200, 390, 30); sx.stroke(); sx.setLineDash([]);
-      sx.fillStyle = '#3bff7a'; sx.font = '700 18px "Inter Tight",Arial,sans-serif'; sx.textAlign = 'left'; sx.fillText('Line  →  ' + Math.round(20 + Math.sin(t) * 6) + '°', 20, 26);
-    } else {
-      sx.fillStyle = '#7c4dff'; sx.beginPath(); sx.roundRect(190 + jx, 85 + jy, 96, 110, 14); sx.fill();
-      sx.fillStyle = '#a78bfa'; sx.beginPath(); sx.roundRect(286 + jx, 115 + jy, 28, 50, 14); sx.fill();
-      box(172 + jx, 66 + jy, 160, 142, '#3bff7a', 'Cup 97%');
-    }
-    sx.fillStyle = 'rgba(0,0,0,.55)'; sx.fillRect(0, 240, 480, 30);
-    sx.fillStyle = '#e8e9ee'; sx.font = '700 16px "Inter Tight",Arial,sans-serif'; sx.textBaseline = 'middle'; sx.textAlign = 'left'; sx.fillText(MODES[mode], 14, 255);
-    sx.textAlign = 'right'; sx.fillStyle = '#3bff7a'; sx.fillText('● REC', 466, 255);
-    stex.needsUpdate = true;
+(function(){
+  var svg=document.getElementById('lightdev'); if(!svg) return;
+  var knobs=[].slice.call(svg.querySelectorAll('.knob')); var ang=[40,-20,95]; var auto=true, t0=performance.now();
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(id){return svg.querySelector('#'+id)}
+  function mix(a,b,t){return a+(b-a)*t}
+  function apply(){
+    var v=ang.map(function(a){return Math.round((a+135)/270*255)});
+    knobs.forEach(function(k,i){k.setAttribute('transform','rotate('+ang[i]+' '+k.dataset.cx+' '+k.dataset.cy+')')});
+    ['R','G','B'].forEach(function(l,i){var s=('00'+v[i]).slice(-3);$('t'+l).textContent=l+' '+s;$('b'+l).setAttribute('width',(26*v[i]/255).toFixed(1))});
+    var mx=Math.max(v[0],v[1],v[2]), lit=mx/255, k=mx? (255/mx):1; var f=Math.pow(k,.35);
+    var c=v.map(function(x){return Math.min(255,x*f)});
+    var base=[233,235,239], u=Math.min(1,lit*2.2);
+    var col=c.map(function(x,i){return Math.round(mix(base[i],mix(x,255,.22),u))});
+    var dark=col.map(function(x){return Math.round(x*.72)}), mid=col.map(function(x,i){return Math.round(mix(x,255,.16))});
+    function rgb(a){return 'rgb('+a.join(',')+')'}
+    $('bs0').setAttribute('stop-color',rgb(col.map(function(x){return Math.round(mix(x,255,.55))})));
+    $('bs1').setAttribute('stop-color',rgb(col)); $('bs2').setAttribute('stop-color',rgb(dark));
+    var g=c.map(Math.round); $('gs0').setAttribute('stop-color',rgb(g)); $('gs1').setAttribute('stop-color',rgb(g));
+    $('glow').setAttribute('opacity',(.08+.62*lit).toFixed(2));
   }
-  board.traverse(m => { if (m.isMesh) m.userData.btn = 'body'; });
-  const face = plate;
-
-  // 바닥 그림자
-  const shCv = document.createElement('canvas'); shCv.width = shCv.height = 128;
-  const sg = shCv.getContext('2d'), sgr = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
-  sgr.addColorStop(0, 'rgba(20,10,60,.34)'); sgr.addColorStop(1, 'rgba(20,10,60,0)');
-  sg.fillStyle = sgr; sg.fillRect(0, 0, 128, 128);
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shCv), transparent: true, depthWrite: false }));
-  shadow.position.z = -1; scene.add(shadow);
-
-  let dragging = false, spinY = 0, spinX = 0, velY = 0, velX = 0;
-  /* ----- 화면 크기에 맞춘 배치 ----- */
-  let L = {};
-  function resize() {
-    const w = innerWidth, h = innerHeight;
-    renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
-    const vh = 2 * cam.position.z * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)), vw = vh * cam.aspect;
-    const desktop = cam.aspect > 1;
-    const heroS = Math.min(vh * .6 / 2.1, vw * (desktop ? .3 : .78) / 2.6);
-    L = desktop
-      ? { desk: true, hx: vw * .245, hy: vh * .14, lx: vw * .3, ly: 0, hs: heroS * .92, ls: heroS * .62 }
-      : { desk: false, hx: 0, hy: vh * .2, lx: 0, ly: vh * .3, hs: heroS, ls: heroS * .6 };
+  function tick(now){
+    if(auto&&!reduce){var t=(now-t0)/1000; ang=[Math.sin(t*.55)*125, Math.sin(t*.43+2.1)*125, Math.sin(t*.37+4.2)*125]; apply();}
+    requestAnimationFrame(tick);
   }
-  addEventListener('resize', resize); resize();
-
-  const ease = t => t * t * (3 - 2 * t), lerp = (a, b, t) => a + (b - a) * t;
-  const tmpCol = new THREE.Color(), t0 = performance.now();
-  let last = t0, mx = 0, my = 0, sc = 0, intro = 0;
-
-  function frame(now) {
-    const dt = Math.min((now - last) / 1000, .05); last = now;
-    const t = (now - t0) / 1000;
-    intro = Math.min(1, intro + dt / 1.4);
-    const introE = 1 - Math.pow(1 - intro, 3);
-
-    const target = Math.min(1, scrollY / (innerHeight * .9));
-    sc += (target - sc) * Math.min(1, dt * 6);
-    const p = ease(sc);
-
-    mx += ((reduce ? 0 : state.mx) - mx) * Math.min(1, dt * 4);
-    my += ((reduce ? 0 : state.my) - my) * Math.min(1, dt * 4);
-
-    const float = reduce ? 0 : Math.sin(t * 1.1) * .08;
-    const s = lerp(L.hs, L.ls, p) * (.55 + .45 * introE);
-    root.position.set(lerp(L.hx, L.lx, p), lerp(L.hy, L.ly, p) + float, 0);
-    root.scale.setScalar(s);
-        if (!dragging) { spinY += velY; velY *= .9; velX *= .85; spinX += velX; spinX *= .985; }
-    board.rotation.y = spinY - .34 + p * .8 + mx * .38 + (reduce ? 0 : Math.sin(t * .6) * .12);
-    board.rotation.x = spinX - .16 + my * .16 + p * .2;
-    board.rotation.z = .03 - p * .08;
-
-    shadow.position.set(root.position.x, root.position.y - 1.25 * s - .35, -1);
-    shadow.scale.set(2.5 * s * (1 - float * .5), .5 * s, 1);
-
-    tmpCol.set(state.acc); rim.color.lerp(tmpCol, Math.min(1, dt * 6));
-
-    drawScreen(t, state.hover && MODE_OF[state.hover] !== undefined ? MODE_OF[state.hover] : cur);
-    spark.material.opacity = .55 + .35 * Math.sin(t * 2.4);
-
-    if (!L.desk) $('#gl').style.opacity = String(1 - ease(Math.min(1, Math.max(0, (scrollY / innerHeight - .35) / .55))));
-    else $('#gl').style.opacity = '1';
-
-    pressables.forEach(b => { b.press += ((b.down ? 1 : 0) - b.press) * Math.min(1, dt * 20); b.cap.position.z = FZ + .07 - b.press * .03; });
-
-    renderer.render(scene, cam);
-    requestAnimationFrame(frame);
-  }
-
-  /* ----- 드래그로 360도 돌리기 + 클릭 동작 ----- */
-  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  const pick = e => {
-    if (L.desk ? scrollY > innerHeight * .5 : scrollY > innerHeight * .3) return null;
-    ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
-    ray.setFromCamera(ndc, cam);
-    const hit = ray.intersectObject(board, true).find(h => h.object.userData.btn);
-    return hit ? hit.object.userData.btn : null;
-  };
-  const isFront = () => Math.cos(board.rotation.y) > .15;
-  let hoverBtn = null, downPos = null, lastX = 0, lastY = 0, moved = 0;
-  addEventListener('pointerdown', e => {
-    if (e.target.closest('a,button')) return;
-    if (!pick(e)) return;
-    dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; velY = velX = 0;
-    document.body.classList.add('grabbing'); cursor.textContent = '돌리는 중';
+  var drag=-1;
+  function pt(e){var r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal; return {x:(e.clientX-r.left)/r.width*vb.width, y:(e.clientY-r.top)/r.height*vb.height}}
+  knobs.forEach(function(k,i){
+    k.addEventListener('pointerdown',function(e){drag=i;auto=false;k.setPointerCapture(e.pointerId);e.preventDefault()});
+    k.addEventListener('pointermove',function(e){ if(drag!==i) return; var p=pt(e); var a=Math.atan2(p.y-k.dataset.cy,p.x-k.dataset.cx)*180/Math.PI+90; if(a>180)a-=360; ang[i]=Math.max(-135,Math.min(135,a)); apply();});
+    k.addEventListener('pointerup',function(){drag=-1});
+    k.addEventListener('pointercancel',function(){drag=-1});
   });
-  addEventListener('pointermove', e => {
-    if (dragging) {
-      const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
-      moved += Math.abs(dx) + Math.abs(dy);
-      velY = dx * .012; velX = dy * .008; spinY += velY; spinX = Math.max(-1.1, Math.min(1.1, spinX + velX));
-      hintEl && hintEl.classList.add('done'); return;
-    }
-    const h = pick(e);
-    if (h === hoverBtn) return; hoverBtn = h;
-    if (!state.hover) {
-      if (h) { cursor.classList.add('big'); cursor.textContent = '돌려보기'; }
-      else { cursor.classList.remove('big'); cursor.textContent = ''; }
-    }
-  });
-  const endDrag = e => {
-    if (!dragging) return; dragging = false; document.body.classList.remove('grabbing');
-    if (hoverBtn) cursor.textContent = '돌려보기';
-    if (moved < 6 && e.type === 'pointerup') { const h = pick(e); if (h) { cur = (cur + 1) % MODES.length; } }
-  };
-  addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
-  const hintEl = document.querySelector('.hint');
-  requestAnimationFrame(frame);
-}
+  apply(); requestAnimationFrame(tick);
+})();
+
 </script>
 </body>
 </html>
