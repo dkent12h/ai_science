@@ -449,7 +449,7 @@ document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(f
   function ease(t){return t*t*(3-2*t)} function lerp(a,b,t){return a+(b-a)*t}
 
   /* ---------- interaction ---------- */
-  var user=new T.Quaternion(), tgtUser=null, baseQ=new T.Quaternion(), eul=new T.Euler();
+  var faceV=new T.Vector3(), faceQ=new T.Quaternion(), Zaxis=new T.Vector3(0,0,1), user=new T.Quaternion(), tgtUser=null, baseQ=new T.Quaternion(), eul=new T.Euler();
   var ray=new T.Raycaster(), ndc=new T.Vector2();
   function hit(e){
     if(Ld.desk? scrollY>innerHeight*1.4 : scrollY>innerHeight*.3) return null;
@@ -488,7 +488,7 @@ document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(f
     var s=lerp(Ld.hs,Ld.ls,p);
     root.position.set(lerp(Ld.hx,Ld.lx,p),lerp(Ld.hy,Ld.ly,p)+fl,0); root.scale.setScalar(s);
     if(tgtUser){user.slerp(tgtUser,0.12); if(user.angleTo(tgtUser)<0.002){user.copy(tgtUser);tgtUser=null}}
-    var B0=window.__ldBase||[-0.28,0.08,-0.2,'ZXY']; eul.set(B0[0]+p*0.15,B0[1]+p*0.30+(reduce?0:Math.sin(t*.6)*.06),B0[2]-p*0.05,B0[3]); baseQ.setFromEuler(eul);
+    var B0=window.__ldBase||[-0.12,0.0,-0.17,'ZXY']; eul.set(B0[0]+p*0.15,B0[1]+p*0.30+(reduce?0:Math.sin(t*.6)*.05),B0[2]-p*0.05,B0[3]); baseQ.setFromEuler(eul); faceV.copy(cam.position).sub(root.position).normalize(); faceQ.setFromUnitVectors(Zaxis,faceV); baseQ.premultiply(faceQ);
     G.quaternion.copy(user).multiply(baseQ);
     key.position.set(root.position.x-3*1,root.position.y+5,9); key.target.position.copy(root.position); key.target.updateMatrixWorld();
     var b=5.2*s; var sh=key.shadow.camera; sh.left=-b;sh.right=b;sh.top=b;sh.bottom=-b;sh.near=1;sh.far=30; sh.updateProjectionMatrix();
