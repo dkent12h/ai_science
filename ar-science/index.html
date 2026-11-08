@@ -50,6 +50,8 @@
     .btn{padding:9px 12px;font-size:15px}.btn.ar{font-size:16px;padding:9px 14px}
     .legend{font-size:13px;padding:6px 9px}
   }
+  #mv.pulse{filter:brightness(1.12)}
+  #mv{transition:filter .12s}
 </style>
 </head>
 <body>
@@ -68,6 +70,7 @@
     <div class="legend" id="legend"><span><i style="background:#cd3430"></i>산소 많은 피</span><span><i style="background:#3e6ccd"></i>산소 적은 피</span></div>
     <div class="bar">
       <button class="btn" id="beatBtn" aria-pressed="true">💓 박동</button>
+      <button class="btn" id="feelBtn" aria-pressed="false">🔊 소리·진동</button>
       <button class="btn" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
       <button class="btn" id="runBtn" aria-pressed="false">🏃 운동 후</button>
       <span class="sep" id="sep"></span>
@@ -122,7 +125,7 @@
     mv.src = current.file;
     mv.alt = current.name+' 3D 모형';
     mv.resetTurntableRotation(0); mv.cameraOrbit='0.02deg 82deg auto'; mv.cameraTarget='auto auto auto';
-    ['beatBtn','restBtn','runBtn','sep'].forEach(id=>$(id).style.display = current.animated?'':'none');
+    ['beatBtn','feelBtn','restBtn','runBtn','sep'].forEach(id=>$(id).style.display = current.animated?'':'none');
     if (current.animated){ beating=true; $('beatBtn').setAttribute('aria-pressed',true); setSpeed(1); }
     $('mName').textContent=(current.emoji||'')+' '+current.name;
     $('mIntro').textContent=current.intro||'';
@@ -149,6 +152,31 @@
     const [x,y,z]=h.pos.split(' ').map(Number);
     mv.resetTurntableRotation(0); mv.cameraTarget=`${x}m ${y}m ${z}m`; mv.cameraOrbit='0.01deg 82deg 0.5m';
   }
+
+  // ── 심장박동 느끼기: 쿵(수축 시작)·쿵(판막 닫힘) 소리 + 진동, 애니메이션 위상에 맞춤
+  let feel=false, actx=null, lastPh=0;
+  function thump(freq,dur,gain){
+    if(!actx) return; const t=actx.currentTime, o=actx.createOscillator(), g=actx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(freq,t); o.frequency.exponentialRampToValueAtTime(freq*0.55,t+dur);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(gain,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t+dur+0.02);
+  }
+  function buzz(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
+  function lub(){ thump(62,0.16,0.9); buzz(70); $('mv').classList.add('pulse'); setTimeout(()=>$('mv').classList.remove('pulse'),120); }
+  function dub(){ thump(78,0.11,0.55); buzz(40); }
+  (function tick(){
+    if(feel && current && current.animated && beating){
+      const dur=0.8, ph=(mv.currentTime%dur+dur)%dur;
+      if(ph<lastPh-0.4) lub();               // 한 박자 시작
+      else if(lastPh<0.42 && ph>=0.42) dub(); // 수축 끝
+      lastPh=ph;
+    }
+    requestAnimationFrame(tick);
+  })();
+  $('feelBtn').onclick=()=>{
+    feel=!feel; $('feelBtn').setAttribute('aria-pressed',feel);
+    if(feel){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); lub(); setTimeout(dub,300); }
+  };
 
   $('beatBtn').onclick=()=>setBeat(!beating);
   $('restBtn').onclick=()=>setSpeed(1);
