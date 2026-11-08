@@ -431,7 +431,7 @@ document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(f
     var mx=Math.max(v[0],v[1],v[2]), lit=mx/255, kk=mx?(255/mx):1, f=Math.pow(kk,.35);
     var c=v.map(function(x){return Math.min(255,x*f)}), u=Math.min(1,lit*2.2);
     var col=c.map(function(x,i){return mix([233,235,239][i],mix(x,255,.22),u)});
-    ballMat.color.setRGB(mix(.95,col[0]/255,u)*1,mix(.95,col[1]/255,u),mix(.95,col[2]/255,u));
+    ballMat.color.setRGB(mix(.82,col[0]/255,u),mix(.84,col[1]/255,u),mix(.88,col[2]/255,u));
     ballMat.emissive.setRGB(c[0]/255,c[1]/255,c[2]/255); ballMat.emissiveIntensity=0.1+0.9*lit;
     ballLight.color.setRGB(c[0]/255,c[1]/255,c[2]/255); ballLight.intensity=lit*1.6;
     var txt=v.join(',');
