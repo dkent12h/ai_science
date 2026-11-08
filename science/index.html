@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DK Digital Science</title>
+<meta name="description" content="피지컬컴퓨팅 과학실험과 과학교육 AI 활용 — 디지털교재">
+<meta name="theme-color" content="#eeeef1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#7c4dff;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);overflow-x:hidden;
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+a{color:inherit}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;transition:opacity .4s}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+nav{display:flex;gap:10px}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:10px 20px;font-weight:700;font-size:15px;text-decoration:none;transition:background .25s,color .25s}
+.pill:hover,.pill:focus-visible{background:var(--ink);color:#fff;outline:none}
+
+/* hero */
+.hero{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(16px,3vw,40px) clamp(24px,5vh,56px)}
+.eyebrow{margin:0 0 14px;font-size:clamp(15px,1.4vw,20px);font-weight:700;color:var(--muted)}
+h1{margin:0;font-size:clamp(92px,19vw,300px);line-height:.8;letter-spacing:-.06em;font-weight:800}
+.ln{display:block;overflow:hidden;padding-bottom:.1em}
+.ln>span{display:block;transform:translateY(106%);animation:up 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+.ln:nth-child(2)>span{animation-delay:.12s}
+@keyframes up{to{transform:none}}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:26px;font-weight:700;font-size:clamp(15px,1.4vw,20px)}
+.scroll{color:var(--muted);display:inline-flex;gap:8px;align-items:center}
+.scroll b{display:inline-block;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+
+/* projects */
+.projects{position:relative;z-index:1;padding:14vh clamp(16px,3vw,40px) 0}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px;font-weight:800;font-size:clamp(16px,1.5vw,22px)}
+.sec-head span{color:var(--muted)}
+.row{--c:var(--acc);display:grid;grid-template-columns:clamp(46px,6vw,90px) 1fr auto;align-items:center;gap:0 clamp(8px,2vw,28px);
+  padding:clamp(28px,5.5vh,60px) 0;border-top:1.5px solid var(--line);text-decoration:none;position:relative}
+.row:last-of-type{border-bottom:1.5px solid var(--line)}
+.row .no{font-weight:800;font-size:clamp(15px,1.4vw,20px);color:var(--muted);align-self:start;padding-top:.5em}
+.row .tag{display:block;margin-bottom:10px;font-size:clamp(13px,1.1vw,16px);font-weight:800;color:var(--c)}
+.row .name{display:block;font-weight:800;font-size:clamp(34px,5.2vw,92px);line-height:1.02;letter-spacing:-.045em;text-wrap:balance;transition:transform .45s cubic-bezier(.2,.8,.2,1),color .3s}
+.row .progs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;max-width:44ch}.row .progs i{font-style:normal;font-size:clamp(12px,1vw,14px);font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--c);background:transparent}
+.row .desc{display:block;margin-top:14px;max-width:36ch;text-wrap:pretty;font-size:clamp(15px,1.3vw,19px);line-height:1.6;font-weight:500;color:var(--muted)}
+.row .go{width:clamp(48px,5vw,72px);height:clamp(48px,5vw,72px);border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:clamp(20px,2vw,30px);transition:background .3s,color .3s,border-color .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.row:hover .name,.row:focus-visible .name{transform:translateX(16px);color:var(--c)}
+.row:hover .go,.row:focus-visible .go{background:var(--c);border-color:var(--c);color:#fff;transform:rotate(45deg)}
+.row:focus-visible{outline:3px solid var(--c);outline-offset:6px;border-radius:6px}
+
+/* marquee */
+.marquee{position:relative;z-index:1;margin-top:16vh;overflow:hidden;border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line);padding:2vh 0}
+.track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.track span{font-weight:800;font-size:clamp(54px,10vw,170px);letter-spacing:-.05em;line-height:1.1;white-space:nowrap;color:transparent;-webkit-text-stroke:2px var(--ink);padding-right:.4em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+footer{position:relative;z-index:1;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:8vh clamp(16px,3vw,40px) 6vh;font-weight:700;font-size:clamp(15px,1.3vw,18px)}
+footer a{text-decoration:none;border-bottom:1.5px solid var(--ink)}
+footer span{color:var(--muted)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+/* cursor */
+.cursor{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--ink);z-index:50;pointer-events:none;display:none;place-items:center;color:#fff;font-size:0;font-weight:800;
+  transition:width .28s,height .28s,margin .28s,background .28s,font-size .2s}
+.cursor.big{width:70px;height:70px;margin:-35px 0 0 -35px;background:var(--acc);font-size:14px;opacity:.92}
+body.has-cursor,body.has-cursor a{cursor:none}
+body.has-cursor .cursor{display:grid}
+
+/* WebGL 없을 때 대체 그림 */
+.hint{font-size:14px;font-weight:600;color:#6c6a7a;transition:opacity .4s}.hint b{color:#e4174b}.hint.done{opacity:0}
+@media(max-width:600px){.hint{display:none}}
+.fb{display:none;position:absolute;right:clamp(16px,10vw,160px);top:18vh;width:clamp(200px,26vw,360px);aspect-ratio:1.15;background:#17181d;border-radius:22px;box-shadow:0 30px 60px rgba(30,20,80,.25);flex-direction:column;align-items:center;padding:6% 8% 4%}
+.fb .lz{width:16%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,#7aa2ff 0 8%,#0b1026 18% 60%,#c4c6cc 62%);margin-bottom:5%}
+.fb .sc{width:100%;flex:1;background:linear-gradient(135deg,#1c2433,#0d1118);border:5px solid #050507;border-radius:6px;position:relative}
+.fb .sc b{position:absolute;left:30%;top:22%;width:38%;height:54%;border:2px solid #3bff7a}
+.fb em{font:700 11px/1 'Inter Tight',Arial,sans-serif;color:#e8e9ee;font-style:normal;letter-spacing:.08em;margin-top:5%}
+html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
+
+@media (max-width:760px){
+  nav .pill:first-child{display:none}
+  .row{grid-template-columns:36px 1fr auto}
+  .row .desc{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .track,.scroll b,.ln>span{animation:none}.ln>span{transform:none}.rv{opacity:1;transform:none;transition:none}
+}
+.row.soon{cursor:default}.row.soon:hover .name{transform:none;color:inherit}.row.soon .go{width:auto;height:auto;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:800;color:var(--muted);border-color:var(--line)}.row.soon:hover .go{background:none;color:var(--muted);border-color:var(--line);transform:none}
+.hero{touch-action:pan-y}body.grabbing,body.grabbing *{cursor:grabbing!important}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="cursor" aria-hidden="true"></div>
+
+<header>
+  <a class="brand" href="#top" aria-label="DK Digital Science">
+    <span class="mini" aria-hidden="true"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></span>
+    DK Digital Science
+  </a>
+  <nav>
+    <a class="pill" href="#projects">Projects</a>
+    <a class="pill" href="https://dkent12h.github.io/dkmicrobit/" aria-label="DK microbit 사이트로 이동">DK microbit ↗</a>
+    <a class="pill" href="https://dkent12h.github.io/ai_science/" aria-label="DK AI 사이트로 이동">DK AI ↗</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="fb" aria-hidden="true"><span class="lz"></span><div class="sc"><b></b></div><em>HUSKYLENS</em></div>
+    <p class="eyebrow">과학실험과 과학교육을 잇는 디지털교재 모음</p>
+    <h1><span class="ln"><span>DK</span></span><span class="ln"><span>Digital Science</span></span></h1>
+    <div class="hero-foot">
+      <span>AI · Science · Physical Computing</span>
+      <span class="hint"><b>드래그</b>하면 360° 돌아가고, <b>클릭</b>하면 얼굴 인식 등 화면 모드가 바뀝니다</span>
+      <span class="scroll">scroll to explore <b>↓</b></span>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <div class="sec-head rv"><div>Projects</div><span>(02)</span></div>
+
+    <a class="row rv" href="https://dkent12h.github.io/dkmicrobit/experiments/" data-pattern="check" data-acc="#0d9488" style="--c:#0d9488">
+      <span class="no">01</span>
+      <span><span class="tag">디지털교재 5종</span><span class="name">피지컬컴퓨팅 과학실험</span><span class="desc">빛의 합성, 물의 증발, 전기전도성, 구름 발생, 자극과 반응 실험 교재입니다.</span><span class="progs"><i>micro:bit</i><i>MakeCode</i><i>센서 · 모듈</i></span></span>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+
+    <a class="row rv" href="https://dkent12h.github.io/ai_science/science-ai/" data-pattern="arrow" data-acc="#d946ef" style="--c:#d946ef">
+      <span class="no">02</span>
+      <span><span class="tag">디지털교재 · 연수 자료</span><span class="name">과학교육에서 AI 활용</span><span class="desc">피지컬 컴퓨팅, 이미지 AI, 데이터 분석, 생성형 AI 웹앱으로 과학수업에 AI를 활용하는 방법입니다.</span><span class="progs"><i>micro:bit · MakeCode</i><i>BME280</i><i>Teachable Machine</i><i>허스키렌즈 · 엔트리</i><i>엔트리 AI 회귀</i><i>Gemini Canvas</i></span></span>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
+
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>AI LITERACY ✦ ETHICS ✦ SCIENCE ✦ PHYSICAL COMPUTING ✦</span>
+      <span>AI LITERACY ✦ ETHICS ✦ SCIENCE ✦ PHYSICAL COMPUTING ✦</span>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 DK Digital Science</span>
+  <a href="https://github.com/dkent12h" target="_blank" rel="noopener">github.com/dkent12h</a>
+</footer>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+const $ = s => document.querySelector(s);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+/* ---------- 스크롤 등장 효과 ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ---------- 3D 장면에서 쓰는 상태 (카드 위에 올리면 바뀜) ---------- */
+const state = { hover: null, acc: '#7c4dff', mx: 0, my: 0 };
+
+/* ---------- 커서 ---------- */
+const cursor = $('.cursor');
+let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
+if (finePointer) document.body.classList.add('has-cursor');
+addEventListener('pointermove', e => {
+  tx = e.clientX; ty = e.clientY;
+  state.mx = (e.clientX / innerWidth) * 2 - 1;
+  state.my = (e.clientY / innerHeight) * 2 - 1;
+});
+document.querySelectorAll('.row').forEach(row => {
+  const on = () => {
+    state.hover = row.dataset.pattern; state.acc = row.dataset.acc;
+    document.documentElement.style.setProperty('--acc', row.dataset.acc);
+    cursor.classList.add('big'); cursor.textContent = '열기';
+  };
+  const off = () => { state.hover = null; cursor.classList.remove('big'); cursor.textContent = ''; };
+  row.addEventListener('pointerenter', on); row.addEventListener('pointerleave', off);
+  row.addEventListener('focus', on); row.addEventListener('blur', off);
+});
+let grow = 1;
+document.querySelectorAll('.pill,footer a,.brand').forEach(a => {
+  a.addEventListener('pointerenter', () => { grow = 1.9; });
+  a.addEventListener('pointerleave', () => { grow = 1; });
+});
+
+/* ---------- three.js 불러오기 (실패해도 페이지는 그대로 동작) ---------- */
+let THREE, RoundedBoxGeometry, RoomEnvironment;
+try {
+  THREE = await import('three');
+  ({ RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js'));
+  ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
+} catch (e) { document.documentElement.classList.add('no-webgl'); }
+
+function cursorLoop() {
+  cx += (tx - cx) * .22; cy += (ty - cy) * .22;
+  cursor.style.transform = `translate3d(${cx}px,${cy}px,0) scale(${grow})`;
+  requestAnimationFrame(cursorLoop);
+}
+if (finePointer) cursorLoop();
+
+if (THREE) start();
+
+function start() {
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: true, alpha: true }); }
+  catch (e) { document.documentElement.classList.add('no-webgl'); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+  const scene = new THREE.Scene();
+  scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+  const cam = new THREE.PerspectiveCamera(30, 1, .1, 100);
+  cam.position.set(0, 0, 12);
+
+  const sun = new THREE.DirectionalLight(0xffffff, 2.4); sun.position.set(3, 5, 6); scene.add(sun);
+  const rim = new THREE.PointLight(0x7c4dff, 70, 0, 2); rim.position.set(-4, 1, 3); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9999bb, .5));
+
+  /* ----- 허스키렌즈 2 : 뒷면(카메라·방열판·주황 탭) / 앞면(화면) / 아래 골드 커넥터 ----- */
+  const root = new THREE.Group(), board = new THREE.Group(); root.add(board); scene.add(root);
+  const W = 2.6, H = 1.8, D = .36;
+  const put = (geo, mat, x, y, z, parent) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); (parent || board).add(m); return m; };
+  const rrShape = (x, y, w, h, r) => { const s = new THREE.Shape(); s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x131418, roughness: .5, metalness: .15, envMapIntensity: .4 });
+  const blackMat = new THREE.MeshStandardMaterial({ color: 0x050507, roughness: .4, metalness: .3, envMapIntensity: .6 });
+  const FZ = D / 2 + .03;
+  const plate = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(-W / 2, -H / 2, W, H, .17), { depth: D, bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 4, curveSegments: 20 }), bodyMat);
+  plate.position.z = -D / 2; board.add(plate);
+  // 아래쪽 커넥터 탭
+  const tab = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(-.46, -H / 2 - .27, .92, .4, .12), { depth: D * .7, bevelEnabled: true, bevelSize: .02, bevelThickness: .02, bevelSegments: 3, curveSegments: 16 }), bodyMat);
+  tab.position.z = -D * .35; board.add(tab);
+
+  // 그리기 도구: 여우 로고 · 골드 패드
+  const fox = (g, cx, cy, s, col, lw) => {
+    g.save(); g.translate(cx, cy); g.scale(s, s); g.strokeStyle = col; g.lineWidth = lw; g.lineJoin = 'round'; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(-1, -1); g.lineTo(-.5, -.3); g.lineTo(.5, -.3); g.lineTo(1, -1); g.lineTo(.95, .15); g.lineTo(0, 1.05); g.lineTo(-.95, .15); g.closePath(); g.stroke();
+    g.beginPath(); g.moveTo(-.55, .2); g.lineTo(-.25, .1); g.moveTo(.55, .2); g.lineTo(.25, .1); g.moveTo(-.2, .62); g.lineTo(0, .78); g.lineTo(.2, .62); g.stroke();
+    g.restore();
+  };
+  const pad = (g, cx, cy, r) => {
+    g.fillStyle = '#d9b24a'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; g.beginPath(); g.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, r * .17, 0, 7); g.fill(); }
+    g.fillStyle = '#f3dc8a'; g.beginPath(); g.arc(cx, cy, r * .72, 0, 7); g.fill();
+    g.fillStyle = '#0b0b0d'; g.beginPath(); g.arc(cx, cy, r * .42, 0, 7); g.fill();
+  };
+  const mkTex = (w, h, fn) => { const c = document.createElement('canvas'); c.width = w * 500; c.height = h * 500; const g = c.getContext('2d'); g.scale(500, 500); fn(g); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+  const plane = (w, h, tex, x, y, z, parent) => put(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true }), x, y, z, parent);
+
+  // 커넥터 탭 그림 (패드 2개 + 가운데 여우)
+  const tabTex = mkTex(.92, .4, g => { pad(g, .25, .2, .13); pad(g, .67, .2, .13); fox(g, .46, .2, .085, '#d9b24a', .22); });
+
+  /* 뒷면 (카메라 쪽): 로컬 좌표는 앞면과 같고 y축으로 180도 돌려 붙임 */
+  const back = new THREE.Group(); back.rotation.y = Math.PI; board.add(back);
+  const backTex = mkTex(W, H, g => {
+    g.translate(0, 0);
+    // 방열판 (가로 줄무늬 회색 판)
+    g.save(); g.beginPath(); g.roundRect(.06, .06, W - .12, H - .12, .12); g.clip();
+    g.fillStyle = '#34363c'; g.fillRect(.06, .5, W - .12, H);
+    for (let y = .52; y < H - .06; y += .045) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(.06, y, W - .12, .012); g.fillStyle = 'rgba(255,255,255,.06)'; g.fillRect(.06, y + .014, W - .12, .008); }
+    g.restore();
+    // 윗줄(검정) 라벨
+    g.fillStyle = '#b9bbc2'; g.font = '700 .05px "Inter Tight",Arial,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('A', .62, .17); g.fillText('B', 1.0, .17);
+    g.fillStyle = '#8c8e96'; g.font = '700 .035px Arial'; g.fillText('CAMERA', W / 2, .83);
+    // 오른쪽 위 작은 포트 두 개
+    g.fillStyle = '#d9dbe0'; g.fillRect(1.93, .1, .22, .1); g.fillStyle = '#202228'; for (let i = 0; i < 4; i++) g.fillRect(1.95 + i * .05, .12, .035, .06);
+    g.fillStyle = '#8c8e96'; g.font = '700 .03px Arial'; g.fillText('MODE', 2.05, .26);
+    // 주황 탭 (왼쪽)
+    g.fillStyle = '#f26a1b'; g.beginPath(); g.roundRect(.07, .66, .34, .92, .06); g.fill();
+    g.fillStyle = 'rgba(0,0,0,.22)'; for (let y = .72; y < 1.5; y += .06) g.fillRect(.09, y, .3, .012);
+    // 네 모서리 나사 구멍
+    [[.2, .2], [W - .2, .2], [.2, H - .2], [W - .2, H - .2]].forEach(([x, y]) => {
+      g.fillStyle = '#6c6e75'; g.beginPath(); g.arc(x, y, .085, 0, 7); g.fill();
+      g.fillStyle = '#050507'; g.beginPath(); g.arc(x, y, .055, 0, 7); g.fill();
+      g.strokeStyle = '#a9abb2'; g.lineWidth = .012; g.beginPath(); g.arc(x, y, .085, 0, 7); g.stroke();
+    });
+    // 가운데 로고
+    fox(g, W / 2 + .14, 1.05, .15, '#e6e7ec', .045);
+    g.fillStyle = '#e6e7ec'; g.font = '700 .075px "Inter Tight",Arial,sans-serif'; g.fillText('HUSKYLENS 2', W / 2 + .14, 1.36);
+  });
+  plane(W, H, backTex, 0, 0, FZ + .001, back);
+  plane(.92, .4, tabTex, 0, -H / 2 - .14, D * .35 + .025, back);
+  // 카메라 모듈 (뒷면 위쪽 가운데) : 튀어나온 검정 상자 + 렌즈
+  const cam3 = new THREE.Group(); cam3.position.set(0, H / 2 - .5, FZ); back.add(cam3);
+  put(new THREE.BoxGeometry(.64, .64, .16), blackMat, 0, 0, .08, cam3);
+  const lring = put(new THREE.CylinderGeometry(.22, .24, .06, 40), new THREE.MeshStandardMaterial({ color: 0x1b1d26, roughness: .3, metalness: .6 }), 0, 0, .19, cam3); lring.rotation.x = Math.PI / 2;
+  const lglass = put(new THREE.CircleGeometry(.17, 40), new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: .05, metalness: .85, envMapIntensity: 2.4 }), 0, 0, .225, cam3);
+  const spark = put(new THREE.CircleGeometry(.035, 16), new THREE.MeshBasicMaterial({ color: 0x8fb0ff, transparent: true, opacity: .8 }), -.06, .06, .228, cam3);
+
+  /* 앞면 (화면 쪽) */
+  const SW = 2.4, SH = 1.35, SY = .13;
+  const frontTex = mkTex(W, H, g => {
+    g.fillStyle = '#d9b24a'; // (아래 탭 연결부 없음)
+    g.fillStyle = 'rgba(255,255,255,.06)'; g.beginPath(); g.roundRect(.04, .04, W - .08, H - .08, .15); g.lineWidth = .01; g.strokeStyle = 'rgba(255,255,255,.10)'; g.stroke();
+  });
+  plane(W, H, frontTex, 0, 0, FZ + .001);
+  plane(.92, .4, tabTex, 0, -H / 2 - .14, D * .35 + .025);
+  const scv = document.createElement('canvas'); scv.width = 480; scv.height = 270; const sx = scv.getContext('2d');
+  const stex = new THREE.CanvasTexture(scv); stex.colorSpace = THREE.SRGBColorSpace; stex.anisotropy = 4;
+  put(new THREE.BoxGeometry(SW + .08, SH + .08, .02), blackMat, 0, SY, FZ + .012);
+  put(new THREE.PlaneGeometry(SW, SH), new THREE.MeshBasicMaterial({ map: stex }), 0, SY, FZ + .025);
+  put(new THREE.PlaneGeometry(SW, SH), new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: .05, roughness: .05, envMapIntensity: 1.6 }), 0, SY, FZ + .03);
+
+  const pressables = [];
+  // 화면에 그릴 내용 : 홈(여우 로고 배경) → 인식 모드들
+  const MODES = ['HUSKYLENS 2', '얼굴 인식', '물체 추적', '색상 인식', '선 추적', '물체 분류'];
+  const MODE_OF = { smile: 1, square: 2, heart: 3, arrow: 4, check: 5 };
+  let cur = 0;
+  const box = (x, y, w, h, col, label) => {
+    sx.strokeStyle = col; sx.lineWidth = 3; sx.strokeRect(x, y, w, h);
+    sx.font = '700 16px "Inter Tight",Arial,sans-serif'; const tw = sx.measureText(label).width + 12;
+    sx.fillStyle = col; sx.fillRect(x - 1.5, y - 21, tw, 21); sx.fillStyle = '#04120a'; sx.textBaseline = 'middle'; sx.textAlign = 'left'; sx.fillText(label, x + 4, y - 10);
+  };
+  function drawScreen(t, mode) {
+    const bg = sx.createLinearGradient(0, 0, 480, 270); bg.addColorStop(0, '#0f1a33'); bg.addColorStop(.55, '#1b2f5e'); bg.addColorStop(1, '#0a1020');
+    sx.fillStyle = bg; sx.fillRect(0, 0, 480, 270);
+    if (mode === 0) {          // 홈 화면 (제품 화면과 같은 구성)
+      const sw = sx.createRadialGradient(380, 60, 10, 380, 60, 260); sw.addColorStop(0, 'rgba(120,170,255,.55)'); sw.addColorStop(1, 'rgba(120,170,255,0)');
+      sx.fillStyle = sw; sx.fillRect(0, 0, 480, 270);
+      sx.save(); sx.translate(240, 112); sx.scale(44, 44); sx.strokeStyle = '#f2f4f8'; sx.lineWidth = .1; sx.lineJoin = 'round'; sx.lineCap = 'round';
+      sx.beginPath(); sx.moveTo(-1, -1); sx.lineTo(-.5, -.3); sx.lineTo(.5, -.3); sx.lineTo(1, -1); sx.lineTo(.95, .15); sx.lineTo(0, 1.05); sx.lineTo(-.95, .15); sx.closePath(); sx.stroke();
+      sx.beginPath(); sx.moveTo(-.55, .2); sx.lineTo(-.25, .1); sx.moveTo(.55, .2); sx.lineTo(.25, .1); sx.moveTo(-.2, .62); sx.lineTo(0, .78); sx.lineTo(.2, .62); sx.stroke(); sx.restore();
+      sx.fillStyle = '#f2f4f8'; sx.font = '800 30px "Inter Tight",Arial,sans-serif'; sx.textAlign = 'center'; sx.textBaseline = 'middle'; sx.fillText('HUSKYLENS 2', 240, 196);
+      return void (stex.needsUpdate = true);
+    }
+    sx.strokeStyle = 'rgba(255,255,255,.05)'; sx.lineWidth = 1;
+    for (let i = 0; i < 480; i += 40) { sx.beginPath(); sx.moveTo(i, 0); sx.lineTo(i, 270); sx.stroke(); }
+    for (let i = 0; i < 270; i += 40) { sx.beginPath(); sx.moveTo(0, i); sx.lineTo(480, i); sx.stroke(); }
+    const jx = Math.sin(t * 1.7) * 6, jy = Math.cos(t * 1.3) * 5;
+    if (mode === 1) {
+      const cx = 240 + jx * 2, cy = 135 + jy * 2;
+      sx.fillStyle = '#e9b98f'; sx.beginPath(); sx.ellipse(cx, cy, 50, 62, 0, 0, 7); sx.fill();
+      sx.fillStyle = '#2a1d17'; sx.beginPath(); sx.ellipse(cx, cy - 42, 52, 28, 0, Math.PI, 0); sx.fill();
+      [-20, 20].forEach(o => { sx.beginPath(); sx.arc(cx + o, cy - 6, 5, 0, 7); sx.fill(); });
+      sx.strokeStyle = '#8a3b2a'; sx.lineWidth = 4; sx.lineCap = 'round'; sx.beginPath(); sx.arc(cx, cy + 12, 21, .2, Math.PI - .2); sx.stroke();
+      box(cx - 64, cy - 76, 128, 142, '#3bff7a', 'Face ID:1');
+    } else if (mode === 2) {
+      const cx = 240 + Math.sin(t * 1.2) * 130, cy = 135 + Math.sin(t * 2.1) * 40;
+      const gr = sx.createRadialGradient(cx - 10, cy - 10, 4, cx, cy, 34); gr.addColorStop(0, '#ffd1a0'); gr.addColorStop(1, '#ff6a1f');
+      sx.fillStyle = gr; sx.beginPath(); sx.arc(cx, cy, 32, 0, 7); sx.fill();
+      box(cx - 42, cy - 42, 84, 84, '#ffd23b', 'Tracking');
+    } else if (mode === 3) {
+      [['#ff3b30', 110, 130, 1], ['#2f6bff', 240, 165, 2], ['#22c55e', 360, 120, 3]].forEach(([c, x, y, id], i) => {
+        const o = Math.sin(t * 1.5 + i) * 6; sx.fillStyle = c; sx.beginPath(); sx.roundRect(x - 36, y - 32 + o, 72, 64, 12); sx.fill();
+        box(x - 42, y - 38 + o, 84, 76, '#3bff7a', 'Color ID:' + id);
+      });
+    } else if (mode === 4) {
+      sx.strokeStyle = '#f3f4f6'; sx.lineWidth = 24; sx.lineCap = 'round'; sx.beginPath(); sx.moveTo(90, 255); sx.bezierCurveTo(150, 180, 330, 200, 390, 30); sx.stroke();
+      sx.strokeStyle = '#3bff7a'; sx.lineWidth = 5; sx.setLineDash([12, 9]); sx.lineDashOffset = -t * 30; sx.beginPath(); sx.moveTo(90, 255); sx.bezierCurveTo(150, 180, 330, 200, 390, 30); sx.stroke(); sx.setLineDash([]);
+      sx.fillStyle = '#3bff7a'; sx.font = '700 18px "Inter Tight",Arial,sans-serif'; sx.textAlign = 'left'; sx.fillText('Line  →  ' + Math.round(20 + Math.sin(t) * 6) + '°', 20, 26);
+    } else {
+      sx.fillStyle = '#7c4dff'; sx.beginPath(); sx.roundRect(190 + jx, 85 + jy, 96, 110, 14); sx.fill();
+      sx.fillStyle = '#a78bfa'; sx.beginPath(); sx.roundRect(286 + jx, 115 + jy, 28, 50, 14); sx.fill();
+      box(172 + jx, 66 + jy, 160, 142, '#3bff7a', 'Cup 97%');
+    }
+    sx.fillStyle = 'rgba(0,0,0,.55)'; sx.fillRect(0, 240, 480, 30);
+    sx.fillStyle = '#e8e9ee'; sx.font = '700 16px "Inter Tight",Arial,sans-serif'; sx.textBaseline = 'middle'; sx.textAlign = 'left'; sx.fillText(MODES[mode], 14, 255);
+    sx.textAlign = 'right'; sx.fillStyle = '#3bff7a'; sx.fillText('● REC', 466, 255);
+    stex.needsUpdate = true;
+  }
+  board.traverse(m => { if (m.isMesh) m.userData.btn = 'body'; });
+  const face = plate;
+
+  // 바닥 그림자
+  const shCv = document.createElement('canvas'); shCv.width = shCv.height = 128;
+  const sg = shCv.getContext('2d'), sgr = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
+  sgr.addColorStop(0, 'rgba(20,10,60,.34)'); sgr.addColorStop(1, 'rgba(20,10,60,0)');
+  sg.fillStyle = sgr; sg.fillRect(0, 0, 128, 128);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shCv), transparent: true, depthWrite: false }));
+  shadow.position.z = -1; scene.add(shadow);
+
+  let dragging = false, spinY = 0, spinX = 0, velY = 0, velX = 0;
+  /* ----- 화면 크기에 맞춘 배치 ----- */
+  let L = {};
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    const vh = 2 * cam.position.z * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)), vw = vh * cam.aspect;
+    const desktop = cam.aspect > 1;
+    const heroS = Math.min(vh * .6 / 2.1, vw * (desktop ? .3 : .78) / 2.6);
+    L = desktop
+      ? { desk: true, hx: vw * .245, hy: vh * .14, lx: vw * .3, ly: 0, hs: heroS * .92, ls: heroS * .62 }
+      : { desk: false, hx: 0, hy: vh * .2, lx: 0, ly: vh * .3, hs: heroS, ls: heroS * .6 };
+  }
+  addEventListener('resize', resize); resize();
+
+  const ease = t => t * t * (3 - 2 * t), lerp = (a, b, t) => a + (b - a) * t;
+  const tmpCol = new THREE.Color(), t0 = performance.now();
+  let last = t0, mx = 0, my = 0, sc = 0, intro = 0;
+
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, .05); last = now;
+    const t = (now - t0) / 1000;
+    intro = Math.min(1, intro + dt / 1.4);
+    const introE = 1 - Math.pow(1 - intro, 3);
+
+    const target = Math.min(1, scrollY / (innerHeight * .9));
+    sc += (target - sc) * Math.min(1, dt * 6);
+    const p = ease(sc);
+
+    mx += ((reduce ? 0 : state.mx) - mx) * Math.min(1, dt * 4);
+    my += ((reduce ? 0 : state.my) - my) * Math.min(1, dt * 4);
+
+    const float = reduce ? 0 : Math.sin(t * 1.1) * .08;
+    const s = lerp(L.hs, L.ls, p) * (.55 + .45 * introE);
+    root.position.set(lerp(L.hx, L.lx, p), lerp(L.hy, L.ly, p) + float, 0);
+    root.scale.setScalar(s);
+        if (!dragging) { spinY += velY; velY *= .9; velX *= .85; spinX += velX; spinX *= .985; }
+    board.rotation.y = spinY - .34 + p * .8 + mx * .38 + (reduce ? 0 : Math.sin(t * .6) * .12);
+    board.rotation.x = spinX - .16 + my * .16 + p * .2;
+    board.rotation.z = .03 - p * .08;
+
+    shadow.position.set(root.position.x, root.position.y - 1.25 * s - .35, -1);
+    shadow.scale.set(2.5 * s * (1 - float * .5), .5 * s, 1);
+
+    tmpCol.set(state.acc); rim.color.lerp(tmpCol, Math.min(1, dt * 6));
+
+    drawScreen(t, state.hover && MODE_OF[state.hover] !== undefined ? MODE_OF[state.hover] : cur);
+    spark.material.opacity = .55 + .35 * Math.sin(t * 2.4);
+
+    if (!L.desk) $('#gl').style.opacity = String(1 - ease(Math.min(1, Math.max(0, (scrollY / innerHeight - .35) / .55))));
+    else $('#gl').style.opacity = '1';
+
+    pressables.forEach(b => { b.press += ((b.down ? 1 : 0) - b.press) * Math.min(1, dt * 20); b.cap.position.z = FZ + .07 - b.press * .03; });
+
+    renderer.render(scene, cam);
+    requestAnimationFrame(frame);
+  }
+
+  /* ----- 드래그로 360도 돌리기 + 클릭 동작 ----- */
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const pick = e => {
+    if (L.desk ? scrollY > innerHeight * .5 : scrollY > innerHeight * .3) return null;
+    ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    ray.setFromCamera(ndc, cam);
+    const hit = ray.intersectObject(board, true).find(h => h.object.userData.btn);
+    return hit ? hit.object.userData.btn : null;
+  };
+  const isFront = () => Math.cos(board.rotation.y) > .15;
+  let hoverBtn = null, downPos = null, lastX = 0, lastY = 0, moved = 0;
+  addEventListener('pointerdown', e => {
+    if (e.target.closest('a,button')) return;
+    if (!pick(e)) return;
+    dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; velY = velX = 0;
+    document.body.classList.add('grabbing'); cursor.textContent = '돌리는 중';
+  });
+  addEventListener('pointermove', e => {
+    if (dragging) {
+      const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
+      moved += Math.abs(dx) + Math.abs(dy);
+      velY = dx * .012; velX = dy * .008; spinY += velY; spinX = Math.max(-1.1, Math.min(1.1, spinX + velX));
+      hintEl && hintEl.classList.add('done'); return;
+    }
+    const h = pick(e);
+    if (h === hoverBtn) return; hoverBtn = h;
+    if (!state.hover) {
+      if (h) { cursor.classList.add('big'); cursor.textContent = '돌려보기'; }
+      else { cursor.classList.remove('big'); cursor.textContent = ''; }
+    }
+  });
+  const endDrag = e => {
+    if (!dragging) return; dragging = false; document.body.classList.remove('grabbing');
+    if (hoverBtn) cursor.textContent = '돌려보기';
+    if (moved < 6 && e.type === 'pointerup') { const h = pick(e); if (h) { cur = (cur + 1) % MODES.length; } }
+  };
+  addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
+  const hintEl = document.querySelector('.hint');
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
