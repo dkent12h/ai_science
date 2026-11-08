@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>초등과학 AR 3D 모형</title>
+<script src="lib/model-viewer.min.js"></script>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#ffffff; --ink:#1e293b; --sub:#64748b;
+    --main:#2563eb; --accent:#f97316; --line:#e2e8f0;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column}
+  header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+  header h1{font-size:20px;margin:0;font-weight:800}
+  #tabs{display:flex;gap:8px;margin-left:auto;overflow-x:auto}
+  .tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;font-size:17px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .tab[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
+  main{flex:1;display:flex;min-height:0}
+  .stage{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 35%,#334155,#0f172a 70%)}
+  model-viewer{width:100%;flex:1;min-height:0;--poster-color:transparent;--progress-bar-color:var(--accent)}
+  .hs{display:block;border:0;border-radius:999px;padding:6px 14px;background:rgba(255,255,255,.95);color:var(--ink);font:700 16px/1.2 inherit;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;transform:translateY(-6px);transition:opacity .2s}
+  .hs.hide{opacity:0;pointer-events:none}
+  .hs[data-visible="false"]{opacity:.25}
+  .hs.on{background:var(--accent);color:#fff}
+  .hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(15,23,42,.75);color:#fff;padding:6px 14px;border-radius:999px;font-size:15px;pointer-events:none}
+  .bar{position:relative;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:12px;background:#0f172a}
+  .btn{border:0;border-radius:14px;padding:12px 20px;font-size:18px;font-weight:800;font-family:inherit;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .btn[aria-pressed="true"]{background:var(--main);color:#fff}
+  .btn.ar{background:var(--accent);color:#fff;font-size:20px;padding:12px 26px}
+  .btn.ar[disabled]{background:#94a3b8;cursor:not-allowed}
+  aside{width:340px;background:var(--panel);padding:18px;overflow:auto;border-left:1px solid var(--line)}
+  aside h2{margin:0 0 6px;font-size:26px}
+  aside p{font-size:18px;line-height:1.6;margin:8px 0}
+  aside ul{padding-left:20px;margin:10px 0}
+  aside li{font-size:18px;line-height:1.6;margin:6px 0}
+  #info{margin-top:14px;padding:14px;border-radius:14px;background:#fff7ed;border:2px solid var(--accent);display:none}
+  #info b{font-size:21px;color:var(--accent)}
+  #arnote{font-size:15px;color:var(--sub);margin-top:12px}
+  @media (max-width:760px){
+    main{flex-direction:column}
+    aside{width:auto;height:38%;border-left:0;border-top:1px solid var(--line)}
+    header h1{font-size:17px}
+    .btn{padding:10px 14px;font-size:16px}
+    .btn.ar{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔬 초등과학 AR 3D 모형</h1>
+  <div id="tabs" role="tablist"></div>
+</header>
+<main>
+  <section class="stage">
+    <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="20deg"
+      interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.75" environment-image="neutral"
+      ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor"
+      camera-orbit="0deg 80deg auto" min-camera-orbit="auto auto 0.15m" max-camera-orbit="auto auto 1.2m" alt="3D 모형">
+      <button slot="ar-button" id="arBtn" class="btn ar" style="position:absolute;right:12px;top:12px">📱 AR로 보기</button>
+    </model-viewer>
+    <div class="hint" id="hint">손가락(마우스)으로 돌려 보고, 두 손가락으로 확대해요</div>
+    <div class="bar">
+      <button class="btn" id="rotBtn" aria-pressed="true">🔄 자동 회전</button>
+      <button class="btn" id="lblBtn" aria-pressed="true">🏷️ 이름표</button>
+      <button class="btn" id="resetBtn">🎯 처음 시점</button>
+    </div>
+  </section>
+  <aside>
+    <h2 id="mName"></h2>
+    <p id="mIntro"></p>
+    <ul id="mFacts"></ul>
+    <div id="info"><b id="iName"></b><p id="iDesc"></p></div>
+    <p id="arnote"></p>
+  </aside>
+</main>
+
+<script>
+(async function(){
+  const mv = document.getElementById('mv');
+  const tabs = document.getElementById('tabs');
+  const $ = id => document.getElementById(id);
+  let models = [], current = null, labelsOn = true;
+
+  try { models = await (await fetch('models.json')).json(); }
+  catch(e){ $('mIntro').textContent = 'models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
+
+  models.forEach((m,i)=>{
+    const b = document.createElement('button');
+    b.className='tab'; b.role='tab'; b.textContent = (m.emoji||'')+' '+m.name;
+    b.onclick = ()=>load(i);
+    tabs.appendChild(b);
+  });
+  if (models.length < 2) tabs.style.display='none';
+
+  function load(i){
+    current = models[i];
+    [...tabs.children].forEach((t,j)=>t.setAttribute('aria-selected', j===i));
+    mv.querySelectorAll('.hs').forEach(h=>h.remove());
+    mv.src = current.file;
+    if (current.poster) mv.poster = current.poster;
+    mv.alt = current.name + ' 3D 모형';
+    $('mName').textContent = (current.emoji||'')+' '+current.name;
+    $('mIntro').textContent = current.intro||'';
+    $('mFacts').innerHTML = (current.facts||[]).map(f=>'<li>'+f+'</li>').join('');
+    $('info').style.display='none';
+    (current.hotspots||[]).forEach((h,k)=>{
+      const b = document.createElement('button');
+      b.className='hs'+(labelsOn?'':' hide'); b.slot='hotspot-'+k;
+      b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 1 0');
+      b.setAttribute('data-visibility-attribute','data-visible');
+      b.textContent=h.name;
+      b.onclick=()=>pick(h,b);
+      mv.appendChild(b);
+    });
+  }
+  function pick(h,btn){
+    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on'));
+    btn.classList.add('on');
+    $('iName').textContent=h.name; $('iDesc').textContent=h.desc||'';
+    $('info').style.display='block';
+    stopRotate();
+  }
+  function stopRotate(){ mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed','false'); }
+
+  $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
+  $('lblBtn').onclick=()=>{
+    labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn);
+    mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn));
+  };
+  $('resetBtn').onclick=()=>{ mv.cameraOrbit='0deg 80deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal(); };
+  mv.addEventListener('camera-change',e=>{ if(e.detail.source==='user-interaction'){ $('hint').style.display='none'; } });
+  mv.addEventListener('load',()=>{
+    const ok = mv.canActivateAR;
+    $('arBtn').style.display = ok ? '' : 'none';
+    $('arnote').textContent = ok
+      ? '「AR로 보기」를 누르고 카메라를 바닥에 비추면, 모형이 우리 교실에 나타나요. 걸어 다니며 가까이 가 봐요!'
+      : '지금 기기에서는 AR을 쓸 수 없어요. 스마트폰·태블릿(Chrome 또는 Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
+  });
+  load(0);
+})();
+</script>
+</body>
+</html>
