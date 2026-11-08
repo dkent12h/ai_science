@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>허스키렌즈 마이크로비트 입문 · DK AI Science</title>
+<title>허스키렌즈 × 마이크로비트 · DK AI Science</title>
 <meta name="description" content="허스키렌즈와 마이크로비트로 배우는 얼굴·색·물체·태그·QR 인식 12장">
 <meta name="theme-color" content="#eeeef1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -62,6 +62,14 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .bl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*1.9)}
 .bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
 .bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c,var(--acc))}
+.code{margin:0;background:#16171d;color:#e8e9f0;border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*7) calc(var(--u)*3) calc(var(--u)*2.6);font:600 calc(var(--u)*2.6)/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;overflow:hidden;border-left:calc(var(--u)*1) solid var(--c,var(--acc))}
+.codewrap{position:relative}
+.cpy{position:absolute;top:calc(var(--u)*1.6);right:calc(var(--u)*1.6);z-index:2;border:0;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*.9) calc(var(--u)*2.2);font:700 calc(var(--u)*2.4)/1 inherit;font-family:inherit;background:rgba(255,255,255,.16);color:#fff;cursor:pointer}
+.lk em{font-style:normal;font-size:.7em;font-weight:700;background:#111;color:#fff;border-radius:99px;padding:.15em .7em;margin-left:.4em;vertical-align:middle}
+.cpy.mk{right:calc(var(--u)*11.5);text-decoration:none;display:inline-block}
+.cpy:hover{background:rgba(255,255,255,.3)}
+.donebtn{align-self:flex-start;border:1.5px solid var(--c,var(--acc));background:#fff;color:var(--c,var(--acc));border-radius:999px;padding:calc(var(--u)*1.4) calc(var(--u)*3.4);font-family:inherit;font-weight:800;font-size:calc(var(--u)*2.9);cursor:pointer}
+.donebtn.on{background:var(--c,var(--acc));color:#fff}
 .nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
 .nt li{position:relative;padding-left:calc(var(--u)*2.8)}
 .nt li::before{content:"※";position:absolute;left:0;color:var(--c,var(--acc));font-weight:800}
@@ -241,277 +249,316 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
    ============================================================ */
 const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="허스키렌즈가 얼굴을 인식해 마이크로비트로 결과를 보내는 그림" font-family="inherit" font-weight="800" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
 <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc8ff"/><stop offset="1" stop-color="#1f6bff"/></linearGradient></defs><circle cx="200" cy="200" r="125" fill="#7fb0ff" opacity=".18" filter="url(#g)"/><rect x="90" y="110" width="220" height="170" rx="22" fill="#1b1b22" stroke="#3a3a46" stroke-width="5"/><rect x="108" y="128" width="184" height="104" rx="12" fill="#10242e" stroke="#3ccfc2" stroke-width="3"/><path d="M140 150h26M140 150v26M260 150h-26M260 150v26M140 210h26M140 210v-26M260 210h-26M260 210v-26" stroke="#ffe83a" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="200" cy="178" r="22" fill="#f6d6b8"/><circle cx="192" cy="174" r="3.4" fill="#222"/><circle cx="208" cy="174" r="3.4" fill="#222"/><path d="M191 186Q200 193 209 186" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/><text x="200" y="224" text-anchor="middle" font-family="Arial" font-weight="800" font-size="13" fill="#3ccfc2">ID1</text><circle cx="200" cy="256" r="16" fill="#0b0b10" stroke="#e8e9ee" stroke-width="4"/><circle cx="200" cy="256" r="7" fill="#ff8a1f"/><rect x="130" y="312" width="140" height="56" rx="10" fill="#22222a" stroke="#7fb0ff" stroke-width="3"/><circle cx="160" cy="330" r="4.5" fill="#ff3b30"/><circle cx="180" cy="330" r="4.5" fill="#33333d"/><circle cx="200" cy="330" r="4.5" fill="#ff3b30"/><circle cx="220" cy="330" r="4.5" fill="#33333d"/><circle cx="240" cy="330" r="4.5" fill="#ff3b30"/><circle cx="160" cy="348" r="4.5" fill="#33333d"/><circle cx="180" cy="348" r="4.5" fill="#ff3b30"/><circle cx="200" cy="348" r="4.5" fill="#33333d"/><circle cx="220" cy="348" r="4.5" fill="#ff3b30"/><circle cx="240" cy="348" r="4.5" fill="#33333d"/><path d="M200 280V312" stroke="#9fdcff" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/></svg>`;
-const MEDIA = {"img": {}, "video": {}, "links": {}};
+const MEDIA = {"img": {"6": ["https://dfimg.dfrobot.com/nobody/wiki/f69408363f19bc0dcdb214db1394e4fc_0x0.png.webp"], "7": ["https://dfimg.dfrobot.com/nobody/wiki/072f12a79851118bc053209a4e1432d4_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/1350390572a2c1a33c1ec9683d0c2b1c_0x0.png.webp", "https://dfimg.dfrobot.com/nobody/wiki/8a801989ed8a87bb798ad151e919818e_0x0.png.webp"], "8": ["https://dfimg.dfrobot.com/nobody/wiki/7a25c52257267277c961a72d6dd50bfc_0x0.png.webp"], "9": ["https://dfimg.dfrobot.com/nobody/wiki/e9aefd9433b3e7c35d6de0d89cbcd980_0x0.png.webp"], "10": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/82c4be3234695210a81d5cbbb64629f0.png"], "11": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/df140cc71b68c377e8b403763dfbf26e.png"], "12": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a75fc34a76f0191df01e144a09db61d1.png"], "13": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/5098b839c912adf38b499d70c449cec8.png"], "14": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/345ead740f724663f37e56442186750e.png"], "15": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ac73823bd16d1ad07a1572d9f1851ce3.png"], "19": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e82b19ac18590f739e1e99a7a3aecd2e.png"], "20": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fb14f0b09f714c39e2af50fa40d8f518.png"], "21": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/fc286538500b32528f546ff872bce618.png"], "22": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/d64b17b029056d304f2c5c8d39214394.png"], "23": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/eff41cace416152f2b242b9ba99270f8.png"], "24": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c13f9195b8a7ce51dd8a5e82050537c3.png"], "25": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dbfa7eee6defe98b8025b59a74a7e7a4.png"], "26": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/ae4791de8d785c41eeff5b53d3e6ffc3.png"], "27": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/9509347b0c64ed92da8229f3bd8c490f.png"], "28": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e40f973bf7687567a20b6bb7c9ddbbf3.png"], "29": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/f1b9695b282e0bc2cb75714b94a936c4.png"], "30": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1cd2db6e31c7f2d4171380fbb3b6fa3d.png"], "31": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/37dd5ba5d79277686cec8fb1a40f1843.png"], "32": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6d9e45c4087b7f8c1195093f1dd0d532.png"], "33": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/e531ee373787f458487df22dd6b683f3.png"], "34": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/a6340ab9cd9bd5d4510e99896e6a81cf.png"], "35": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/c8613dfb96a99063043fe5d5e519bffe.png"], "36": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8693f9cce3ebaba8e1a9ba1458878134.png"], "37": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/8740400c8ecf2a1acfae43fd9b9bbf7b.png"], "38": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/de3d084c6d79c0dd68608bde07f35d8a.png"], "39": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/6dd67bd4a0bfdec5c98b6e4d77162719.png"], "40": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/1d584f9186b24ea31c845641832266ff.png"], "41": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3ff1f996b686fdf5e88d204472fc6b6a.png"], "42": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/3b2838f12e74bcfbf0f4fbe971c7b70d.png"], "43": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/83d9fd37c4a1bf0163f0d0808e8ee179.png"], "44": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/7923af702212f5c1f5ce2da782d12898.png"], "45": ["https://dfimg.dfrobot.com/5e49162af2c4183e48c5caa5/makelog/dcd0810045e97990607d084c28e5335d.png"]}, "video": {}, "links": {}};
 const ILLU = {};
 const PARTS = {};
-const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1장 · 음악 마법 거울", "c": "#ff8a1f"}, {"n": "2장 · 얼굴 인식 출입 통제", "c": "#16a34a"}, {"n": "3장 · 알록달록 피아노", "c": "#1e6bff"}, {"n": "4장 · 길고양이·강아지 급식기", "c": "#d946ef"}, {"n": "5장 · 물체 추적기", "c": "#0d9488"}, {"n": "6장 · 셀프 계산대", "c": "#ff3b30"}, {"n": "7장 · 에너지 수확", "c": "#f59e0b"}, {"n": "8장 · 스마트 버스 요금기", "c": "#8b5cf6"}, {"n": "9장 · 안전모 알림이", "c": "#06b6d4"}, {"n": "10장 · 2진수 해독기", "c": "#e11d48"}, {"n": "11장 · 허스키렌즈 카메라", "c": "#65a30d"}, {"n": "12장 · 비상차로 감시견", "c": "#2563eb"}, {"n": "마무리", "c": "#7c4dff"}];
+const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "기초 1 · 연결하기", "c": "#ff8a1f"}, {"n": "기초 2 · 확장 추가", "c": "#16a34a"}, {"n": "기초 3 · 통신 방식", "c": "#1e6bff"}, {"n": "기초 4 · 첫 프로그램", "c": "#d946ef"}, {"n": "응용 1 · 음악 마법 거울", "c": "#ff8a1f"}, {"n": "응용 2 · 얼굴 인식 출입 통제", "c": "#16a34a"}, {"n": "응용 3 · 알록달록 피아노", "c": "#1e6bff"}, {"n": "응용 4 · 길고양이·강아지 급식기", "c": "#d946ef"}, {"n": "응용 5 · 물체 추적기", "c": "#0d9488"}, {"n": "응용 6 · 셀프 계산대", "c": "#ff3b30"}, {"n": "응용 7 · 에너지 수확", "c": "#f59e0b"}, {"n": "응용 8 · 스마트 버스 요금기", "c": "#8b5cf6"}, {"n": "응용 9 · 안전모 알림이", "c": "#06b6d4"}, {"n": "응용 10 · 2진수 해독기", "c": "#e11d48"}, {"n": "응용 11 · 허스키렌즈 카메라", "c": "#65a30d"}, {"n": "응용 12 · 비상차로 감시견", "c": "#2563eb"}, {"n": "마무리", "c": "#7c4dff"}];
 const QUIZ = {};
 const DATA = `
-cover|0||허스키렌즈 마이크로비트 입문|
-: 허스키렌즈와 마이크로비트로 배우는 12가지 AI 이미지 인식
+cover|0||허스키렌즈 × 마이크로비트|
+: 허스키렌즈와 마이크로비트로 배우는 연결, 코딩, 12가지 AI 이미지 인식
 @toc 표지
 ---
 text|0|이 책은|학습 순서 ①|
+: 먼저 기초에서 허스키렌즈와 마이크로비트를 연결하고, 응용에서 열두 가지 작품을 만듭니다.
+- 기초 1 — 연결하기
+- 기초 2 — MakeCode 확장 추가
+- 기초 3 — 통신 방식 설정
+- 기초 4 — 첫 프로그램(얼굴 인식)
+@toc 학습 순서
+---
+text|0|이 책은|학습 순서 ② 응용|
 1. 음악 마법 거울
 2. 얼굴 인식 출입 통제
 3. 알록달록 피아노
 4. 길고양이·강아지 급식기
 5. 물체 추적기
 6. 셀프 계산대
-@toc 학습 순서
+@toc 학습 순서 응용 ①
 ---
-text|0|이 책은|학습 순서 ②|
+text|0|이 책은|학습 순서 ③ 응용|
 7. 에너지 수확
 8. 스마트 버스 요금기
 9. 안전모 알림이
 10. 2진수 해독기
 11. 허스키렌즈 카메라
 12. 비상차로 감시견
-@toc 학습 순서 ②
+@toc 학습 순서 응용 ②
 ---
 text|0|준비하기|시작하기 전에|
-1. 허스키렌즈와 micro:bit를 케이블로 연결합니다(I2C).
-2. MakeCode에서 새 프로젝트를 만들고 허스키렌즈 확장을 추가합니다.
-3. 허스키렌즈의 기능 버튼으로 모드를 고르고, ‘+’를 물체에 맞춰 학습 버튼으로 배웁니다.
-4. 배운 순서대로 ID가 붙습니다. micro:bit가 그 ID를 읽어 동작합니다.
-* DFRobot ‘HUSKYLENS for micro:bit’ 학습 코스를 참고해 새로 쓴 안내서입니다. 원본 링크는 각 장에 있습니다.
+* 허스키렌즈를 처음 쓴다면 먼저 “허스키렌즈 탐구”로 기능 사용법을 익혀 두면 좋아요.
+1. 준비물: 허스키렌즈, micro:bit, micro:bit 확장 보드, 4핀 케이블, 전원(USB 또는 확장 보드 외부 전원)
+2. 컴퓨터에서 MakeCode(makecode.microbit.org)를 엽니다.
+3. 허스키렌즈에서 배우는 방법은 “허스키렌즈 탐구”를 참고하세요.
 @toc 시작하기 전에
 ---
-text|1|1장 · 음악 마법 거울|음악 마법 거울|
+text|1|기초 1 · 연결하기|허스키렌즈와 micro:bit 연결|
+: 둘은 I2C 방식으로 대화합니다. 선 4개로 연결합니다.
+- 허스키렌즈의 R, T 핀은 여기서 SCL, SDA 역할을 합니다.
+- micro:bit의 SCL(P19), SDA(P20)에 각각 연결합니다.
+- 확장 보드를 쓰면 선 연결이 쉬워요.
+* 허스키렌즈는 전류를 많이 써서(3.3V 320mA 이상) micro:bit만으로는 모자랍니다. 확장 보드의 외부 전원이나 허스키렌즈 USB로 따로 전원을 주세요.
+@toc 연결하기
+---
+text|2|기초 2 · 확장 추가|MakeCode에 허스키렌즈 확장 넣기|
+1. MakeCode 웹에서 새 프로젝트를 만듭니다.
+2. 오른쪽 위 톱니바퀴(더보기)를 눌러 “확장”을 고릅니다.
+3. 검색창에 huskylens를 입력하고 검색합니다.
+4. “DFRobot_HuskyLens”를 눌러 추가합니다.
+5. 블록 목록에 “HuskyLens” 묶음이 생긴 것을 확인합니다.
+@toc 확장 추가
+---
+text|3|기초 3 · 통신 방식|통신 방식 I2C로 맞추기|
+: 허스키렌즈의 통신 방식(프로토콜)이 micro:bit와 같아야 합니다.
+1. 허스키렌즈의 기능 버튼을 길게 눌러 설정으로 들어갑니다.
+2. “Protocol Type(프로토콜 종류)”을 I2C로 맞춥니다.
+3. 저장하고 돌아옵니다.
+* 자동 감지(Auto)로 두어도 되지만, I2C로 직접 맞추면 가장 확실합니다.
+@toc 통신 방식
+---
+text|4|기초 4 · 첫 프로그램|얼굴을 알아보면 웃는 얼굴|
+: 허스키렌즈가 배운 얼굴을 알아보면 micro:bit 화면에 웃는 얼굴을, 아니면 우는 얼굴을 보여 줍니다.
+1. 허스키렌즈에서 얼굴 하나를 배웁니다(“허스키렌즈 탐구” 1장).
+2. 오른쪽 블록 프로그램을 만들어 micro:bit에 내려받습니다.
+3. 배운 얼굴을 보여 주면 웃는 얼굴이 나옵니다.
+4. 다른 얼굴이거나 얼굴이 없으면 우는 얼굴이 나옵니다.
+@toc 첫 프로그램
+---
+text|5|응용 1 · 음악 마법 거울|음악 마법 거울|
 : 허스키렌즈가 아는 얼굴과 모르는 얼굴을 구별해, 화면 표정과 음악으로 반응하게 만듭니다.
 - 준비물 — 허스키렌즈(I2C로 설정, USB로 따로 전원 공급), micro:bit, 확장 보드와 부저(스위치 켜기)
 - 배울 내용 — 얼굴 인식 4단계: 얼굴 찾기 → 얼굴 맞추기(정렬) → 얼굴 코드 만들기 → 얼굴 비교하기 · 표정·각도·조명에 따라 얼굴이 달라 보임
-@toc 1장 음악 마법 거울
+@toc 응용 1 음악 마법 거울
 ---
-text|1|1장 · 음악 마법 거울|프로그램 만들기|
+text|5|응용 1 · 음악 마법 거울|프로그램 만들기|
 1. 허스키렌즈의 기능 버튼을 돌려 ‘얼굴 인식’ 모드로 맞춥니다.
 2. 화면 가운데 ‘+’를 얼굴에 맞추고 학습 버튼을 짧게 누릅니다. 학습한 얼굴에는 파란 틀과 ‘Face: ID1’이 나타납니다.
 3. 버튼을 길게 누르면 여러 각도의 얼굴을 더 배웁니다.
 4. 과제 1: 학습한 ID가 보이면 웃는 얼굴, 아니면 우는 얼굴을 LED에 보여 줍니다.
 5. 과제 2: 음표 블록으로 학습한 얼굴에는 캐럴 한 소절을, 낯선 얼굴에는 다른 동요를 부저로 연주합니다.
-@toc 1장 프로그램
+@toc 응용 1 프로그램
 ---
-text|1|1장 · 음악 마법 거울|해 보기|
+text|5|응용 1 · 음악 마법 거울|해 보기|
 : 일상에서 얼굴 인식이 쓰이는 곳을 더 찾아 적어 봅시다. 부저 경보는 다음 장의 출입 통제로 이어집니다.
 F 얼굴 인식이 쓰이는 곳|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308701.html
-@toc 1장 해 보기
+@toc 응용 1 해 보기
 ---
-text|2|2장 · 얼굴 인식 출입 통제|얼굴 인식 출입 통제|
+text|6|응용 2 · 얼굴 인식 출입 통제|얼굴 인식 출입 통제|
 : 가족 얼굴이면 문을 열고, 낯선 얼굴이면 경보를 울리는 출입 통제 장치를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, 확장 보드, 연결 케이블, USB 케이블, 컴퓨터(MakeCode), P0에 연결한 서보(문 역할)
 - 배울 내용 — 열쇠·카드보다 편리하고 안전한 얼굴 인식 · ‘여러 얼굴 학습’ 켜기 · 학습 순서대로 ID1, ID2… 부여(틀 색이 서로 다름)
-@toc 2장 얼굴 인식 출입 통제
+@toc 응용 2 얼굴 인식 출입 통제
 ---
-text|2|2장 · 얼굴 인식 출입 통제|프로그램 만들기|
+text|6|응용 2 · 얼굴 인식 출입 통제|프로그램 만들기|
 1. 허스키렌즈를 얼굴 인식 모드로 하고 ‘여러 얼굴 학습’을 켭니다.
 2. 가족 얼굴을 차례로 배웁니다. 배운 순서대로 ID가 붙습니다.
 3. 과제 1: 감지한 얼굴이 배운 ID이면 LED에 √, 모르는 얼굴이면 ×를 보여 줍니다.
 4. 과제 2: 가족이면 서보를 돌려 문을 열고 5초 뒤 자동으로 닫습니다. 낯선 사람이면 × 표시만 하고 서보는 움직이지 않습니다.
 5. 서보 각도는 10°~170° 안에서 쓰는 것이 부품을 지키는 데 좋습니다.
-@toc 2장 프로그램
+@toc 응용 2 프로그램
 ---
-text|2|2장 · 얼굴 인식 출입 통제|해 보기|
+text|6|응용 2 · 얼굴 인식 출입 통제|해 보기|
 : 얼굴 인식을 우리 학교 관리에 쓴다면 어떤 문제를 풀 수 있을까요? 허스키렌즈는 어디에 둘까요?
 F 우리 학교 적용 아이디어|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308702.html
-@toc 2장 해 보기
+@toc 응용 2 해 보기
 ---
-text|3|3장 · 알록달록 피아노|알록달록 피아노|
+text|7|응용 3 · 알록달록 피아노|알록달록 피아노|
 : 색 블록을 알아보고 색마다 다른 음을 연주하는 피아노를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, 확장 보드, 연결 케이블, USB 케이블, 컴퓨터(MakeCode)
 - 배울 내용 — 색 인식은 밝기·색상·채도를 배운 값과 비교 · 주변 밝기에 따라 달라지므로 같은 조명에서 학습·인식 · 여러 색을 배우면 순서대로 ID
-@toc 3장 알록달록 피아노
+@toc 응용 3 알록달록 피아노
 ---
-text|3|3장 · 알록달록 피아노|프로그램 만들기|
+text|7|응용 3 · 알록달록 피아노|프로그램 만들기|
 1. 허스키렌즈를 ‘색 인식’ 모드로 바꾸고 기능 버튼을 길게 눌러 ‘여러 색 학습’을 켠 뒤 저장합니다.
 2. 가운데 ‘+’를 각 색 블록에 맞추고 학습 버튼을 눌러 색마다 ID를 만듭니다.
 3. 과제 1: 인식한 색의 ID 숫자를 LED에 보여 줍니다.
 4. 과제 2: ID마다 음 블록을 연결합니다(예: ID1 빨강은 ‘도’). 색 블록을 보여 주면 그 음이 연주됩니다.
-@toc 3장 프로그램
+@toc 응용 3 프로그램
 ---
-text|3|3장 · 알록달록 피아노|해 보기|
+text|7|응용 3 · 알록달록 피아노|해 보기|
 : 비슷한 색이 같은 색으로 읽히면 ‘인식 틀 문턱값’을 조절해 봅시다. 낮추면 민감해지지만 정확도는 떨어집니다. 건반 수를 늘리려면 A·B 버튼으로 음의 높이를 바꿔 봅시다.
 F 잘 안 맞는 색과 해결 방법|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308704.html
-@toc 3장 해 보기
+@toc 응용 3 해 보기
 ---
-text|4|4장 · 길고양이·강아지 급식기|길고양이·강아지 급식기|
+text|8|응용 4 · 길고양이·강아지 급식기|길고양이·강아지 급식기|
 : 고양이와 강아지를 구별해 알맞은 사료를 내보내는 급식기를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, 사료 문을 여닫는 서보, 연결선
 - 배울 내용 — 이미지 인식: 사진을 찍고 → 정리하고 → 특징을 뽑아 → 견본과 비교 · 허스키렌즈에는 기본 물체 20가지(고양이·강아지 포함) · 품종이나 개별 동물은 구별하지 못함
-@toc 4장 길고양이·강아지 급식기
+@toc 응용 4 길고양이·강아지 급식기
 ---
-text|4|4장 · 길고양이·강아지 급식기|프로그램 만들기|
+text|8|응용 4 · 길고양이·강아지 급식기|프로그램 만들기|
 1. 미리 ‘여러 물체 학습’을 켭니다.
 2. 고양이와 강아지를 각각 배웁니다. 배운 순서대로 ID가 붙고 틀 색이 달라집니다.
 3. 과제 1: 결과를 읽어 LED에 고양이 또는 강아지 그림을 보여 줍니다.
 4. 과제 2: 고양이면 서보로 고양이 사료를, 강아지면 강아지 사료를 내보냅니다. 기다리는 시간을 다르게 해 양을 조절합니다.
 5. 다 내보내면 하트 그림을 보여 줍니다.
-@toc 4장 프로그램
+@toc 응용 4 프로그램
 ---
-text|4|4장 · 길고양이·강아지 급식기|해 보기|
+text|8|응용 4 · 길고양이·강아지 급식기|해 보기|
 : 같은 동물이 계속 보일 때 사료가 반복해서 나오지 않게 하려면 어떻게 할까요? 하루 방문 횟수를 기록해 사료를 나누는 아이디어도 생각해 봅시다.
 F 반복 급식을 막는 방법|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308705.html
-@toc 4장 해 보기
+@toc 응용 4 해 보기
 ---
-text|5|5장 · 물체 추적기|물체 추적기|
+text|9|응용 5 · 물체 추적기|물체 추적기|
 : 배운 물체를 따라가며 위치를 알려 주고, 물체가 사라지면 진동으로 알리는 추적기를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit V2, 진동 모듈
 - 배울 내용 — 물체 추적은 색이나 얼굴만이 아니라 물체 전체의 특징을 따라감 · 허스키렌즈 화면은 320×240이라 가운데가 (160, 120)
-@toc 5장 물체 추적기
+@toc 응용 5 물체 추적기
 ---
-text|5|5장 · 물체 추적기|프로그램 만들기|
+text|9|응용 5 · 물체 추적기|프로그램 만들기|
 1. 추적할 물체를 노란 가운데 틀에 맞춥니다.
 2. 학습 버튼을 길게 누른 채 물체를 여러 각도·거리로 움직입니다. 화면에 ‘Learning: ID1’이 보입니다.
 3. 잘 따라오면 버튼을 놓습니다. 노란 틀이 안 보이면 이미 배운 물체이니 지우고 다시 배웁니다.
 4. 기능 버튼 메뉴에서 ‘학습 켜기’를 꺼서 더 이상 배우지 않게 합니다.
 5. 과제 1: 추적하는 물체의 X, Y 값을 읽어 위치를 알아봅니다. X와 Y가 -1이면 물체를 놓친 것입니다.
 6. 과제 2: X와 Y가 모두 -1이면 진동 모듈을 켜고, 아니면 끕니다. PWM으로 진동 세기를 조절할 수도 있습니다.
-@toc 5장 프로그램
+@toc 응용 5 프로그램
 ---
-text|5|5장 · 물체 추적기|해 보기|
+text|9|응용 5 · 물체 추적기|해 보기|
 : 목표의 위치를 화면에 표시해 봅시다. 물체가 가까울수록 진동이 세지고 멀어질수록 약해지게 PWM을 써 보면 어떨까요?
 F 나의 확장 아이디어|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308707.html
-@toc 5장 해 보기
+@toc 응용 5 해 보기
 ---
-text|6|6장 · 셀프 계산대|셀프 계산대|
+text|10|응용 6 · 셀프 계산대|셀프 계산대|
 : 상품 태그를 알아보고 가격을 더해 계산서를 만드는 무인 계산대를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit V2, 확장 보드(부저, P1의 스위치 LED), 바코드 대신 쓸 종이 카드(흰 종이를 깔면 인식이 좋아짐)
 - 배울 내용 — 바코드는 막대와 빈 곳의 무늬로 정보를 담음 · 이 프로젝트는 허스키렌즈의 태그 인식을 바코드 대신 사용
-@toc 6장 셀프 계산대
+@toc 응용 6 셀프 계산대
 ---
-text|6|6장 · 셀프 계산대|프로그램 만들기|
+text|10|응용 6 · 셀프 계산대|프로그램 만들기|
 1. 학습 버튼으로 과일, 사탕, 장난감 세 가지 태그를 차례로 배웁니다. ID와 틀 색이 순서대로 붙습니다.
 2. 과제 1: 인식한 태그의 ID를 읽어 가격을 보여 줍니다(과일 7, 사탕 4, 장난감 15). 성공하면 부저가 ‘도’를 한 번 울립니다.
 3. 과제 2: 스위치를 켜(1) 계산을 시작하면 인식한 상품이 표시되고, 끄면(0) 합계를 보여 줍니다.
 4. 끝낸 뒤 스캔한 상품은 다음 손님이 새로 시작할 때까지 보이지 않습니다.
-@toc 6장 프로그램
+@toc 응용 6 프로그램
 ---
-text|6|6장 · 셀프 계산대|해 보기|
+text|10|응용 6 · 셀프 계산대|해 보기|
 : 인쇄한 바코드로 알맞은 사물함이 열리는 사물함 시스템을 허스키렌즈로 어떻게 만들까요?
 F 사물함 시스템 설계|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308708.html
-@toc 6장 해 보기
+@toc 응용 6 해 보기
 ---
-text|7|7장 · 에너지 수확|에너지 수확|
+text|11|응용 7 · 에너지 수확|에너지 수확|
 : 태그를 읽을 때마다 에너지가 모이는 작은 게임을 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, AprilTag 카드, 부저
 - 배울 내용 — 태그 인식: 모서리 찾기 → 사각형 찾기 → 해독하기 · AprilTag는 번호와 함께 3차원 위치·방향도 알아낼 수 있음 · 인식할 때마다 0~9 무작위 숫자
-@toc 7장 에너지 수확
+@toc 응용 7 에너지 수확
 ---
-text|7|7장 · 에너지 수확|프로그램 만들기|
+text|11|응용 7 · 에너지 수확|프로그램 만들기|
 1. 허스키렌즈를 ‘태그 인식’ 모드로 하고, ‘+’를 태그에 맞춰 학습 버튼을 누릅니다. 배운 순서대로 ID가 붙습니다.
 2. 과제 1: 배운 태그를 인식하면 0~9 사이 무작위 숫자를 LED에 보여 줍니다. 같은 태그도 다른 숫자가 나올 수 있습니다.
 3. 과제 2: 나온 숫자를 계속 더해 허스키렌즈 화면에 합계를 보여 줍니다.
 4. 합계가 50 이상이 되면 하트를 보여 주고 부저로 ‘충전 완료’ 소리를 냅니다.
 5. A 버튼을 누르면 화면과 에너지가 지워져 새 판을 시작합니다.
-@toc 7장 프로그램
+@toc 응용 7 프로그램
 ---
-text|7|7장 · 에너지 수확|해 보기|
+text|11|응용 7 · 에너지 수확|해 보기|
 : 허스키렌즈를 더 적게 사용한 사람이 이기는 시합을 해 봅시다. 같으면 시간이 짧은 사람이 이깁니다.
 F 시합 기록|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308711.html
-@toc 7장 해 보기
+@toc 응용 7 해 보기
 ---
-text|8|8장 · 스마트 버스 요금기|스마트 버스 요금기|
+text|12|응용 8 · 스마트 버스 요금기|스마트 버스 요금기|
 : QR 코드 교통카드를 읽고 요금을 차감하는 버스 요금기를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, 확장 보드, 음성 녹음 모듈, 스테레오 스피커(도전: 부저)
 - 배울 내용 — QR 코드는 검은 칸과 흰 칸으로 2진수 정보를 담음 · 세 모서리의 큰 네모가 어느 방향에서도 읽게 도와 줌
-@toc 8장 스마트 버스 요금기
+@toc 응용 8 스마트 버스 요금기
 ---
-text|8|8장 · 스마트 버스 요금기|프로그램 만들기|
+text|12|응용 8 · 스마트 버스 요금기|프로그램 만들기|
 1. 허스키렌즈를 ‘QR 코드 인식’ 모드로 하고 ‘+’를 카드의 코드에 맞춰 학습 버튼을 누릅니다. 순서대로 ID와 틀 색이 붙습니다.
 2. 배운 카드가 보이면 색 틀과 ID가 나타납니다.
 3. 과제 1: ID마다 요금을 정해 허스키렌즈 화면에 보여 줍니다(학생 카드 1위안, 일반 카드 1.5위안). ‘도’ 음이 알림으로 울립니다.
 4. 과제 2: 카드마다 잔액 20위안에서 시작합니다. 인식하면 요금을 빼고 요금과 잔액을 보여 준 뒤 ‘결제되었습니다, 타세요’ 음성을 들려 줍니다.
 5. 예시 프로그램은 학생 카드만 다룹니다. 일반 카드는 숙제입니다.
-@toc 8장 프로그램
+@toc 응용 8 프로그램
 ---
-text|8|8장 · 스마트 버스 요금기|해 보기|
+text|12|응용 8 · 스마트 버스 요금기|해 보기|
 : 카드 잔액이 모자랄 때 어떻게 알려 줄까요? 조건문과 부저, 또는 음성 모듈과 스피커로 설계해 봅시다.
 F 잔액 부족 알림 설계|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308712.html
-@toc 8장 해 보기
+@toc 응용 8 해 보기
 ---
-text|9|9장 · 안전모 알림이|안전모 알림이|
+text|13|응용 9 · 안전모 알림이|안전모 알림이|
 : 작업자가 안전모를 썼는지 확인해 쓰지 않은 사람은 공사 현장에 들어가지 못하게 하는 장치를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, (과제 2) RGB LED 띠와 서보
 - 배울 내용 — KNN(k-최근접 이웃): 새 자료를 저장된 예와 비교해 분류 · 허스키렌즈는 K=1(가장 가까운 하나) · 물체 분류는 화면 위치를 알려 주지 않음 · 여러 각도·거리에서 배우면 정확해짐
-@toc 9장 안전모 알림이
+@toc 응용 9 안전모 알림이
 ---
-text|9|9장 · 안전모 알림이|프로그램 만들기|
+text|13|응용 9 · 안전모 알림이|프로그램 만들기|
 1. 허스키렌즈를 ‘물체 분류’ 모드로 합니다.
 2. 학습 버튼을 길게 눌러 세 가지를 배웁니다: 배경(ID1), 안전모 씀(ID2), 안전모 안 씀(ID3).
 3. MakeCode 프로그램에서 ID 이름을 알아보기 쉽게 바꿉니다.
 4. 과제 1: 읽은 ID에 따라 안전모를 썼는지 보여 줍니다.
 5. 과제 2: 과제 1의 인식을 그대로 쓰고, NeoPixel 확장으로 LED 띠를, 서보로 차단기를 ID마다 정해 제어합니다.
-@toc 9장 프로그램
+@toc 응용 9 프로그램
 ---
-text|9|9장 · 안전모 알림이|해 보기|
+text|13|응용 9 · 안전모 알림이|해 보기|
 : 골판지로 안전모 인식 문을 만들어 봅시다. 또 K=3일 때와 K=6일 때 새로운 점이 어느 쪽으로 분류되는지 그림에서 따져 보세요.
 F K=3, K=6 분류 결과|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308713.html
-@toc 9장 해 보기
+@toc 응용 9 해 보기
 ---
-text|10|10장 · 2진수 해독기|2진수 해독기|
+text|14|응용 10 · 2진수 해독기|2진수 해독기|
 : 허스키렌즈와 micro:bit로 2진수를 알아보고 10진수로 바꿉니다.
 - 준비물 — 허스키렌즈, micro:bit V2, 태그 카드 2장(ID1, ID2), 켜짐·꺼짐 유지 버튼
 - 배울 내용 — 2진수는 0과 1만 쓰고 자리마다 2의 거듭제곱 · 컴퓨터는 회로의 두 상태(켜짐·꺼짐) 때문에 2진수 사용 · 2진수→10진수는 각 자리 값을 더함(10000101 = 133) · 10진수→2진수는 2로 나눈 나머지를 아래에서 위로(25 = 11001)
-@toc 10장 2진수 해독기
+@toc 응용 10 2진수 해독기
 ---
-text|10|10장 · 2진수 해독기|프로그램 만들기|
+text|14|응용 10 · 2진수 해독기|프로그램 만들기|
 1. 태그 카드 두 장을 배웁니다. ID1은 1, ID2는 0으로 약속합니다.
 2. 과제 1: ID1을 읽으면 1, ID2를 읽으면 0을 허스키렌즈 화면에 보여 줍니다. 새 숫자는 X 위치를 달리해 앞 숫자가 지워지지 않게 합니다. 버튼으로 인식 시작·끝을 정합니다.
 3. 과제 2: 세 가지 일을 함수로 나눕니다. 버튼이 켜진 동안 태그를 읽어 2진수를 모으고, 버튼을 다시 누르면 10진수로 바꾸고, 결과를 다음 줄에 보여 줍니다.
 4. 100101을 넣으면 37이 나와야 합니다.
-@toc 10장 프로그램
+@toc 응용 10 프로그램
 ---
-text|10|10장 · 2진수 해독기|해 보기|
+text|14|응용 10 · 2진수 해독기|해 보기|
 : 친구에게 2진수 문제를 내 봅시다. 2진수와 문자를 짝지은 표를 만들어 글자로 읽어 보는 확장도 해 볼 수 있습니다.
 F 내가 낸 2진수 문제|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308714.html
-@toc 10장 해 보기
+@toc 응용 10 해 보기
 ---
-text|11|11장 · 허스키렌즈 카메라|허스키렌즈 카메라|
+text|15|응용 11 · 허스키렌즈 카메라|허스키렌즈 카메라|
 : 허스키렌즈와 micro:bit로 사진을 찍는 카메라를 만들고, 바늘구멍 사진기 원리와 연결합니다.
 - 준비물 — 허스키렌즈, micro:bit V2(로고 터치·A 버튼·마이크·LED), 작은 진동 모듈, SD 카드와 리더(키트에 없음)
 - 배울 내용 — 바늘구멍 사진기: 작은 구멍으로 들어온 빛이 거꾸로 선 상을 맺음 · 허스키렌즈의 500만 화소 카메라 · 빛→전하→디지털→압축→SD 카드 저장
-@toc 11장 허스키렌즈 카메라
+@toc 응용 11 허스키렌즈 카메라
 ---
-text|11|11장 · 허스키렌즈 카메라|프로그램 만들기|
+text|15|응용 11 · 허스키렌즈 카메라|프로그램 만들기|
 1. 터치 촬영: micro:bit 로고를 만지면 촬영하고, 가운데 ‘도’ 음으로 알립니다.
 2. 소리 촬영: 마이크 소리 크기가 100을 넘으면 허스키렌즈가 촬영하고 진동 모듈이 울립니다.
 3. 타이머 촬영: A 버튼을 누르면 3, 2, 1 카운트다운을 허스키렌즈 화면에 보여 주고 촬영합니다. 찍으면 LED에 하트가 나타납니다.
-@toc 11장 프로그램
+@toc 응용 11 프로그램
 ---
-text|11|11장 · 허스키렌즈 카메라|해 보기|
+text|15|응용 11 · 허스키렌즈 카메라|해 보기|
 : 셔터 버튼 말고 사진 찍기를 시작하게 할 수 있는 장치에는 또 무엇이 있을까요? 강아지를 배워 강아지가 보일 때만 찍는 카메라도 생각해 봅시다.
 F 카메라를 켜는 새로운 방법|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308715.html
-@toc 11장 해 보기
+@toc 응용 11 해 보기
 ---
-text|12|12장 · 비상차로 감시견|비상차로 감시견|
+text|16|응용 12 · 비상차로 감시견|비상차로 감시견|
 : 비상차로에 들어온 차를 찾아 사진을 찍고 비키라고 알리는 감시 장치를 만듭니다.
 - 준비물 — 허스키렌즈, micro:bit, SD 카드(키트에 없음), (과제 2) RGB 불빛과 경보. 차로 위에 카메라를 달고, 시험은 종이로 오린 차로로 합니다.
 - 배울 내용 — 물체 분류: 물체에 틀을 그리고 이름을 보여 줌 · ‘+’를 물체 틀에 맞추고 학습 버튼을 짧게 누르면 틀이 파랗게 되고 ID1이 붙음 · 한 가지든 여러 가지든 배울 수 있음
-@toc 12장 비상차로 감시견
+@toc 응용 12 비상차로 감시견
 ---
-text|12|12장 · 비상차로 감시견|프로그램 만들기|
+text|16|응용 12 · 비상차로 감시견|프로그램 만들기|
 1. 허스키렌즈로 차를 배웁니다. 배울 때까지 화면에는 ‘학습하세요’ 표시가 있습니다.
 2. 과제 1: 허스키렌즈가 감지한 차는 모두 불법 주차로 봅니다. 차를 인식하면 화면에 ‘촬영 중’을 (230, 10) 위치에 보여 주고 사진을 SD 카드에 저장합니다.
 3. 과제 2: 과제 1에 RGB 불빛 깜빡임과 경보음을 더해 차가 비켜 가도록 알리면서 사진도 찍습니다.
-@toc 12장 프로그램
+@toc 응용 12 프로그램
 ---
-text|12|12장 · 비상차로 감시견|해 보기|
+text|16|응용 12 · 비상차로 감시견|해 보기|
 : 골판지로 차로를 완성해 위에 허스키렌즈를 달고 차가 잘 감지되는지 확인해 봅시다.
 F 시험 결과 기록|여기에 적어 보세요
 L DFRobot 원본 레슨 보기(영어)|https://learn.dfrobot.com/makelog-308716.html
-@toc 12장 해 보기
+@toc 응용 12 해 보기
 ---
-text|13|마무리|핵심 질문|
+text|17|마무리|핵심 질문|
 : 카메라가 알아본 결과를 micro:bit는 어떻게 행동으로 바꿀까요?
 1. 모드 고르기(얼굴·색·물체·태그·QR)
 2. 배우기(ID 붙이기)
@@ -525,6 +572,12 @@ text|13|마무리|핵심 질문|
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const FK = "dkbook:" + location.pathname;   // 입력칸 저장 키 (이 브라우저에만 저장)
 const typing = t => t && t.closest && t.closest("textarea,input");
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cpy")) { const mk = t.classList.contains("mk"); const txt = t.parentElement.querySelector("pre").textContent; const ok = () => { if (mk) return; t.textContent = "복사됨 ✓"; setTimeout(() => t.textContent = "복사", 1400); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); } catch (y) {} a.remove(); ok(); } }
+  if (t && t.classList && t.classList.contains("donebtn")) { const on = !t.classList.contains("on"); t.classList.toggle("on", on); t.textContent = on ? "✓ 완료했어요" : "이 장 완료 체크"; try { localStorage.setItem(t.dataset.k, on ? "1" : "0"); } catch (x) {} }
+});
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("a.cplk"); if (!a) return; e.preventDefault(); const txt = a.dataset.copy, em = a.querySelector("em"); const ok = () => { em.textContent = "복사됨 ✓"; setTimeout(() => em.textContent = "주소 복사", 1600); }; try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (x) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (y) {} t.remove(); ok(); } });
 document.addEventListener("input", e => { const t = e.target; if (t && t.matches && t.matches("textarea[data-k]")) { try { localStorage.setItem(t.dataset.k, t.value); } catch (x) {} } });
 const $ = s => document.querySelector(s);
 /* ---------- 적응형 퀴즈 ---------- */
@@ -577,7 +630,7 @@ function chipHTML(label, n, urlOverride) {
 function mediaHTML(n, skipImg) {
   let h = "";
   if (ILLU[n]) h += `<figure class="fig svg${ILLU[n].indexOf("data-dark") > 0 ? " dark" : ""}">${ILLU[n]}</figure>`;
-  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async"></figure>`; });
+  if (!skipImg) [].concat(MEDIA.img[n] || []).forEach(src => { h += `<figure class="fig"><img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"></figure>`; });
   const v = MEDIA.video[n];
   if (v) {
     const m = String(v).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
@@ -594,6 +647,7 @@ function partsHTML(n, bl) {
     return th ? li.replace("</li>", `<span class="th">${th}</span></li>`) : li;
   }).join("");
 }
+function codeStyle(code){const ls=String(code).split("\n");let sc=1;for(;sc>0.4;sc-=0.05){const L=ls.reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/(46/sc))),0);if(L*sc<=21)break}return sc<1?` style="font-size:calc(var(--u)*${(2.6*sc).toFixed(2)})"`:""}
 function pageHTML(i) {
   if (i < 0 || i >= N) return `<div class="page blank"></div>`;
   const p = pages[i], n = i + 1, ch = CHAPS[p.chap], c = ch.c;
@@ -604,7 +658,7 @@ function pageHTML(i) {
   }
   if (p.kind === "end") {
     return `<div class="page endp" style="--c:${c}"><div class="mini" style="width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.4);gap:calc(var(--u)*.9);padding:calc(var(--u)*2)"><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div>
-      <div class="ttl" style="font-size:calc(var(--u)*4.4)">허스키렌즈 마이크로비트 입문</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
+      <div class="ttl" style="font-size:calc(var(--u)*4.4)">허스키렌즈 × 마이크로비트</div><div class="chips"><a class="chip" href="#p1" data-go="1" style="--c:#0b0b10">처음으로</a></div></div>`;
   }
   if (p.kind === "divider") {
     const body = p.lines.map(l => /^[:\-*] /.test(l) ? `<p>${esc(l.slice(2))}</p>` : "").join("");
@@ -614,7 +668,7 @@ function pageHTML(i) {
     const qid = (p.lines.find(l => l.startsWith("QZ ")) || "").slice(3);
     return `<div class="page quiz" style="--c:${c}"><div class="eb">${esc(p.eb)}</div><h2 class="ttl qt">${esc(p.title)}</h2><div class="body">${quizHTML(qid, n)}</div>${foot}</div>`;
   }
-  let body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
+  let done = "", code = "", body = "", bl = "", nt = "", nums = "", chips = "", extra = "", tags = "", links = "", qr = "", fields = "", fi = 0;
   p.lines.forEach(l => {
     let m;
     if (l.startsWith("F ")) {
@@ -627,7 +681,9 @@ function pageHTML(i) {
     else if (l.startsWith("+ ")) { const [lab, url] = l.slice(2).split("|"); chips += chipHTML(lab, n, url); }
     else if (l.startsWith(": ")) body += `<p class="${p.kind === "text" && p.lines.length === 1 ? "para" + (l.length > 300 ? " s" : "") : ""}">${esc(l.slice(2))}</p>`;
     else if (l.startsWith("~ ")) { const u = MEDIA.links[n] && MEDIA.links[n][l.slice(2)]; tags += u ? `<a class="tag" href="${esc(u)}" target="_blank" rel="noopener">${esc(l.slice(2))} ↗</a>` : `<span class="tag">${esc(l.slice(2))}</span>`; }
-    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("L ")) { const [lab, url] = l.slice(2).split("|"); links += /github\.com/.test(url) ? `<a href="#" class="cplk" data-copy="${esc(url)}"><b>${esc(lab)} <em>주소 복사</em></b><span>${esc(url)}</span></a>` : `<a href="${esc(url)}" target="_blank" rel="noopener"><b>${esc(lab)} ↗</b><span>${esc(url)}</span></a>`; }
+    else if (l.startsWith("V ")) { const k = FK + ":done:" + l.slice(2); let on = false; try { on = localStorage.getItem(k) === "1"; } catch (e) {} done = `<button type="button" class="donebtn${on ? " on" : ""}" data-k="${esc(k)}">${on ? "✓ 완료했어요" : "이 장 완료 체크"}</button>`; }
+    else if (l.startsWith("C ")) code += (code ? "\n" : "") + l.slice(2);
     else if (l.startsWith("Q ")) qr = `<div class="qr" data-url="${esc(l.slice(2))}"></div>`;
     else if ((m = l.match(/^(\d+)\. (.*)$/))) nums += `<li><span class="n">${m[1]}</span><span>${esc(m[2])}</span></li>`;
   });
@@ -641,7 +697,7 @@ function pageHTML(i) {
   const longTitle = p.title.length > 26 && p.lines.length > 0;
   title = `<h2 class="ttl" ${p.lines.length===0 ? `style="font-size:calc(var(--u)*8.2);margin-top:calc(var(--u)*10)"` : longTitle ? `style="font-size:calc(var(--u)*4.2)"` : ""}>${esc(p.title)}</h2>`;
   return `<div class="page" style="--c:${c}"><div class="eb">${esc(p.eb)}</div>${title}
-    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
+    <div class="body">${tags}${body}${p.kind === "parts" ? `<ul class="parts${(bl.match(/<li>/g)||[]).length > 6 ? " many dense" : (bl.match(/<li>/g)||[]).length > 5 ? " many" : (bl.match(/<li>/g)||[]).length > 4 ? " five" : ""}">${partsHTML(n, bl)}</ul>` : bl ? `<ul class="bl">${bl}</ul>` : ""}${nums ? `<ol class="nums">${nums}</ol>` : ""}${code ? `<div class="codewrap">${typeof CODE_LINK !== "undefined" ? `<a class="cpy mk" href="${CODE_LINK}" target="_blank" rel="noopener">MakeCode ↗</a>` : ""}<button class="cpy" type="button">복사</button><pre class="code"${codeStyle(code)}>${esc(code)}</pre></div>` : ""}${nt ? `<ul class="nt">${nt}</ul>` : ""}${links ? `<div class="lk">${links}</div>` : ""}${qr}${fields ? `<div class="fields">${fields}</div>` : ""}${done}${mediaHTML(n, p.kind === "parts" && !!PARTS[n])}${chips ? `<div class="chips">${chips}</div>` : ""}</div>${foot}</div>`;
 }
 function fillQR(root) {
   root.querySelectorAll(".qr").forEach(el => {
