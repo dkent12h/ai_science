@@ -1,200 +1,371 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>초등과학 AR 3D 모형</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>심장과 혈액 순환 · AR 3D 모형 | DK Digital Science</title>
+<meta name="description" content="사실적인 3D 심장 모형을 돌려 보고, 박동·내부 구조·혈액 흐름을 관찰하며 AR로 교실에 띄우는 과학 웹페이지">
+<meta name="theme-color" content="#eeeef1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="lib/model-viewer.min.js"></script>
 <style>
-  :root{--bg:#0b1220;--panel:#fff;--ink:#1e293b;--sub:#64748b;--main:#2563eb;--accent:#f97316;--line:#e2e8f0}
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0}
-  body{font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column}
-  header{display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
-  header h1{font-size:19px;margin:0;font-weight:800;white-space:nowrap}
-  #tabs{display:flex;gap:8px;margin-left:auto;overflow-x:auto}
-  .tab{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;font:700 17px inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
-  .tab[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
-  main{flex:1;display:flex;min-height:0}
-  .stage{flex:1;position:relative;min-width:0;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 38%,#2c3b57,#0b1220 72%)}
-  model-viewer{width:100%;flex:1;min-height:0;--poster-color:transparent;--progress-bar-color:var(--accent)}
-  .hs{display:block;transform:translate(-50%,-115%);border:0;border-radius:999px;padding:4px 11px;background:rgba(255,255,255,.95);color:var(--ink);font:700 15px/1.2 inherit;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;white-space:nowrap;transition:opacity .2s,background .2s}
-  .hs.hide{opacity:0;pointer-events:none}
-  .hs[data-visible="false"]{opacity:.0;pointer-events:none}
-  .hs.hide.on{opacity:1;pointer-events:auto}
-  .hs.on{background:var(--accent);color:#fff}
-  .legend{position:absolute;left:12px;top:12px;display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:#fff;background:rgba(11,18,32,.65);padding:8px 12px;border-radius:12px;pointer-events:none}
-  .legend i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;vertical-align:-2px}
-  .bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px;background:#0b1220}
-  .btn{border:0;border-radius:14px;padding:11px 16px;font-size:17px;font-weight:800;font-family:inherit;cursor:pointer;background:#fff;color:var(--ink)}
-  .btn[aria-pressed="true"]{background:var(--main);color:#fff}
-  .btn.ar{background:var(--accent);color:#fff;font-size:19px;padding:11px 22px;position:absolute;right:12px;top:12px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-  .sep{width:2px;background:#334155;margin:0 4px}
-  aside{width:350px;background:var(--panel);padding:16px 18px;overflow:auto;border-left:1px solid var(--line)}
-  aside h2{margin:0 0 4px;font-size:25px}
-  aside p{font-size:17px;line-height:1.55;margin:6px 0}
-  .facts{margin:8px 0;padding:0;list-style:none}
-  .facts li{font-size:16px;line-height:1.5;margin:5px 0;padding-left:20px;position:relative}
-  .facts li:before{content:"✔";position:absolute;left:0;color:var(--main);font-weight:800}
-  h3{font-size:16px;color:var(--sub);margin:14px 0 6px}
-  #parts{display:flex;flex-wrap:wrap;gap:6px}
-  .pt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:6px 11px;font:700 16px inherit;font-family:inherit;cursor:pointer}
-  .pt.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  #info{margin-top:12px;padding:12px 14px;border-radius:14px;background:#fff7ed;border:2px solid var(--accent);display:none}
-  #info b{font-size:21px;color:var(--accent)}
-  #info p{margin:4px 0 0}
-  .note{font-size:14px;color:var(--sub);margin-top:12px;line-height:1.5}
-  @media (max-width:760px){
-    main{flex-direction:column}
-    aside{width:auto;height:40%;border-left:0;border-top:1px solid var(--line)}
-    header h1{display:none}.tab{font-size:15px;padding:5px 12px}
-    .btn{padding:9px 12px;font-size:15px}.btn.ar{font-size:16px;padding:9px 14px}
-    .legend{font-size:13px;padding:6px 9px}
-  }
-  #mv.pulse{filter:brightness(1.12)}
-  #mv{transition:filter .12s}
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#f97316;--red:#d8332b;--blue:#3e6ccd;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);overflow-x:hidden;
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+a{color:inherit}
+button{font-family:inherit;color:inherit}
+
+header{display:flex;justify-content:space-between;align-items:center;padding:20px clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+nav{display:flex;gap:10px}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:15px;text-decoration:none;background:transparent;cursor:pointer;transition:background .25s,color .25s,border-color .25s;white-space:nowrap}
+.pill:hover,.pill:focus-visible{background:var(--ink);color:#fff;outline:none}
+.pill[aria-pressed="true"],.pill[aria-selected="true"]{background:var(--ink);color:#fff}
+.pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.pill.acc:hover{background:var(--ink);border-color:var(--ink)}
+
+.hero{padding:clamp(8px,2vh,24px) clamp(16px,3vw,40px) clamp(16px,2.4vh,28px)}
+.eyebrow{margin:0 0 12px;font-size:clamp(14px,1.3vw,19px);font-weight:700;color:var(--muted)}
+.eyebrow b{color:var(--acc)}
+h1{margin:0;font-size:clamp(38px,7.2vw,112px);line-height:1.04;letter-spacing:-.055em;font-weight:800}
+h1 em{font-style:normal;color:var(--acc)}
+.sub{margin:12px 0 0;max-width:60ch;font-size:clamp(15px,1.35vw,20px);line-height:1.6;font-weight:500;color:var(--muted)}
+
+main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr);gap:clamp(14px,2vw,28px);padding:0 clamp(16px,3vw,40px)}
+.card{border:1.5px solid var(--line);border-radius:22px;background:rgba(255,255,255,.62);backdrop-filter:blur(6px)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1.5px solid var(--line);align-items:center}
+.tabs .sp{flex:1}
+.stage{position:relative}.vw{position:relative;height:clamp(380px,60vh,640px)}
+model-viewer{width:100%;height:100%;border-radius:0;--poster-color:transparent;background:radial-gradient(70% 60% at 50% 45%,#ffffff 0%,#f1f1f5 70%,#e6e6ee 100%)}
+.badge{position:absolute;left:16px;top:14px;z-index:2;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.85)}
+.badge i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc);margin-right:7px}
+.legend{position:absolute;left:16px;bottom:14px;z-index:2;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;background:rgba(255,255,255,.85);border:1.5px solid var(--line);padding:8px 12px;border-radius:14px}
+.legend span{display:flex;gap:8px;align-items:center}.legend i{width:10px;height:10px;border-radius:50%}
+.bpm{position:absolute;right:16px;top:14px;z-index:2;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(255,255,255,.85)}
+.bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;border-top:1.5px solid var(--line)}
+.bar .pill{background:rgba(255,255,255,.9);padding:8px 14px;font-size:14px}
+.bar .pill[aria-pressed="true"]{background:var(--ink);color:#fff}
+.bar .sep{width:1.5px;background:var(--line);margin:0 2px}
+#arBtn{position:absolute;right:16px;bottom:14px;z-index:3;border-radius:999px;border:0;background:var(--acc);color:#fff;font-weight:800;font-size:15px;padding:11px 18px;cursor:pointer;box-shadow:0 10px 24px rgba(249,115,22,.35)}
+
+aside{padding:22px;display:flex;flex-direction:column;gap:14px}
+.step{font-size:13px;font-weight:800;color:var(--acc);letter-spacing:.06em}
+h2{margin:0;font-size:clamp(28px,3.2vw,44px);line-height:1.05;letter-spacing:-.04em;font-weight:800}
+.intro{margin:0;font-size:16px;line-height:1.65;font-weight:500;color:var(--muted)}
+.facts{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.facts li{font-size:15px;line-height:1.5;font-weight:700;padding-left:20px;position:relative}
+.facts li:before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--acc)}
+.list{display:grid;gap:8px;max-height:340px;overflow:auto;padding-right:2px}
+.item{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:9px 12px;cursor:pointer;font-weight:800;font-size:15px;transition:border-color .2s,background .2s}
+.item .no{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:13px}
+.item:hover{border-color:var(--ink)}
+.item.on{border-color:var(--acc);background:#fff5ec}.item.on .no{background:var(--acc);border-color:var(--acc);color:#fff}
+.item .ar{color:var(--muted);font-size:18px}
+.info{display:none;border-radius:16px;border:1.5px solid var(--acc);background:#fff5ec;padding:14px 16px}
+.info b{display:block;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
+.info p{margin:0;font-size:15px;line-height:1.65;font-weight:500}
+.think{border-left:4px solid var(--acc);background:rgba(255,255,255,.7);padding:12px 14px;border-radius:0 14px 14px 0}
+.think b{display:block;font-size:13px;color:var(--acc);margin-bottom:4px}
+.think p{margin:0;font-size:15px;line-height:1.6;font-weight:700}
+.flowctl{display:none;gap:8px;align-items:center;flex-wrap:wrap}
+.flowctl .pill{padding:8px 14px;font-size:14px}
+.flowctl small{font-size:13px;font-weight:700;color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+
+/* 모형 위 번호 표지 */
+.hs{display:block;border:0;background:none;padding:0;cursor:pointer;transition:opacity .2s}
+.hs .n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid var(--ink);font-weight:800;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.28)}
+.hs .t{display:none;position:absolute;left:50%;bottom:34px;transform:translateX(-50%);white-space:nowrap;background:var(--ink);color:#fff;font-weight:800;font-size:13px;padding:5px 10px;border-radius:999px}
+.hs.on .n{background:var(--acc);border-color:var(--acc);color:#fff}
+.hs.on .t,.hs:hover .t,.hs:focus-visible .t{display:block}
+.hs.hide{opacity:0;pointer-events:none}.hs.hide.on{opacity:1;pointer-events:auto}
+.hs.fa .n{background:var(--blue);border-color:var(--blue);color:#fff;animation:pl 1s infinite}
+.hs.fb .n{background:var(--blue);border-color:var(--blue);color:#fff;animation:pl 1s infinite}
+.hs.red.fa .n,.hs.red.fb .n{background:var(--red);border-color:var(--red)}
+.hs.fa .t,.hs.fb .t{display:block}
+@keyframes pl{50%{box-shadow:0 0 0 9px rgba(249,115,22,.0),0 3px 10px rgba(0,0,0,.28)}0%{box-shadow:0 0 0 0 rgba(249,115,22,.55),0 3px 10px rgba(0,0,0,.28)}}
+#mv.pulse{filter:brightness(1.1)}#mv{transition:filter .12s}
+
+/* 미션 */
+.mission{margin:clamp(18px,3vw,36px) clamp(16px,3vw,40px) 0;padding:clamp(20px,3vw,36px)}
+.mission h3{margin:0 0 6px;font-size:clamp(26px,3.4vw,48px);letter-spacing:-.045em;line-height:1.05}
+.mission .lead{margin:0 0 22px;color:var(--muted);font-weight:500;font-size:16px}
+.qs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.q{border:1.5px solid var(--line);border-radius:18px;background:#fff;padding:16px;display:flex;flex-direction:column;gap:10px}
+.q .qn{font-size:13px;font-weight:800;color:var(--acc)}
+.q p{margin:0;font-size:16px;line-height:1.6;font-weight:700}
+textarea,input[type=text]{width:100%;font:inherit;font-weight:500;font-size:15px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fafafc;resize:vertical;min-height:92px}
+input[type=text]{min-height:0}
+textarea:focus,input:focus{outline:2px solid var(--acc);outline-offset:1px}
+.mrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.mrow input{max-width:220px}
+.guide{margin:clamp(18px,3vw,36px) clamp(16px,3vw,40px) 0;padding:clamp(18px,2.4vw,28px)}
+.guide h3{margin:0 0 12px;font-size:22px;letter-spacing:-.03em}
+.guide ul{margin:0;padding-left:20px;display:grid;gap:6px;font-weight:500;line-height:1.6}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:5vh clamp(16px,3vw,40px) 5vh;font-weight:700;font-size:15px}
+footer a{text-decoration:none;border-bottom:1.5px solid var(--ink)}
+footer span{color:var(--muted)}
+
+/* 인쇄: 내 탐구 기록만 */
+#print{display:none}
+@media print{
+  body{background:#fff}header,.hero,main,.mission,.guide,footer{display:none!important}
+  #print{display:block;padding:24px;font-family:"Noto Sans KR",sans-serif}
+  #print h1{font-size:26px;line-height:1.3;letter-spacing:0}
+  #print .pq{margin:18px 0}#print .pq b{display:block;margin-bottom:6px}
+  #print .pa{white-space:pre-wrap;border:1px solid #999;border-radius:6px;padding:10px;min-height:90px}
+}
+
+@media (max-width:980px){
+  main{grid-template-columns:1fr}.qs{grid-template-columns:1fr}
+  .vw{height:clamp(340px,54vh,520px)}
+  .legend{display:none}
+  nav .pill:first-child{display:none}
+}
+@media (max-width:520px){
+  .bar .pill{padding:7px 10px;font-size:13px}.bpm{display:none}
+}
 </style>
 </head>
 <body>
 <header>
-  <h1>🔬 AR 3D 인체 모형</h1>
-  <div id="tabs" role="tablist"></div>
+  <a class="brand" href="../science/"><span class="mini" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></span>DK Digital Science</a>
+  <nav><a class="pill" href="../science/">← 과학 목록</a><a class="pill" href="#guide">사용 안내</a><a class="pill" href="#mission">탐구 미션</a></nav>
 </header>
-<main>
-  <section class="stage">
-    <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
-      interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.9" environment-image="neutral"
-      camera-orbit="0deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.2m"
-      ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 모형">
-      <button slot="ar-button" id="arBtn" class="btn ar">📱 AR로 보기</button>
-    </model-viewer>
-    <div class="legend" id="legend"><span><i style="background:#cd3430"></i>산소 많은 피</span><span><i style="background:#3e6ccd"></i>산소 적은 피</span></div>
-    <div class="bar">
-      <button class="btn" id="beatBtn" aria-pressed="true">💓 박동</button>
-      <button class="btn" id="feelBtn" aria-pressed="false">🔊 소리·진동</button>
-      <button class="btn" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
-      <button class="btn" id="runBtn" aria-pressed="false">🏃 운동 후</button>
-      <span class="sep" id="sep"></span>
-      <button class="btn" id="rotBtn" aria-pressed="true">🔄 회전</button>
-      <button class="btn" id="lblBtn" aria-pressed="true">🏷️ 이름표</button>
-      <button class="btn" id="resetBtn">🎯 처음</button>
+
+<section class="hero">
+  <p class="eyebrow"><b>●</b> 생명과학 · 인체 탐구 · AR 3D 모형</p>
+  <h1>심장과 혈액 순환<em>.</em></h1>
+  <p class="sub">심장의 겉과 속을 돌려 보고, 박동을 느끼고, 피가 온몸을 한 바퀴 도는 길을 따라가 보세요. 스마트폰·태블릿에서는 AR로 교실에 띄울 수 있어요.</p>
+</section>
+
+<main id="top">
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button class="pill" role="tab" id="t0" aria-selected="true">① 외형 관찰</button>
+      <button class="pill" role="tab" id="t1" aria-selected="false">② 내부 구조</button>
+      <button class="pill" role="tab" id="t2" aria-selected="false">③ 혈액 흐름</button>
+    </div>
+    <div class="stage">
+      <div class="vw">
+      <model-viewer id="mv" camera-controls touch-action="pan-y" auto-rotate rotation-per-second="14deg"
+        interaction-prompt="none" shadow-intensity="1" shadow-softness="1" exposure="0.95" environment-image="neutral"
+        camera-orbit="0.01deg 82deg auto" min-camera-orbit="auto auto 0.12m" max-camera-orbit="auto auto 1.4m"
+        ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" alt="3D 심장 모형" animation-name="beat" autoplay>
+        <button slot="ar-button" id="arBtn">📱 AR로 보기</button>
+      </model-viewer>
+      <span class="badge"><i></i><span id="badge">3D · 사실적 외형</span></span>
+      <span class="bpm" id="bpm">72회/분 · 쉬는 중</span>
+      <div class="legend"><span><i style="background:var(--red)"></i>산소 많은 피</span><span><i style="background:var(--blue)"></i>산소 적은 피</span></div>
+      </div>
+      <div class="bar">
+        <button class="pill" id="beatBtn" aria-pressed="true">💓 박동</button>
+        <button class="pill" id="feelBtn" aria-pressed="false">🔊 소리·진동</button>
+        <button class="pill" id="restBtn" aria-pressed="true">🧍 쉬는 중</button>
+        <button class="pill" id="runBtn" aria-pressed="false">🏃 운동 후</button>
+        <button class="pill" id="slowBtn" aria-pressed="false">🐢 느리게 0.5×</button>
+        <span class="sep"></span>
+        <button class="pill" id="rotBtn" aria-pressed="true">🔄 회전</button>
+        <button class="pill" id="lblBtn" aria-pressed="true">🔢 구조 표시</button>
+        <button class="pill" id="resetBtn">🎯 처음</button>
+      </div>
     </div>
   </section>
-  <aside>
-    <h2 id="mName"></h2>
-    <p id="mIntro"></p>
-    <ul class="facts" id="mFacts"></ul>
-    <h3>👆 부위를 눌러 보세요</h3>
-    <div id="parts"></div>
-    <div id="info"><b id="iName"></b><p id="iDesc"></p></div>
-    <p class="note">※ 정면에서 본 모습이라 화면의 왼쪽이 몸의 오른쪽입니다.<br><span id="arnote"></span></p>
-    <p class="note" style="font-size:12px;opacity:.7">3D 모델: <a href="https://grab3d.com/" style="color:inherit">Grab3D</a> (CC0 1.0 퍼블릭 도메인). 폴리곤 축소·박동 애니메이션 등을 가공했습니다.</p>
-</aside>
+
+  <aside class="card">
+    <span class="step" id="step"></span>
+    <h2 id="h"></h2>
+    <p class="intro" id="intro"></p>
+    <ul class="facts" id="facts"></ul>
+    <div class="flowctl" id="flowctl">
+      <button class="pill acc" id="playFlow">▶ 흐름 재생</button>
+      <small><span class="dot" style="background:var(--blue)"></span>산소가 적은 피 <span class="dot" style="background:var(--red);margin-left:8px"></span>산소가 많은 피</small>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="info" id="info"><b id="iName"></b><p id="iDesc"></p></div>
+    <div class="think"><b>생각해 볼까요?</b><p id="think"></p></div>
+    <p class="intro" style="font-size:13px" id="arnote"></p>
+  </aside>
 </main>
+
+<section class="card mission" id="mission">
+  <h3>탐구 미션</h3>
+  <p class="lead">모형을 관찰한 내용으로 답을 써 보세요. 쓴 내용은 이 기기에 저장되고, 아래 버튼으로 PDF 기록으로 만들 수 있어요.</p>
+  <div class="qs">
+    <div class="q"><span class="qn">미션 1 · 외형 관찰</span><p>① 외형 관찰에서 심장에 연결된 큰 혈관 4개(대동맥, 대정맥, 폐동맥, 폐정맥) 중 산소가 많은 피가 흐르는 혈관을 모두 쓰고, 모형의 어떤 색을 보고 알았는지 함께 써 보세요.</p><textarea id="a1" placeholder="예) ○○, ○○ — 모형에서 ○색으로 표시되어 있어서"></textarea></div>
+    <div class="q"><span class="qn">미션 2 · 혈액 흐름</span><p>② 혈액 흐름에서 ‘흐름 재생’을 눌러 보고, 피가 온몸에서 돌아온 뒤 다시 온몸으로 나가기까지 지나는 심장의 방 4개를 순서대로 쓰고, 방과 방 사이에서 지나는 판막 이름도 써 보세요.</p><textarea id="a2" placeholder="예) 오른심방 → … (사이의 판막: …)"></textarea></div>
+    <div class="q"><span class="qn">미션 3 · 박동 비교</span><p>③ ‘쉬는 중’과 ‘운동 후’를 번갈아 눌러 박동 빠르기를 비교하고, 운동할 때 심장이 더 빨리 뛰어야 하는 까닭을 ‘산소’라는 낱말을 넣어 써 보세요.</p><textarea id="a3" placeholder="예) 운동하면 근육이 ○○가 더 필요해서"></textarea></div>
+  </div>
+  <div class="mrow">
+    <input type="text" id="who" placeholder="이름 (예: 3모둠 김하늘)" aria-label="이름">
+    <button class="pill acc" id="printBtn">📄 내 기록 PDF로 저장</button>
+    <button class="pill" id="clearBtn">지우기</button>
+    <small style="color:var(--muted);font-weight:700" id="saved"></small>
+  </div>
+</section>
+
+<section class="card guide" id="guide">
+  <h3>사용 안내</h3>
+  <ul>
+    <li><b>돌리기·확대</b> 손가락(마우스)으로 끌면 돌아가고, 두 손가락으로 벌리거나 스크롤하면 확대·축소돼요. ‘처음’을 누르면 정면으로 돌아와요.</li>
+    <li><b>번호 표지</b> 모형 위 번호나 오른쪽 목록을 누르면 그 부위로 다가가서 설명이 나와요. ‘구조 표시’로 번호를 숨길 수 있어요.</li>
+    <li><b>박동 느끼기</b> ‘소리·진동’을 켜면 심장이 뛸 때마다 “쿵-쿵” 소리가 나고, 안드로이드 기기에서는 진동도 와요. ‘운동 후’는 2배 빠르게, ‘느리게’는 절반 속도로 보여 줘요.</li>
+    <li><b>AR 보기</b> 스마트폰·태블릿(Chrome·Safari)에서 ‘AR로 보기’를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요. 아이폰 AR에서는 박동이 멈춘 모습으로 보여요.</li>
+    <li><b>크기</b> 모형은 실제 심장(약 12 cm)의 약 3.3배예요. 성인 심장은 휴식 시 1분에 약 60~100회, 하루 약 10만 회 뛰어요.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>3D 모델: <a href="https://grab3d.com/models/anatomy/human-heart/" target="_blank" rel="noopener">외형(Human Heart)</a> · <a href="https://grab3d.com/models/anatomy/human-heart-cutaway/" target="_blank" rel="noopener">단면(Human Heart Cutaway)</a> — Grab3D, CC0 1.0. 폴리곤 축소·박동 애니메이션을 더해 가공했습니다.</span>
+  <a href="https://www.nhlbi.nih.gov/health/heart/anatomy" target="_blank" rel="noopener">심장 구조 참고 자료(NHLBI)</a>
+  <a href="../science/">DK Digital Science로 돌아가기</a>
+</footer>
+
+<div id="print" aria-hidden="true">
+  <h1>탐구 미션 기록 — 심장과 혈액 순환</h1>
+  <p id="pwho"></p><p id="pdate"></p>
+  <div class="pq"><b>미션 1 · 산소가 많은 피가 흐르는 혈관과 까닭</b><div class="pa" id="p1"></div></div>
+  <div class="pq"><b>미션 2 · 피가 지나는 방의 순서와 판막</b><div class="pa" id="p2"></div></div>
+  <div class="pq"><b>미션 3 · 운동할 때 심장이 더 빨리 뛰는 까닭</b><div class="pa" id="p3"></div></div>
+</div>
 
 <script>
 (async function(){
-  const mv = document.getElementById('mv'), tabs = document.getElementById('tabs');
-  const $ = id => document.getElementById(id);
-  let models = [], current = null, labelsOn = innerWidth>640, beating = true, speed = 1;
+  const $=id=>document.getElementById(id), mv=$('mv');
+  let models=[];
+  try{ models=await (await fetch('models.json')).json(); }
+  catch(e){ $('intro').textContent='models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
+  const outer=models[0], cut=models[1];
 
-  try { models = await (await fetch('models.json')).json(); }
-  catch(e){ $('mIntro').textContent = 'models.json을 불러오지 못했어요. 웹서버(또는 GitHub Pages)에서 열어 주세요.'; return; }
+  /* 세 단계 정의 */
+  const flow=[
+    {t:'온몸 → 오른심방', d:'온몸을 돌고 온 산소가 적은 피가 위·아래대정맥을 지나 오른심방으로 들어와요.', a:0, b:2, red:false, note:'위대정맥 → 오른심방'},
+    {t:'오른심방 → 오른심실', d:'오른심방이 모은 피가 삼첨판을 지나 오른심실로 내려가요.', a:2, b:6, via:4, red:false, note:'삼첨판'},
+    {t:'오른심실 → 폐', d:'오른심실이 수축하면 폐동맥판이 열리고 피가 폐동맥을 지나 폐로 가서 산소를 받아요.', a:6, b:11, red:false, note:'폐동맥판'},
+    {t:'폐 → 왼심방', d:'폐에서 산소를 받은 피가 폐정맥을 지나 왼심방으로 돌아와요. 이때부터 피는 산소가 많은 붉은 피예요.', a:11, b:3, red:true, note:'폐정맥(모형에는 일부만 보여요)'},
+    {t:'왼심방 → 왼심실', d:'왼심방의 피가 승모판(이첨판)을 지나 왼심실로 내려가요.', a:3, b:7, via:5, red:true, note:'승모판'},
+    {t:'왼심실 → 온몸', d:'가장 두꺼운 왼심실이 힘차게 수축해 대동맥판을 열고 피를 대동맥으로 내보내 온몸으로 보내요.', a:7, b:1, via:10, red:true, note:'대동맥판'}
+  ];
+  const tabs=[
+    {id:'t0', model:outer, file:'models/heart.glb', badge:'3D · 사실적 외형', step:'STEP 01 · OBSERVE', h:'겉모양 살펴보기',
+     intro:'모형을 돌려 가며 번호를 눌러 큰 혈관과 심장의 방을 찾아보세요. 표면의 노란 부분은 지방, 붉은 가는 줄기는 심장 근육에 피를 주는 관상동맥이에요.',
+     facts:['빨강 혈관: 산소가 많은 피 / 파랑 혈관: 산소가 적은 피','폐동맥은 동맥인데 파랗고, 폐정맥은 정맥인데 빨개요','우심실이 앞쪽에, 좌심실이 왼쪽 아래에 있어요'],
+     think:'심장에 연결된 혈관들은 모두 같은 방향으로 피를 보낼까요? 심장으로 들어오는 혈관과 나가는 혈관을 나눠 보세요.'},
+    {id:'t1', model:cut, file:'models/heart-cut.glb', badge:'3D · 단면 보기', step:'STEP 02 · STRUCTURE', h:'심장 속 네 개의 방',
+     intro:'심장을 앞에서 세로로 잘라 본 모습이에요. 네 개의 방, 판막, 판막을 붙잡는 건삭과 유두근을 찾아보세요. 박동하는 모습도 관찰해 보세요.',
+     facts:['위쪽 두 방은 심방, 아래쪽 두 방은 심실','좌심실 벽이 가장 두꺼워요','판막은 피가 한 방향으로만 흐르게 하는 문이에요'],
+     think:'왼심실의 벽이 오른심실보다 훨씬 두꺼운 까닭은 무엇일까요? 두 심실이 피를 보내는 곳을 비교해 보세요.'},
+    {id:'t2', model:cut, file:'models/heart-cut.glb', badge:'3D · 혈액의 길', step:'STEP 03 · CIRCULATION', h:'혈액의 길 따라가기',
+     intro:'단계를 누르거나 ‘흐름 재생’을 눌러 피가 어떤 순서로 심장의 방과 판막을 지나는지 따라가 보세요. 점멸하는 번호가 출발과 도착이에요.',
+     facts:['몸 → 오른쪽 심장 → 폐: 산소가 적은 피(폐순환)','폐 → 왼쪽 심장 → 몸: 산소가 많은 피(온몸순환)','피는 심장을 두 번 지나 몸을 한 바퀴 돌아요'],
+     think:'피가 심장을 한 바퀴 돌 때 왜 폐를 꼭 거쳐야 할까요? 산소가 적은 피와 많은 피가 어디에서 바뀌는지 찾아보세요.'}
+  ];
+  let cur=-1, active=-1, labelsOn=innerWidth>0, beating=true, speed=1, flowTimer=null, flowIdx=-1, feel=false, actx=null, lastPh=0;
 
-  models.forEach((m,i)=>{
-    const b = document.createElement('button');
-    b.className='tab'; b.role='tab'; b.textContent=(m.emoji||'')+' '+m.name; b.onclick=()=>load(i);
-    tabs.appendChild(b);
-  });
-  if (models.length<2) tabs.style.display='none';
-
-  function setBeat(on){
-    beating = on; $('beatBtn').setAttribute('aria-pressed', on);
-    if (on) mv.play({repetitions: Infinity}); else mv.pause();
+  function pos(s){return s.split(' ').map(x=>parseFloat(x));}
+  function hotspotsFor(i){ return i===0?outer.hotspots:cut.hotspots; }
+  function setBpm(){ $('bpm').textContent=(Math.round(72*speed))+'회/분 · '+(speed>1?'운동 후':speed<1?'느리게(관찰용)':'쉬는 중'); }
+  function setSpeed(s,which){
+    speed=s; mv.timeScale=s; setBpm();
+    $('restBtn').setAttribute('aria-pressed',which==='rest'); $('runBtn').setAttribute('aria-pressed',which==='run'); $('slowBtn').setAttribute('aria-pressed',which==='slow');
   }
-  function setSpeed(s){
-    speed = s; mv.timeScale = s;
-    $('restBtn').setAttribute('aria-pressed', s===1); $('runBtn').setAttribute('aria-pressed', s!==1);
-  }
+  function setBeat(on){ beating=on; $('beatBtn').setAttribute('aria-pressed',on); if(on) mv.play({repetitions:Infinity}); else mv.pause(); }
 
-  function load(i){
-    current = models[i];
-    [...tabs.children].forEach((t,j)=>t.setAttribute('aria-selected', j===i));
-    mv.querySelectorAll('.hs').forEach(h=>h.remove());
-    mv.autoplay = !!current.animated;
-    mv.animationName = current.animated ? 'beat' : undefined;
-    mv.src = current.file;
-    mv.alt = current.name+' 3D 모형';
-    mv.resetTurntableRotation(0); mv.cameraOrbit='0.02deg 82deg auto'; mv.cameraTarget='auto auto auto';
-    ['beatBtn','feelBtn','restBtn','runBtn','sep'].forEach(id=>$(id).style.display = current.animated?'':'none');
-    if (current.animated){ beating=true; $('beatBtn').setAttribute('aria-pressed',true); setSpeed(1); }
-    $('mName').textContent=(current.emoji||'')+' '+current.name;
-    $('mIntro').textContent=current.intro||'';
-    $('mFacts').innerHTML=(current.facts||[]).map(f=>'<li>'+f+'</li>').join('');
-    $('info').style.display='none';
-    const pl=$('parts'); pl.innerHTML='';
-    (current.hotspots||[]).forEach((h,k)=>{
-      const b=document.createElement('button');
-      b.className='hs'+(labelsOn?'':' hide'); b.slot='hotspot-'+k;
-      b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 1 0');
-      b.setAttribute('data-visibility-attribute','data-visible');
-      b.textContent=h.name; b.onclick=()=>pick(k);
-      mv.appendChild(b);
-      const p=document.createElement('button'); p.className='pt'; p.textContent=h.name; p.onclick=()=>pick(k);
-      pl.appendChild(p);
-    });
-  }
-  function pick(k){
-    const h=current.hotspots[k];
+  function clearFlow(){ mv.querySelectorAll('.hs').forEach(h=>h.classList.remove('fa','fb','red')); }
+  function selectItem(k){
+    active=k; const hs=hotspotsFor(cur)[k]; if(!hs) return;
     mv.querySelectorAll('.hs').forEach((x,j)=>x.classList.toggle('on',j===k));
-    [...$('parts').children].forEach((x,j)=>x.classList.toggle('on',j===k));
-    $('iName').textContent=h.name; $('iDesc').textContent=h.desc||''; $('info').style.display='block';
-    mv.autoRotate=false; $('rotBtn').setAttribute('aria-pressed','false');
-    const [x,y,z]=h.pos.split(' ').map(Number);
-    mv.resetTurntableRotation(0); mv.cameraTarget=`${x}m ${y}m ${z}m`; mv.cameraOrbit='0.01deg 82deg 0.5m';
+    [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
+    $('iName').textContent=hs.name; $('iDesc').textContent=hs.desc; $('info').style.display='block';
+    const p=pos(hs.pos); mv.resetTurntableRotation(0); mv.cameraTarget=`${p[0]}m ${p[1]}m ${p[2]}m`; mv.cameraOrbit='0.01deg 82deg 0.55m';
+  }
+  function showStep(k){
+    flowIdx=k; const s=flow[k]; clearFlow();
+    const els=[...mv.querySelectorAll('.hs')];
+    els.forEach(e=>e.classList.remove('on'));
+    [els[s.a],els[s.b]].forEach(e=>{ if(e){e.classList.add('fa'); if(s.red) e.classList.add('red');} });
+    if(s.via!=null && els[s.via]) els[s.via].classList.add('fb','on');
+    [...$('list').children].forEach((x,j)=>x.classList.toggle('on',j===k));
+    $('iName').textContent=(k+1)+'단계 · '+s.t; $('iDesc').textContent=s.d+(s.note?' ('+s.note+')':''); $('info').style.display='block';
+    const pa=pos(cut.hotspots[s.a].pos), pb=pos(cut.hotspots[s.b].pos);
+    const m=pa.map((v,i)=>(v+pb[i])/2); mv.resetTurntableRotation(0); mv.cameraTarget=`${m[0]}m ${m[1]}m ${m[2]}m`; mv.cameraOrbit='0.01deg 82deg 0.75m';
+  }
+  function stopFlow(){ if(flowTimer){clearInterval(flowTimer); flowTimer=null;} $('playFlow').textContent='▶ 흐름 재생'; }
+  function playFlow(){
+    if(flowTimer){ stopFlow(); return; }
+    $('playFlow').textContent='■ 멈춤'; let k=(flowIdx+1)%flow.length; showStep(k);
+    flowTimer=setInterval(()=>{ k=(k+1)%flow.length; showStep(k); },3200);
   }
 
-  // ── 심장박동 느끼기: 쿵(수축 시작)·쿵(판막 닫힘) 소리 + 진동, 애니메이션 위상에 맞춤
-  let feel=false, actx=null, lastPh=0;
-  function thump(freq,dur,gain){
-    if(!actx) return; const t=actx.currentTime, o=actx.createOscillator(), g=actx.createGain();
-    o.type='sine'; o.frequency.setValueAtTime(freq,t); o.frequency.exponentialRampToValueAtTime(freq*0.55,t+dur);
-    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(gain,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-    o.connect(g).connect(actx.destination); o.start(t); o.stop(t+dur+0.02);
-  }
-  function buzz(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
-  function lub(){ thump(62,0.16,0.9); buzz(70); $('mv').classList.add('pulse'); setTimeout(()=>$('mv').classList.remove('pulse'),120); }
-  function dub(){ thump(78,0.11,0.55); buzz(40); }
-  (function tick(){
-    if(feel && current && current.animated && beating){
-      const dur=0.8, ph=(mv.currentTime%dur+dur)%dur;
-      if(ph<lastPh-0.4) lub();               // 한 박자 시작
-      else if(lastPh<0.42 && ph>=0.42) dub(); // 수축 끝
-      lastPh=ph;
+  function build(i){
+    const T=tabs[i]; cur=i; active=-1; stopFlow(); flowIdx=-1;
+    ['t0','t1','t2'].forEach((id,j)=>$(id).setAttribute('aria-selected',j===i));
+    $('badge').textContent=T.badge; $('step').textContent=T.step; $('h').textContent=T.h; $('intro').textContent=T.intro;
+    $('facts').innerHTML=T.facts.map(f=>'<li>'+f+'</li>').join(''); $('think').textContent=T.think;
+    $('info').style.display='none'; $('flowctl').style.display=i===2?'flex':'none';
+    mv.querySelectorAll('.hs').forEach(h=>h.remove());
+    if(!mv.getAttribute('src')||!mv.getAttribute('src').endsWith(T.file.split('/')[1])){ mv.src=T.file; }
+    mv.resetTurntableRotation(0); mv.cameraOrbit='0.02deg 82deg auto'; mv.cameraTarget='auto auto auto';
+    const list=$('list'); list.innerHTML='';
+    const hsData=hotspotsFor(i);
+    hsData.forEach((h,k)=>{
+      const b=document.createElement('button'); b.className='hs'+(labelsOn?'':' hide'); b.slot='hotspot-'+k;
+      b.setAttribute('data-position',h.pos); b.setAttribute('data-normal',h.normal||'0 0 1'); b.setAttribute('data-visibility-attribute','data-visible');
+      b.innerHTML='<span class="n">'+(k+1)+'</span><span class="t">'+h.name+'</span>';
+      b.onclick=()=>{ if(cur===2) showStep(nearestStep(k)); else selectItem(k); };
+      mv.appendChild(b);
+    });
+    if(i===2){
+      flow.forEach((s,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+s.t+'</span><span class="ar">›</span>'; it.onclick=()=>{stopFlow();showStep(k)}; list.appendChild(it); });
+    } else {
+      hsData.forEach((h,k)=>{ const it=document.createElement('button'); it.className='item'; it.innerHTML='<span class="no">'+(k+1)+'</span><span>'+h.name+'</span><span class="ar">›</span>'; it.onclick=()=>selectItem(k); list.appendChild(it); });
     }
-    requestAnimationFrame(tick);
-  })();
-  $('feelBtn').onclick=()=>{
-    feel=!feel; $('feelBtn').setAttribute('aria-pressed',feel);
-    if(feel){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); lub(); setTimeout(dub,300); }
-  };
+  }
+  function nearestStep(k){ const f=flow.findIndex(s=>s.a===k||s.b===k||s.via===k); return f<0?0:f; }
 
+  ['t0','t1','t2'].forEach((id,i)=>$(id).onclick=()=>build(i));
   $('beatBtn').onclick=()=>setBeat(!beating);
-  $('restBtn').onclick=()=>setSpeed(1);
-  $('runBtn').onclick=()=>setSpeed(2);
+  $('restBtn').onclick=()=>setSpeed(1,'rest'); $('runBtn').onclick=()=>setSpeed(2,'run'); $('slowBtn').onclick=()=>setSpeed(0.5,'slow');
   $('rotBtn').onclick=()=>{ mv.autoRotate=!mv.autoRotate; $('rotBtn').setAttribute('aria-pressed',mv.autoRotate); };
   $('lblBtn').onclick=()=>{ labelsOn=!labelsOn; $('lblBtn').setAttribute('aria-pressed',labelsOn); mv.querySelectorAll('.hs').forEach(h=>h.classList.toggle('hide',!labelsOn)); };
-  $('resetBtn').onclick=()=>{ mv.resetTurntableRotation(0); mv.cameraOrbit='0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
-    mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('parts').children].forEach(x=>x.classList.remove('on')); $('info').style.display='none'; };
+  $('resetBtn').onclick=()=>{ stopFlow(); mv.resetTurntableRotation(0); mv.cameraOrbit='0.01deg 82deg auto'; mv.cameraTarget='auto auto auto'; mv.fieldOfView='auto'; mv.jumpCameraToGoal();
+    clearFlow(); mv.querySelectorAll('.hs').forEach(x=>x.classList.remove('on')); [...$('list').children].forEach(x=>x.classList.remove('on')); $('info').style.display='none'; };
+  $('playFlow').onclick=playFlow;
   mv.addEventListener('load',()=>{
-    const ok=mv.canActivateAR;
-    $('arBtn').style.display=ok?'':'none';
-    $('arnote').textContent= ok ? '「AR로 보기」를 누르고 카메라를 바닥에 비추면, 커다란 심장이 우리 교실에 나타나요.'
-      : '스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
-    if (current.animated){ mv.timeScale=speed; if(!beating) mv.pause(); }
+    const ok=mv.canActivateAR; $('arBtn').style.display=ok?'':'none';
+    $('arnote').textContent= ok?'「AR로 보기」를 누르고 카메라를 바닥에 비추면 커다란 심장이 교실에 나타나요.':'스마트폰·태블릿(Chrome/Safari)에서 이 주소를 열면 「AR로 보기」 버튼이 나타나요.';
+    mv.timeScale=speed; if(!beating) mv.pause();
   });
-  $('lblBtn').setAttribute('aria-pressed',labelsOn);
-  load(0);
+
+  /* 박동 소리·진동: 애니메이션 위상(0.8초 주기)에 맞춤 */
+  function thump(f,d,g){ if(!actx) return; const t=actx.currentTime,o=actx.createOscillator(),gn=actx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*.55,t+d);
+    gn.gain.setValueAtTime(.0001,t); gn.gain.exponentialRampToValueAtTime(g,t+.012); gn.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(gn).connect(actx.destination); o.start(t); o.stop(t+d+.02); }
+  const buzz=ms=>{ try{ navigator.vibrate&&navigator.vibrate(ms);}catch(e){} };
+  const lub=()=>{ thump(62,.16,.9); buzz(70); mv.classList.add('pulse'); setTimeout(()=>mv.classList.remove('pulse'),120); };
+  const dub=()=>{ thump(78,.11,.55); buzz(40); };
+  (function tick(){ if(feel&&beating){ const D=.8, ph=((mv.currentTime%D)+D)%D; if(ph<lastPh-.4) lub(); else if(lastPh<.42&&ph>=.42) dub(); lastPh=ph; } requestAnimationFrame(tick); })();
+  $('feelBtn').onclick=()=>{ feel=!feel; $('feelBtn').setAttribute('aria-pressed',feel); if(feel){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); lub(); setTimeout(dub,300); } };
+
+  /* 탐구 미션 저장 */
+  const ids=['a1','a2','a3','who'];
+  const store={get(k){try{return localStorage.getItem('heartlab_'+k)||''}catch(e){return ''}},set(k,v){try{localStorage.setItem('heartlab_'+k,v)}catch(e){}}};
+  ids.forEach(id=>{ $(id).value=store.get(id); $(id).addEventListener('input',()=>{ store.set(id,$(id).value); $('saved').textContent='이 기기에 저장됨'; }); });
+  $('printBtn').onclick=()=>{
+    $('pwho').textContent='이름: '+($('who').value||'(쓰지 않음)'); $('pdate').textContent='날짜: '+new Date().toLocaleDateString('ko-KR');
+    ['1','2','3'].forEach(n=>$('p'+n).textContent=$('a'+n).value||'(답을 쓰지 않았어요)'); window.print();
+  };
+  $('clearBtn').onclick=()=>{ if(!confirm('쓴 내용을 모두 지울까요?')) return; ids.forEach(id=>{$(id).value='';store.set(id,'')}); $('saved').textContent=''; };
+
+  setBpm(); build(0);
 })();
 </script>
 </body>
