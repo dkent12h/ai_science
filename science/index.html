@@ -102,8 +102,9 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 
 .dev{position:absolute;z-index:2;right:clamp(16px,7vw,130px);top:clamp(70px,10vh,110px);height:min(76vh,760px);aspect-ratio:470/780;transform:rotate(5deg);filter:drop-shadow(0 30px 40px rgba(40,50,110,.22))}
 .dev svg{width:100%;height:100%;display:block;overflow:visible;touch-action:none;transition:none}
-.dev canvas{touch-action:none}.dev.on{filter:none}
-@media (max-width:900px){.dev{height:auto;width:min(48vw,280px);top:76px;right:auto;left:50%;transform:translateX(-50%) rotate(5deg)}}
+#gl3d{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;display:block}html:not(.no-webgl) .dev{display:none}
+@media (max-width:900px){.dev{height:auto;width:min(56vw,320px);top:76px;right:auto;left:50%;transform:translateX(-50%) rotate(5deg)}}
+@media (orientation:portrait) and (min-width:901px){.dev{height:auto;width:min(58vw,560px);top:clamp(70px,8vh,110px);right:auto;left:50%;transform:translateX(-50%) rotate(5deg)}}
 </style>
 </head>
 <body>
@@ -276,30 +277,22 @@ html.no-webgl .fb{display:flex}html.no-webgl #gl{display:none}
 document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(function(es,io){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.15}).observe(el)});
 
 (function(){
-  var host=document.querySelector('.dev'); if(!host||!window.THREE) return;
-  var svgFallback=host.querySelector('svg');
-  var T=THREE, canvas=document.createElement('canvas'), renderer;
-  try{ renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }catch(e){ return; }
+  var T=window.THREE, host=document.querySelector('.dev');
+  function fail(){document.documentElement.classList.add('no-webgl')}
+  if(!T){fail();return}
+  var canvas=document.getElementById('gl3d'), renderer;
+  if(!canvas){canvas=document.createElement('canvas');canvas.id='gl3d';canvas.setAttribute('aria-hidden','true');document.body.appendChild(canvas)}
+  try{ renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true}); }catch(e){ fail(); return; }
   renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
   renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
-  canvas.style.cssText='position:absolute;left:-25%;top:-25%;width:150%;height:150%;display:block;touch-action:none;cursor:grab';
-  host.appendChild(canvas); host.classList.add('on'); if(svgFallback) svgFallback.style.display='none';
 
-  var scene=new T.Scene(), cam=new T.PerspectiveCamera(28,1,0.1,100);
-  function fit(){
-    var w=canvas.clientWidth||300,h=canvas.clientHeight||500; renderer.setSize(w,h,false); cam.aspect=w/h;
-    var vis=7.3*1.5*1.22, d=vis/(2*Math.tan(T.MathUtils.degToRad(cam.fov/2))); cam.position.set(0,0,d); cam.updateProjectionMatrix();
-  }
-  new ResizeObserver(fit).observe(canvas); fit();
-
+  var scene=new T.Scene(), cam=new T.PerspectiveCamera(30,1,0.1,100); cam.position.set(0,0,12);
   scene.add(new T.HemisphereLight(0xffffff,0xaab2c4,0.95));
-  var key=new T.DirectionalLight(0xffffff,0.85); key.position.set(-3,5,9); key.castShadow=true;
-  key.shadow.mapSize.set(2048,2048); var sc=key.shadow.camera; sc.left=-6;sc.right=6;sc.top=6;sc.bottom=-6;sc.near=1;sc.far=30; key.shadow.bias=-0.0006;
-  scene.add(key);
+  var key=new T.DirectionalLight(0xffffff,0.85); key.castShadow=true; key.shadow.mapSize.set(2048,2048); key.shadow.bias=-0.0006; scene.add(key); scene.add(key.target);
   var back=new T.DirectionalLight(0xffffff,0.55); back.position.set(2,-3,-9); scene.add(back);
-  var floor=new T.Mesh(new T.PlaneGeometry(20,20),new T.ShadowMaterial({opacity:0.10})); floor.position.z=-1.6; floor.receiveShadow=true; scene.add(floor);
-
-  var G=new T.Group(); scene.add(G);
+  var root=new T.Group(); scene.add(root);
+  var floor=new T.Mesh(new T.PlaneGeometry(20,20),new T.ShadowMaterial({opacity:0.10})); floor.position.z=-1.6; floor.receiveShadow=true; root.add(floor);
+  var G=new T.Group(); root.add(G);
   function P(x,y,z){return new T.Vector3((x-232)/100,-(y-385)/100,z)}
   function mat(c,r,m){return new T.MeshStandardMaterial({color:c,roughness:r==null?0.6:r,metalness:m||0})}
   function add(o,cast){ o.castShadow=cast!==false; o.receiveShadow=true; G.add(o); return o }
@@ -443,41 +436,67 @@ document.querySelectorAll(".rv").forEach(function(el){new IntersectionObserver(f
     }
   }
 
+  /* ---------- layout (same scheme as DK microbit hero: fixed canvas, moves with scroll) ---------- */
+  var Ld={};
+  function resize(){
+    var w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();
+    var vh=2*cam.position.z*Math.tan(T.MathUtils.degToRad(cam.fov/2)), vw=vh*cam.aspect, desk=cam.aspect>1;
+    var heroS=Math.min(vh*(desk?.80:.45)/7.3, vw*(desk?.34:.80)/4.3);
+    Ld=desk?{desk:true,hx:vw*.245,hy:-vh*.02,lx:vw*.355,ly:0,hs:heroS,ls:heroS*.56}
+            :{desk:false,hx:0,hy:vh*.13,lx:0,ly:vh*.30,hs:heroS,ls:heroS*.62};
+  }
+  addEventListener('resize',resize); resize();
+  function ease(t){return t*t*(3-2*t)} function lerp(a,b,t){return a+(b-a)*t}
+
   /* ---------- interaction ---------- */
-  var home=new T.Quaternion().setFromEuler(new T.Euler(-0.5,0.38,0)), target=null;
-  G.quaternion.copy(home);
-  var ray=new T.Raycaster(), mouse=new T.Vector2(), allK=[]; knobs.forEach(function(k){allK=allK.concat(k.meshes)});
-  function pick(e){var r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mouse,cam);var h=ray.intersectObjects(allK,false);return h.length?h[0].object.userData.k:-1}
-  function scr(k){var p=knobs[k].g.getWorldPosition(new T.Vector3()).project(cam),r=canvas.getBoundingClientRect();return {x:r.left+(p.x+1)/2*r.width,y:r.top+(1-p.y)/2*r.height}}
-  var mode=null,lx=0,ly=0,kidx=-1,lastA=0,Z=new T.Vector3(0,0,1);
-  canvas.addEventListener('pointerdown',function(e){
-    target=null; var k=pick(e); canvas.setPointerCapture(e.pointerId); e.preventDefault();
-    if(k>=0){mode='knob';kidx=k;auto=false;var c=scr(k);lastA=Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI;
-      // direction: front-facing knob => normal toward camera
-      }
-    else{mode='orbit';lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'}
+  var user=new T.Quaternion(), tgtUser=null, baseQ=new T.Quaternion(), eul=new T.Euler();
+  var ray=new T.Raycaster(), ndc=new T.Vector2();
+  function hit(e){
+    if(Ld.desk? scrollY>innerHeight*1.4 : scrollY>innerHeight*.3) return null;
+    ndc.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1); ray.setFromCamera(ndc,cam);
+    var h=ray.intersectObjects(G.children,true); for(var i=0;i<h.length;i++){ if(h[i].object===floor) continue; return h[i].object }
+    return null;
+  }
+  function scr(k){var p=knobs[k].g.getWorldPosition(new T.Vector3()).project(cam);return {x:(p.x+1)/2*innerWidth,y:(1-p.y)/2*innerHeight}}
+  var mode=null,lx=0,ly=0,kidx=-1,lastA=0,Z=new T.Vector3(0,0,1),hoverDisp='';
+  addEventListener('pointerdown',function(e){
+    if(e.target.closest&&e.target.closest('a,button,input,select,textarea')) return;
+    var o=hit(e); if(!o) return; tgtUser=null;
+    if(o.userData.k!==undefined){mode='knob';kidx=o.userData.k;auto=false;var c=scr(kidx);lastA=Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI}
+    else{mode='orbit';lx=e.clientX;ly=e.clientY}
+    document.body.style.cursor='grabbing';
   });
-  canvas.addEventListener('pointermove',function(e){
+  addEventListener('pointermove',function(e){
     if(mode==='orbit'){var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;
       var qy=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),dx*0.009), qx=new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),dy*0.009);
-      G.quaternion.premultiply(qx).premultiply(qy).normalize();}
+      user.premultiply(qx).premultiply(qy).normalize();}
     else if(mode==='knob'){var c=scr(kidx),a=Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI,d=a-lastA;if(d>180)d-=360;if(d<-180)d+=360;lastA=a;
-      var n=Z.clone().applyQuaternion(G.quaternion); var s=n.z>=0?1:-1; // viewed from back => reversed
-      knobs[kidx].ang=Math.max(-135,Math.min(135,knobs[kidx].ang+d*s));}
-    else{canvas.style.cursor=pick(e)>=0?'pointer':'grab'}
+      var n=Z.clone().applyQuaternion(G.getWorldQuaternion(new T.Quaternion())); var sg=n.z>=0?1:-1;
+      knobs[kidx].ang=Math.max(-135,Math.min(135,knobs[kidx].ang+d*sg));}
+    else if(e.pointerType==='mouse'){var o=hit(e),d=o?(o.userData.k!==undefined?'pointer':'grab'):''; if(d!==hoverDisp){hoverDisp=d;document.body.style.cursor=d}}
   });
-  function up(){mode=null;canvas.style.cursor='grab'}
-  canvas.addEventListener('pointerup',up); canvas.addEventListener('pointercancel',up);
-  canvas.addEventListener('dblclick',function(){target=home.clone()});
+  function up(){ if(mode){mode=null;document.body.style.cursor=hoverDisp} }
+  addEventListener('pointerup',up); addEventListener('pointercancel',up);
+  addEventListener('dblclick',function(e){ if(hit(e)) tgtUser=new T.Quaternion() });
 
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function loop(now){
-    if(auto&&!reduce){var t=(now-t0)/1000; knobs[0].ang=Math.sin(t*.55)*125; knobs[1].ang=Math.sin(t*.43+2.1)*125; knobs[2].ang=Math.sin(t*.37+4.2)*125}
-    if(target){G.quaternion.slerp(target,0.12); if(G.quaternion.angleTo(target)<0.002){G.quaternion.copy(target);target=null}}
-    apply(); renderer.render(scene,cam); requestAnimationFrame(loop);
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, last=performance.now(), sc=0;
+  function frame(now){
+    var dt=Math.min((now-last)/1000,.05); last=now; var t=(now-t0)/1000;
+    if(auto&&!reduce){knobs[0].ang=Math.sin(t*.55)*125; knobs[1].ang=Math.sin(t*.43+2.1)*125; knobs[2].ang=Math.sin(t*.37+4.2)*125}
+    var target=Math.min(1,scrollY/(innerHeight*.9)); sc+=(target-sc)*Math.min(1,dt*6); var p=ease(sc);
+    var fl=reduce?0:Math.sin(t*1.1)*.08;
+    var s=lerp(Ld.hs,Ld.ls,p);
+    root.position.set(lerp(Ld.hx,Ld.lx,p),lerp(Ld.hy,Ld.ly,p)+fl,0); root.scale.setScalar(s);
+    if(tgtUser){user.slerp(tgtUser,0.12); if(user.angleTo(tgtUser)<0.002){user.copy(tgtUser);tgtUser=null}}
+    eul.set(-0.5+p*0.15,0.38+p*0.30+(reduce?0:Math.sin(t*.6)*.06),0.0-p*0.05); baseQ.setFromEuler(eul);
+    G.quaternion.copy(user).multiply(baseQ);
+    key.position.set(root.position.x-3*1,root.position.y+5,9); key.target.position.copy(root.position); key.target.updateMatrixWorld();
+    var b=5.2*s; var sh=key.shadow.camera; sh.left=-b;sh.right=b;sh.top=b;sh.bottom=-b;sh.near=1;sh.far=30; sh.updateProjectionMatrix();
+    canvas.style.opacity=Ld.desk?'1':String(1-ease(Math.min(1,Math.max(0,(scrollY/innerHeight-.35)/.55))));
+    apply(); renderer.render(scene,cam); requestAnimationFrame(frame);
   }
-  requestAnimationFrame(loop);
-  window.__ld3d={G:G,knobs:knobs,renderer:renderer};
+  requestAnimationFrame(frame);
+  window.__ld3d={G:G,root:root,knobs:knobs,renderer:renderer};
 })();
 
 
