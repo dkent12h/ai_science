@@ -250,7 +250,7 @@ input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
 const CODE_LINK = "";
 const COVER = `<svg viewBox="0 0 400 400" role="img" aria-label="태블릿에 그래프가 그려지는 그림" font-family="inherit" font-weight="700" text-anchor="middle" fill="#25252d"><defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter></defs><circle cx="200" cy="200" r="140" fill="#0d9488" opacity=".35" filter="url(#g)"/><g transform="translate(40,70) scale(.53)"><rect x="6" y="6" width="588" height="388" rx="38" fill="#1b1b22"/><rect x="20" y="20" width="560" height="360" rx="26" fill="#fff"/><line x1="64" y1="318" x2="520" y2="318" stroke="#6a6a76" stroke-width="5"/><line x1="64" y1="318" x2="64" y2="62" stroke="#6a6a76" stroke-width="5"/><polyline points="70,250 140,230 220,200 300,170 380,150 470,138" fill="none" stroke="#f08a4b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><polyline points="70,285 140,284 220,283 300,282 380,281 470,281" fill="none" stroke="#4aa3e8" stroke-width="10" stroke-linecap="round"/></g><g transform="translate(250,250)"><rect x="0" y="0" width="100" height="40" rx="12" fill="#0d9488"/><circle cx="26" cy="20" r="8" fill="#fff"/><path d="M52 20 q14 -14 28 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg>`;
 const MEDIA = {"img": {"3": ["https://turbo.vernier.com/wp-content/uploads/2019/12/product.gdx-volt._hero.001-600x338.jpg"]}, "video": {}, "links": {}};
-const ILLU = {"4": "<svg viewBox=\"0 0 600 400\" role=\"img\" aria-label=\"스마트패드(태블릿)에 Graphical Analysis 그래프가 뜬 화면\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"6\" y=\"6\" width=\"588\" height=\"388\" rx=\"38\" fill=\"#1b1b22\"/><rect x=\"20\" y=\"20\" width=\"560\" height=\"360\" rx=\"26\" fill=\"#fff\"/>\n<rect x=\"20\" y=\"20\" width=\"560\" height=\"38\" rx=\"26\" fill=\"#eef0f6\"/><text x=\"44\" y=\"46\" font-size=\"16\" text-anchor=\"start\">☰</text><text x=\"300\" y=\"46\" font-size=\"15\" fill=\"#6a6a76\">Graphical Analysis</text>\n<line x1=\"64\" y1=\"318\" x2=\"520\" y2=\"318\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"64\" y1=\"318\" x2=\"64\" y2=\"82\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"70,250 140,230 220,200 300,170 380,150 470,138\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"70,280 140,279 220,278 300,277 380,276 470,276\" fill=\"none\" stroke=\"#4aa3e8\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n<text x=\"292\" y=\"346\" font-size=\"14\" fill=\"#6a6a76\">시간 (s)</text><text x=\"34\" y=\"200\" font-size=\"14\" fill=\"#6a6a76\" transform=\"rotate(-90 34 200)\">전압 (V)</text>\n<rect x=\"470\" y=\"344\" width=\"96\" height=\"26\" rx=\"9\" fill=\"#16a34a\"/><text x=\"518\" y=\"362\" font-size=\"13\" fill=\"#fff\">▶ 수집 시작</text><circle cx=\"300\" cy=\"13\" r=\"3\" fill=\"#444\"/></svg>"};
+const ILLU = {"4": "<svg viewBox=\"0 0 600 400\" role=\"img\" aria-label=\"스마트패드(태블릿)에 Graphical Analysis 그래프가 뜬 화면\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"6\" y=\"6\" width=\"588\" height=\"388\" rx=\"38\" fill=\"#1b1b22\"/><rect x=\"20\" y=\"20\" width=\"560\" height=\"360\" rx=\"26\" fill=\"#fff\"/>\n<rect x=\"20\" y=\"20\" width=\"560\" height=\"38\" rx=\"26\" fill=\"#eef0f6\"/><text x=\"44\" y=\"46\" font-size=\"16\" text-anchor=\"start\">☰</text><text x=\"300\" y=\"46\" font-size=\"15\" fill=\"#6a6a76\">Graphical Analysis</text>\n<line x1=\"64\" y1=\"318\" x2=\"520\" y2=\"318\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"64\" y1=\"318\" x2=\"64\" y2=\"82\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"70,250 140,230 220,200 300,170 380,150 470,138\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"70,280 140,279 220,278 300,277 380,276 470,276\" fill=\"none\" stroke=\"#4aa3e8\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n<text x=\"292\" y=\"346\" font-size=\"14\" fill=\"#6a6a76\">시간 (s)</text><text x=\"34\" y=\"200\" font-size=\"14\" fill=\"#6a6a76\" transform=\"rotate(-90 34 200)\">전압 (V)</text>\n<rect x=\"470\" y=\"344\" width=\"96\" height=\"26\" rx=\"9\" fill=\"#16a34a\"/><text x=\"518\" y=\"362\" font-size=\"13\" fill=\"#fff\">▶ 수집 시작</text><circle cx=\"300\" cy=\"13\" r=\"3\" fill=\"#444\"/></svg>", "5": "<svg viewBox=\"0 0 600 310\" role=\"img\" aria-label=\"전지를 이은 뒤 전압 센서를 연결한 모습\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"80\" y=\"110\" width=\"60\" height=\"90\" rx=\"8\" fill=\"#e5e7eb\" stroke=\"#6b7280\" stroke-width=\"4\"/><text x=\"110\" y=\"162\" font-size=\"20\" fill=\"#25252d\">1.5V</text><rect x=\"150\" y=\"110\" width=\"60\" height=\"90\" rx=\"8\" fill=\"#e5e7eb\" stroke=\"#6b7280\" stroke-width=\"4\"/><text x=\"180\" y=\"162\" font-size=\"20\" fill=\"#25252d\">1.5V</text><line x1=\"140\" y1=\"155\" x2=\"150\" y2=\"155\" stroke=\"#6b7280\" stroke-width=\"6\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"70\" stroke=\"#ef4444\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"70\" x2=\"330\" y2=\"70\" stroke=\"#ef4444\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"180\" y1=\"200\" x2=\"180\" y2=\"240\" stroke=\"#334155\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"180\" y1=\"240\" x2=\"330\" y2=\"240\" stroke=\"#334155\" stroke-width=\"5\" stroke-linecap=\"round\"/><g><rect x=\"330\" y=\"100\" width=\"70\" height=\"46\" rx=\"12\" fill=\"#e6f5f2\" stroke=\"#0d9488\" stroke-width=\"4\"/><circle cx=\"346\" cy=\"116\" r=\"5\" fill=\"#22c55e\" stroke=\"#22c55e\" stroke-width=\"0\"/><text x=\"365\" y=\"137\" font-size=\"15\" fill=\"#25252d\">전압</text></g><text x=\"260\" y=\"285\" font-size=\"18\" fill=\"#25252d\">전지를 이어 연결해요</text></svg>", "6": "<svg viewBox=\"0 0 600 180\" role=\"img\" aria-label=\"온도 그래프 모양 세 가지\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(10,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,86 60,66 104,40 146,18\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">올라가요</text></g>\n<g transform=\"translate(210,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,18 60,40 104,66 146,86\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">내려가요</text></g>\n<g transform=\"translate(410,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,52 146,52\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">그대로예요</text></g>\n</svg>", "7": "<svg viewBox=\"0 0 600 310\" role=\"img\" aria-label=\"전지를 이은 뒤 전압 센서를 연결한 모습\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"80\" y=\"110\" width=\"60\" height=\"90\" rx=\"8\" fill=\"#e5e7eb\" stroke=\"#6b7280\" stroke-width=\"4\"/><text x=\"110\" y=\"162\" font-size=\"20\" fill=\"#25252d\">1.5V</text><rect x=\"150\" y=\"110\" width=\"60\" height=\"90\" rx=\"8\" fill=\"#e5e7eb\" stroke=\"#6b7280\" stroke-width=\"4\"/><text x=\"180\" y=\"162\" font-size=\"20\" fill=\"#25252d\">1.5V</text><line x1=\"140\" y1=\"155\" x2=\"150\" y2=\"155\" stroke=\"#6b7280\" stroke-width=\"6\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"70\" stroke=\"#ef4444\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"70\" x2=\"330\" y2=\"70\" stroke=\"#ef4444\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"180\" y1=\"200\" x2=\"180\" y2=\"240\" stroke=\"#334155\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"180\" y1=\"240\" x2=\"330\" y2=\"240\" stroke=\"#334155\" stroke-width=\"5\" stroke-linecap=\"round\"/><g><rect x=\"330\" y=\"100\" width=\"70\" height=\"46\" rx=\"12\" fill=\"#e6f5f2\" stroke=\"#0d9488\" stroke-width=\"4\"/><circle cx=\"346\" cy=\"116\" r=\"5\" fill=\"#22c55e\" stroke=\"#22c55e\" stroke-width=\"0\"/><text x=\"365\" y=\"137\" font-size=\"15\" fill=\"#25252d\">전압</text></g><text x=\"260\" y=\"285\" font-size=\"18\" fill=\"#25252d\">전지를 이어 연결해요</text></svg>", "10": "<svg viewBox=\"0 0 600 400\" role=\"img\" aria-label=\"스마트패드(태블릿)에 Graphical Analysis 그래프가 뜬 화면\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"6\" y=\"6\" width=\"588\" height=\"388\" rx=\"38\" fill=\"#1b1b22\"/><rect x=\"20\" y=\"20\" width=\"560\" height=\"360\" rx=\"26\" fill=\"#fff\"/>\n<rect x=\"20\" y=\"20\" width=\"560\" height=\"38\" rx=\"26\" fill=\"#eef0f6\"/><text x=\"44\" y=\"46\" font-size=\"16\" text-anchor=\"start\">☰</text><text x=\"300\" y=\"46\" font-size=\"15\" fill=\"#6a6a76\">Graphical Analysis</text>\n<line x1=\"64\" y1=\"318\" x2=\"520\" y2=\"318\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"64\" y1=\"318\" x2=\"64\" y2=\"82\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"70,250 140,230 220,200 300,170 380,150 470,138\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"70,280 140,279 220,278 300,277 380,276 470,276\" fill=\"none\" stroke=\"#4aa3e8\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n<text x=\"292\" y=\"346\" font-size=\"14\" fill=\"#6a6a76\">시간 (s)</text><text x=\"34\" y=\"200\" font-size=\"14\" fill=\"#6a6a76\" transform=\"rotate(-90 34 200)\">전압 (V)</text>\n<rect x=\"470\" y=\"344\" width=\"96\" height=\"26\" rx=\"9\" fill=\"#16a34a\"/><text x=\"518\" y=\"362\" font-size=\"13\" fill=\"#fff\">▶ 수집 시작</text><circle cx=\"300\" cy=\"13\" r=\"3\" fill=\"#444\"/></svg>", "13": "<svg viewBox=\"0 0 600 310\" role=\"img\" aria-label=\"전구 두 개를 이은 회로와 전류 센서\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><circle cx=\"160\" cy=\"150\" r=\"34\" fill=\"#fef9c3\" stroke=\"#eab308\" stroke-width=\"4\"/><text x=\"160\" y=\"156\" font-size=\"16\" fill=\"#25252d\">전구</text><circle cx=\"300\" cy=\"150\" r=\"34\" fill=\"#fef9c3\" stroke=\"#eab308\" stroke-width=\"4\"/><text x=\"300\" y=\"156\" font-size=\"16\" fill=\"#25252d\">전구</text><line x1=\"60\" y1=\"150\" x2=\"126\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"194\" y1=\"150\" x2=\"266\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"334\" y1=\"150\" x2=\"380\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><g><rect x=\"380\" y=\"128\" width=\"70\" height=\"46\" rx=\"12\" fill=\"#e6f5f2\" stroke=\"#0d9488\" stroke-width=\"4\"/><circle cx=\"396\" cy=\"144\" r=\"5\" fill=\"#22c55e\" stroke=\"#22c55e\" stroke-width=\"0\"/><text x=\"415\" y=\"165\" font-size=\"15\" fill=\"#25252d\">전류</text></g><line x1=\"60\" y1=\"150\" x2=\"60\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"60\" y1=\"230\" x2=\"450\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"450\" y1=\"150\" x2=\"450\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"450\" y1=\"150\" x2=\"455\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><text x=\"260\" y=\"275\" font-size=\"18\" fill=\"#25252d\">전구를 직렬로 연결한 회로</text></svg>", "14": "<svg viewBox=\"0 0 600 180\" role=\"img\" aria-label=\"온도 그래프 모양 세 가지\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\">\n<g transform=\"translate(10,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,86 60,66 104,40 146,18\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">올라가요</text></g>\n<g transform=\"translate(210,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,18 60,40 104,66 146,86\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">내려가요</text></g>\n<g transform=\"translate(410,20)\"><line x1=\"14\" y1=\"100\" x2=\"150\" y2=\"100\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"14\" y1=\"100\" x2=\"14\" y2=\"14\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"18,52 146,52\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\"/><text x=\"82\" y=\"140\" font-size=\"22\">그대로예요</text></g>\n</svg>", "15": "<svg viewBox=\"0 0 600 310\" role=\"img\" aria-label=\"전구 두 개를 이은 회로와 전류 센서\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><circle cx=\"160\" cy=\"150\" r=\"34\" fill=\"#fef9c3\" stroke=\"#eab308\" stroke-width=\"4\"/><text x=\"160\" y=\"156\" font-size=\"16\" fill=\"#25252d\">전구</text><circle cx=\"300\" cy=\"150\" r=\"34\" fill=\"#fef9c3\" stroke=\"#eab308\" stroke-width=\"4\"/><text x=\"300\" y=\"156\" font-size=\"16\" fill=\"#25252d\">전구</text><line x1=\"60\" y1=\"150\" x2=\"126\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"194\" y1=\"150\" x2=\"266\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"334\" y1=\"150\" x2=\"380\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><g><rect x=\"380\" y=\"128\" width=\"70\" height=\"46\" rx=\"12\" fill=\"#e6f5f2\" stroke=\"#0d9488\" stroke-width=\"4\"/><circle cx=\"396\" cy=\"144\" r=\"5\" fill=\"#22c55e\" stroke=\"#22c55e\" stroke-width=\"0\"/><text x=\"415\" y=\"165\" font-size=\"15\" fill=\"#25252d\">전류</text></g><line x1=\"60\" y1=\"150\" x2=\"60\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"60\" y1=\"230\" x2=\"450\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"450\" y1=\"150\" x2=\"450\" y2=\"230\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"450\" y1=\"150\" x2=\"455\" y2=\"150\" stroke=\"#6a6a76\" stroke-width=\"4\" stroke-linecap=\"round\"/><text x=\"260\" y=\"275\" font-size=\"18\" fill=\"#25252d\">전구를 직렬로 연결한 회로</text></svg>", "18": "<svg viewBox=\"0 0 600 400\" role=\"img\" aria-label=\"스마트패드(태블릿)에 Graphical Analysis 그래프가 뜬 화면\" font-family=\"inherit\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#25252d\"><rect x=\"6\" y=\"6\" width=\"588\" height=\"388\" rx=\"38\" fill=\"#1b1b22\"/><rect x=\"20\" y=\"20\" width=\"560\" height=\"360\" rx=\"26\" fill=\"#fff\"/>\n<rect x=\"20\" y=\"20\" width=\"560\" height=\"38\" rx=\"26\" fill=\"#eef0f6\"/><text x=\"44\" y=\"46\" font-size=\"16\" text-anchor=\"start\">☰</text><text x=\"300\" y=\"46\" font-size=\"15\" fill=\"#6a6a76\">Graphical Analysis</text>\n<line x1=\"64\" y1=\"318\" x2=\"520\" y2=\"318\" stroke=\"#6a6a76\" stroke-width=\"3\"/><line x1=\"64\" y1=\"318\" x2=\"64\" y2=\"82\" stroke=\"#6a6a76\" stroke-width=\"3\"/><polyline points=\"70,250 140,230 220,200 300,170 380,150 470,138\" fill=\"none\" stroke=\"#f08a4b\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"70,280 140,279 220,278 300,277 380,276 470,276\" fill=\"none\" stroke=\"#4aa3e8\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n<text x=\"292\" y=\"346\" font-size=\"14\" fill=\"#6a6a76\">시간 (s)</text><text x=\"34\" y=\"200\" font-size=\"14\" fill=\"#6a6a76\" transform=\"rotate(-90 34 200)\">전압 (V)</text>\n<rect x=\"470\" y=\"344\" width=\"96\" height=\"26\" rx=\"9\" fill=\"#16a34a\"/><text x=\"518\" y=\"362\" font-size=\"13\" fill=\"#fff\">▶ 수집 시작</text><circle cx=\"300\" cy=\"13\" r=\"3\" fill=\"#444\"/></svg>"};
 const PARTS = {};
 const CHAPS = [{"n": "도입", "c": "#7c4dff"}, {"n": "1 · 센서 알아보기", "c": "#0d9488"}, {"n": "2 · 수업 1", "c": "#16a34a"}, {"n": "3 · 수업 2", "c": "#1e6bff"}, {"n": "4 · 선생님께", "c": "#e4174b"}];
 const QUIZ = {};
@@ -278,37 +278,137 @@ text|1|스마트패드로 보기|태블릿 앱 화면에 이렇게 보여요|
 : 센서가 재는 값은 블루투스로 스마트패드의 Graphical Analysis 앱에 모여 실시간 그래프가 됩니다.
 @toc 태블릿 화면
 ---
-text|2|6학년 · 전기의 이용|전지를 이어 연결했을 때의 전압|
+text|2|6학년 · 전기의 이용|오늘의 질문|
+: 전지를 이어 연결하는 방법에 따라 전압은 어떻게 달라질까요?
 - 성취기준 — [6과15-01, 6과15-02] 전기의 이용 (단원 연결은 제안)
 - 학습목표(제안) — 전지의 연결 방법에 따라 전압이 달라짐을 비교할 수 있다.
-- MBL 활용 — 전지 1개, 직렬 2개, 병렬 2개의 전압을 한 화면에서 비교합니다.
-* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
-@toc 전지를 이어 연결했을 때의 전압
+- 40분 · 모둠 4명 · 센서 모둠당 1대 · 건전지(1.5 V) 3개, 전지 끼우개, 도선
+* MBL의 역할: 전지 1개, 직렬 2개, 병렬 2개의 전압을 한 화면에서 비교합니다.
+@toc 전압 · 오늘의 질문
 ---
-text|2|6학년 · 전기의 이용 · 활동|전지를 이어 연결했을 때의 전압: 활동 순서|
-1. 전지 1개의 전압을 전압 센서로 재어 기준으로 삼습니다
-2. 전지 2개를 직렬로 연결해 전압을 잽니다
-3. 전지 2개를 병렬로 연결해 전압을 잽니다
-4. 세 그래프의 높이를 비교합니다
-- 그래프 읽기 — 직렬연결과 병렬연결 중 전압이 더 높은 것은?
-* 전지 직렬은 전압이 더해지고, 병렬은 전지 1개와 비슷합니다. 단락(합선)이 되지 않게 전지 양쪽을 직접 잇지 않습니다.
-@toc 전지를 이어 연결했을 때의 전압 활동
+text|2|전압 · 1 예상하기|먼저 예상해 보아요|
+: 전지 2개를 직렬로 연결하면 전압은 어떻게 될까요? 병렬로 연결하면 어떨까요?
+- 직렬: 커져요 / 같아요 / 작아져요 중에 골라 봅니다
+- 병렬: 커져요 / 같아요 / 작아져요 중에 골라 봅니다
+F 내 예상은 무엇이고 그 까닭은?|예) 직렬로 이으면 전압이 ... 때문에 ...
+* 전지를 직렬로 이으면 전압이 더해지고, 병렬로 이으면 전지 1개일 때와 같습니다.
+@toc 전압 · 예상하기
 ---
-text|3|6학년 · 전기의 이용|전구 연결에 따른 전류|
+text|2|전압 · 2 준비하기|센서와 앱을 이렇게 준비해요|
+1. 센서를 켜고 앱에 연결해 전압(V)을 고릅니다
+2. 전지 1개를 끼우개에 끼우고 전압 센서의 +, − 도선을 전지 양 끝에 댑니다
+3. 수집을 시작하고 값이 안정될 때까지 기다립니다
+4. 전지를 늘려 같은 방법으로 반복합니다
+* 건전지(1.5 V)만 사용해요. 가정용 전기나 큰 전압은 쓰지 않습니다. 전압 센서는 20 V까지 잴 수 있지만 학교에서는 건전지만 씁니다.
+@toc 전압 · 준비하기
+---
+text|2|전압 · 3 활동 A|전지 1개와 직렬 2개|
+: 전지 1개, 직렬 2개, 직렬 3개의 전압을 차례로 잽니다.
+- 전압마다 안정된 값을 읽어 표에 적습니다
+- 전지 수와 전압의 관계를 찾습니다
+F 전지를 직렬로 늘리면 전압은 어떻게 달라졌나요?|1개 _V / 2개 _V / 3개 _V
+* +와 −를 바꾸면 값에 −가 나올 수 있어요. 정상이에요.
+@toc 전압 · 활동 A
+---
+text|2|전압 · 4 활동 B|전지 병렬 연결|
+: 전지 2개를 병렬로 연결해 전압을 재고 전지 1개와 비교합니다.
+- 병렬 2개의 그래프를 전지 1개 그래프와 겹쳐 봅니다
+- 직렬과 병렬의 전압을 비교합니다
+F 병렬로 연결하면 전압은 전지 1개일 때와 비교해 어땠나요?|전지 1개 _V / 병렬 2개 _V / 직렬 2개 _V
+* 전지는 같은 종류, 새 것으로 준비해요.
+@toc 전압 · 활동 B
+---
+text|2|전압 · 5 데이터 활용|내 데이터로 확인하고 활용해요|
+: 앱에서 전지 연결별 전압을 비교합니다.
+- 값 읽기로 안정된 전압을 읽어 표를 만듭니다
+- 그래프를 겹쳐 연결 방법마다 높이를 비교합니다
+- 그림(PNG)·표(CSV)로 저장합니다
+* 멀티미터가 없어도 전압이 그래프와 숫자로 바로 보여요.
+@toc 전압 · 데이터 활용
+---
+text|2|전압 · 6 계산하고 점검해요|데이터로 판단해요|
+: 전압의 차이를 수로 말해 봅니다.
+1. 변화량 구하기 — 직렬 2개와 전지 1개의 전압 차이, 병렬 2개와 전지 1개의 전압 차이를 구합니다.
+F 전압의 차이는 몇 V인가요?|직렬 _V − 1개 _V = _V / 병렬 _V − 1개 _V = _V
+2. 공정한 실험인지 점검 — 전지가 모두 새것이었나요? 도선이 잘 연결되어 있었나요?
+F 공정했나요? 아니라면 어떻게 고칠까요?|예) 전지가 약해서 ... 다시 한다면 ...
++ 데이터 비교 도우미 열기|https://dkent12h.github.io/ai_science/mbl-data/
+@toc 전압 · 계산·점검
+---
+text|2|전압 · 7 정리하기|알게 된 점을 정리해요|
+: 전지의 연결 방법에 따라 전압은 어떻게 달라지나요?
+F 직렬과 병렬 연결은 전압이 어떻게 달랐나요?|예) 직렬은 ... 병렬은 ...
+F 전압 센서로 알게 된 점은?|예) 전구가 밝아지는 까닭은 전압이 ...
+F 내 주장과 데이터 근거|예) ~가 가장 ~했다. 왜냐하면 그래프에서 _가 _로 변했기 때문이다
+F 예상한 그래프와 실제는 어땠나요?|예) 처음은 맞았지만 나중은 달랐다. 까닭은 ...
+* MBL 활용 지점 — 값 읽기, 그래프 겹쳐 보기, 표 만들기
+@toc 전압 · 정리하기
+---
+text|3|6학년 · 전기의 이용|오늘의 질문|
+: 전구를 이어 연결하는 방법에 따라 흐르는 전류는 어떻게 달라질까요?
 - 성취기준 — [6과15-02] 전기의 이용 (단원 연결은 제안)
 - 학습목표(제안) — 전구의 연결 방법에 따라 전류의 세기가 달라짐을 비교할 수 있다.
-- MBL 활용 — 전구 연결을 바꿀 때 전류 그래프가 어떻게 변하는지 봅니다.
-* 센서와 단원의 연결, 활동 설계, 학습목표는 필자의 제안입니다.
-@toc 전구 연결에 따른 전류
+- 40분 · 모둠 4명 · 센서 모둠당 1대 · 건전지, 전구 2개, 전구 끼우개, 도선, 전류 센서
+* MBL의 역할: 전구 연결을 바꿀 때 전류 그래프가 어떻게 변하는지 봅니다.
+@toc 전류 · 오늘의 질문
 ---
-text|3|6학년 · 전기의 이용 · 활동|전구 연결에 따른 전류: 활동 순서|
-1. 전지와 전구 1개를 연결하고 전류 센서를 회로에 끼웁니다
-2. 전구를 직렬로 하나 더 연결해 수집합니다
-3. 전구를 병렬로 하나 더 연결해 수집합니다
-4. 전류 그래프와 전구의 밝기를 함께 비교합니다
-- 그래프 읽기 — 전구가 밝을 때 전류 그래프는 높았나요, 낮았나요?
-* 전류 센서의 측정 범위를 먼저 확인하고, 센서는 회로에 직렬로 끼웁니다.
-@toc 전구 연결에 따른 전류 활동
+text|3|전류 · 1 예상하기|먼저 예상해 보아요|
+: 전구를 직렬로 이으면 전구 1개일 때보다 전류는 어떻게 될까요? 병렬로 이으면 어떨까요?
+- 직렬: 커져요 / 같아요 / 작아져요 중에 골라 봅니다
+- 병렬: 커져요 / 같아요 / 작아져요 중에 골라 봅니다
+F 내 예상은 무엇이고 그 까닭은?|예) 직렬로 이으면 전류가 ... 때문에 ...
+* 전구를 직렬로 이으면 전류가 줄어 전구가 어두워지고, 병렬로 이으면 각 전구에 전류가 흘러 밝습니다.
+@toc 전류 · 예상하기
+---
+text|3|전류 · 2 준비하기|센서와 앱을 이렇게 준비해요|
+1. 센서를 켜고 앱에 연결해 전류(A)를 고릅니다
+2. 전지에 전구 1개를 연결한 회로를 만들고 전류 센서를 회로 중간에 끼웁니다
+3. 수집을 시작하고 값이 안정될 때까지 기다립니다
+4. 전구를 늘려 같은 방법으로 반복합니다
+* 전류 센서는 회로에 직렬로 끼워요(전압 센서와 달라요). 건전지만 쓰고 큰 전류가 흐르는 회로는 만들지 않습니다.
+@toc 전류 · 준비하기
+---
+text|3|전류 · 3 활동 A|전구 1개와 직렬 2개|
+: 전구 1개, 직렬 2개의 전류와 전구 밝기를 비교합니다.
+- 안정된 전류를 읽어 표에 적습니다
+- 전구의 밝기도 함께 관찰합니다
+F 전구를 직렬로 늘리면 전류와 밝기는 어떻게 달라졌나요?|1개 _A / 직렬 2개 _A / 밝기 _
+* 전구는 같은 종류를 사용해야 공정해요.
+@toc 전류 · 활동 A
+---
+text|3|전류 · 4 활동 B|전구 병렬 연결|
+: 전구 2개를 병렬로 연결해 전류를 재고 직렬 연결과 비교합니다.
+- 병렬 그래프를 직렬 그래프와 겹쳐 봅니다
+- 어느 쪽이 전류가 더 큰지 찾습니다
+F 직렬과 병렬 연결의 전류는 어땠나요? 전구 밝기는?|직렬 _A / 병렬 _A / 밝기 _
+* 전류 센서의 위치는 전지와 가까운 쪽에 둡니다.
+@toc 전류 · 활동 B
+---
+text|3|전류 · 5 데이터 활용|내 데이터로 확인하고 활용해요|
+: 앱에서 연결 방법별 전류를 비교합니다.
+- 값 읽기로 안정된 전류를 읽어 표를 만듭니다
+- 그래프를 겹쳐 전류가 가장 큰 연결을 찾습니다
+- 그림(PNG)·표(CSV)로 저장합니다
+* 전구가 밝다/어둡다는 눈 대신 전류의 숫자로 근거를 말할 수 있어요.
+@toc 전류 · 데이터 활용
+---
+text|3|전류 · 6 계산하고 점검해요|데이터로 판단해요|
+: 전류의 차이를 수로 말해 봅니다.
+1. 변화량 구하기 — 전구 1개와 직렬 2개의 전류 차이, 직렬 2개와 병렬 2개의 전류 차이를 구합니다.
+F 전류의 차이는 몇 A인가요?|_A − _A = _A / _A − _A = _A
+2. 공정한 실험인지 점검 — 전지가 같은 상태였나요? 전류 센서가 회로에 직렬로 끼워져 있었나요?
+F 공정했나요? 아니라면 어떻게 고칠까요?|예) 센서가 병렬로 연결되어 ... 다시 한다면 ...
++ 데이터 비교 도우미 열기|https://dkent12h.github.io/ai_science/mbl-data/
+@toc 전류 · 계산·점검
+---
+text|3|전류 · 7 정리하기|알게 된 점을 정리해요|
+: 전구의 연결 방법에 따라 전류의 세기는 어떻게 달라지나요?
+F 직렬과 병렬 연결은 전류가 어떻게 달랐나요?|예) 직렬은 전류가 ... 병렬은 ...
+F 전구 밝기와 전류는 어떤 관계였나요?|예) 전류가 클수록 전구가 ...
+F 내 주장과 데이터 근거|예) ~가 가장 ~했다. 왜냐하면 그래프에서 _가 _로 변했기 때문이다
+F 예상한 그래프와 실제는 어땠나요?|예) 처음은 맞았지만 나중은 달랐다. 까닭은 ...
+* MBL 활용 지점 — 값 읽기, 그래프 겹쳐 보기, 표 만들기
+@toc 전류 · 정리하기
 ---
 text|4|선생님께|수업 전에 확인하세요|
 - 전압 센서는 20 V까지 잴 수 있어요. 학교의 건전지 실험 범위에서 안전하게 씁니다
