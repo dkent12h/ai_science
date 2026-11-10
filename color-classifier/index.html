@@ -1,0 +1,535 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0;font:14px system-ui}[hidden]{display:none!important}img{max-width:100%}</style></head><body>
+<title>색 분류기</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one phone column. The UI chrome stays gray so the measured colors are the only color on the page. */
+:root{
+  --bg:#f2f3f5; --surface:#ffffff; --surface-2:#e9ebf0; --line:#d6d9e1;
+  --fg:#1b2030; --fg-dim:#586074; --ink:#1b2030; --on-ink:#ffffff;
+  --ok:#13795b; --bad:#b42318;
+  --font-ui:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  --font-num:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1218; --surface:#171b24; --surface-2:#1f2430; --line:#2d3342;
+    --fg:#e8ebf2; --fg-dim:#9aa3b6; --ink:#e8ebf2; --on-ink:#10131a;
+    --ok:#4cc29a; --bad:#ff8a7d; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1218; --surface:#171b24; --surface-2:#1f2430; --line:#2d3342;
+  --fg:#e8ebf2; --fg-dim:#9aa3b6; --ink:#e8ebf2; --on-ink:#10131a;
+  --ok:#4cc29a; --bad:#ff8a7d; color-scheme:dark;
+}
+body{
+  background:var(--bg); color:var(--fg); font-family:var(--font-ui); font-size:15px; line-height:1.5;
+  padding-block:16px 32px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.app{max-width:560px; margin:0 auto; display:grid; gap:18px}
+.app > *{min-width:0}
+h1{font-size:23px; line-height:1.25; margin:0 0 4px; font-weight:700; text-wrap:balance}
+h2{font-size:15px; margin:0; font-weight:700}
+p{margin:0}
+.dim{color:var(--fg-dim)}
+.sub{color:var(--fg-dim); font-size:14px}
+
+.stage{position:relative; border-radius:12px; overflow:hidden; background:#000; border:1px solid var(--line)}
+#view{display:block; width:100%; height:auto}
+.badge{position:absolute; left:10px; top:10px; background:rgba(0,0,0,.66); color:#fff; font-size:12px; font-weight:500; padding:3px 9px; border-radius:6px}
+
+.actions{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px}
+.actions.live{grid-template-columns:repeat(2,minmax(0,1fr))}
+.btn{
+  position:relative; display:flex; align-items:center; justify-content:center; text-align:center;
+  min-height:46px; padding:6px 10px; border-radius:10px; border:1px solid var(--line);
+  background:var(--surface); color:var(--fg); font:500 14px/1.25 var(--font-ui); cursor:pointer; touch-action:manipulation;
+}
+.btn.primary{background:var(--ink); color:var(--on-ink); border-color:var(--ink)}
+.btn:focus-visible,.btn:focus-within,.chip:focus-visible,.cell:focus-visible,summary:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+.sr{position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; pointer-events:none}
+.note{font-size:13px; color:var(--fg-dim); margin-top:8px; min-height:1.5em}
+
+.sechead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px}
+.opt{font-size:12px; color:var(--fg-dim); font-weight:400; margin-left:6px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{
+  display:inline-flex; align-items:center; gap:7px; min-height:40px; padding:0 13px; border-radius:20px;
+  border:1px solid var(--line); background:var(--surface); color:var(--fg); font:500 14px var(--font-ui); cursor:pointer; touch-action:manipulation;
+}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--on-ink); border-color:var(--ink)}
+.dot{display:inline-block; width:11px; height:11px; border-radius:50%; border:1px solid rgba(128,128,128,.55); flex:none}
+
+.score{font:500 13px var(--font-num); color:var(--fg-dim)}
+.score b{color:var(--fg); font-weight:500}
+.bar{height:6px; border-radius:3px; background:var(--surface-2); overflow:hidden; margin-bottom:10px}
+.bar > i{display:block; height:100%; background:var(--ink); width:0}
+.cells{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.cell{
+  display:grid; gap:5px; align-content:start; text-align:left; padding:8px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--line); color:var(--fg); font-family:var(--font-ui); cursor:pointer; touch-action:manipulation;
+}
+.cell[aria-pressed="true"]{outline:2px solid var(--ink); outline-offset:1px}
+.cap{font-size:12px; color:var(--fg-dim)}
+.sw{display:block; height:40px; border-radius:6px; border:1px solid var(--line)}
+.name{display:flex; align-items:center; gap:6px; font-size:17px; font-weight:700; line-height:1.2}
+.num{font:400 11.5px/1.35 var(--font-num); color:var(--fg-dim)}
+.flag{font-size:12px; font-weight:500; min-height:1.3em}
+.flag.ok{color:var(--ok)} .flag.bad{color:var(--bad)}
+
+details{background:var(--surface); border:1px solid var(--line); border-radius:12px}
+summary{min-height:46px; display:flex; align-items:center; padding:0 14px; font-weight:700; font-size:15px; cursor:pointer}
+.body{padding:2px 14px 14px; display:grid; gap:12px}
+.srow{display:grid; grid-template-columns:6.5em minmax(0,1fr) 2.6em; align-items:center; gap:10px}
+.srow label{font-size:14px}
+.srow output{font:400 13px var(--font-num); color:var(--fg-dim); text-align:right}
+input[type=range]{width:100%; min-height:40px; accent-color:var(--ink)}
+.seg{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.seg label{display:flex; align-items:center; justify-content:center; min-height:44px; border:1px solid var(--line); border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; background:var(--surface-2); text-align:center; padding:0 6px}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label:has(input:checked){background:var(--ink); color:var(--on-ink); border-color:var(--ink)}
+.seg label:has(input:focus-visible){outline:3px solid var(--ink); outline-offset:2px}
+.teachgrid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+.teachgrid .chip{justify-content:center; padding:0 6px; border-radius:10px; min-height:44px}
+.small{font-size:13px; color:var(--fg-dim)}
+.foot{font-size:12.5px; color:var(--fg-dim)}
+.vid{position:fixed; width:1px; height:1px; opacity:0; pointer-events:none}
+</style>
+
+<main class="app">
+  <header>
+    <h1>색 분류기</h1>
+    <p class="sub">컬러판을 비추면 칸마다 빨강·초록·파랑·노랑·청록·자홍·흰색·검정 중 하나로 알려 줘요.</p>
+  </header>
+
+  <section aria-label="카메라 화면">
+    <div class="stage">
+      <canvas id="view" width="640" height="480" aria-label="컬러판 화면. 칸을 누르면 선택돼요"></canvas>
+      <span class="badge" id="badge">예시 화면</span>
+    </div>
+    <div class="actions" id="mainActions">
+      <button class="btn primary" type="button" id="btnLive">실시간 카메라</button>
+      <label class="btn" id="btnShoot">사진 촬영<input class="sr" type="file" accept="image/*" capture="environment" id="inShoot"></label>
+      <label class="btn" id="btnAlbum">앨범에서 선택<input class="sr" type="file" accept="image/*" id="inAlbum"></label>
+    </div>
+    <div class="actions live" id="liveActions" hidden>
+      <button class="btn" type="button" id="btnFreeze">정지</button>
+      <button class="btn" type="button" id="btnLock">노출·색온도 고정 시도</button>
+    </div>
+    <p class="note" id="msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <section aria-label="켜 둔 조명">
+    <div class="sechead"><h2>지금 켠 조명<span class="opt">선택</span></h2></div>
+    <div class="chips" id="ill"></div>
+    <p class="small" style="margin-top:8px">조명을 고르면 이론에서 나와야 하는 색과 비교해 맞은 칸 수를 보여 줘요.</p>
+  </section>
+
+  <section aria-label="인식 결과">
+    <div class="sechead"><h2>인식 결과</h2><span class="score" id="score"></span></div>
+    <div class="bar" id="barWrap" hidden><i id="bar"></i></div>
+    <div class="cells" id="cells"></div>
+  </section>
+
+  <details>
+    <summary>격자 맞추기</summary>
+    <div class="body">
+      <p class="small">화면 위 흰 테두리가 컬러판 6칸에 맞도록 조절하세요. 점선 안쪽 색을 평균 내서 읽어요.</p>
+      <div class="srow"><label for="gx">가로 위치</label><input id="gx" type="range" min="15" max="85" value="50"><output id="gxo">50</output></div>
+      <div class="srow"><label for="gy">세로 위치</label><input id="gy" type="range" min="15" max="85" value="50"><output id="gyo">50</output></div>
+      <div class="srow"><label for="gw">너비</label><input id="gw" type="range" min="30" max="95" value="74"><output id="gwo">74</output></div>
+      <div class="srow"><label for="gh">높이</label><input id="gh" type="range" min="20" max="90" value="50"><output id="gho">50</output></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>분류 기준 조정</summary>
+    <div class="body">
+      <div class="srow"><label for="tb">검정 기준</label><input id="tb" type="range" min="5" max="50" value="20"><output id="tbo">20</output></div>
+      <p class="small">밝기가 이 값(%)보다 낮거나, 가장 밝은 칸의 4분의 1보다 어두우면 검정으로 읽어요.</p>
+      <div class="srow"><label for="ts">흰색 기준</label><input id="ts" type="range" min="0" max="40" value="18"><output id="tso">18</output></div>
+      <p class="small">색이 이 값(%)보다 덜 진하면 흰색으로 읽어요.</p>
+    </div>
+  </details>
+
+  <details id="teach">
+    <summary>AI 가르치기</summary>
+    <div class="body">
+      <p class="small">칸을 눌러 고른 뒤, 그 칸이 어떤 색으로 보이는지 알려 주세요. 여러 조명에서 몇 번씩 가르치면, AI(k-최근접 이웃)가 가장 비슷한 색으로 분류해요.</p>
+      <div class="seg" role="radiogroup" aria-label="분류 방법">
+        <label><input type="radio" name="engine" value="rule" checked>기본 규칙</label>
+        <label><input type="radio" name="engine" value="ai">내가 가르친 AI</label>
+      </div>
+      <p id="selInfo" class="small"></p>
+      <div class="teachgrid" id="teachBtns"></div>
+      <p id="teachCount" class="small"></p>
+      <button class="btn" type="button" id="btnReset">배운 샘플 모두 지우기</button>
+    </div>
+  </details>
+
+  <p class="foot">카메라가 색을 자동으로 보정하면 결과가 흔들려요. 같은 설정(화이트밸런스·노출 고정)으로 찍은 사진을 비교하세요.</p>
+</main>
+
+<script>
+(function(){
+'use strict';
+var W = 640, H = 480;
+var LABELS = [
+  {id:'red',ko:'빨강',hex:'#e5322d'},{id:'green',ko:'초록',hex:'#1fa84f'},{id:'blue',ko:'파랑',hex:'#2f5de0'},
+  {id:'yellow',ko:'노랑',hex:'#f2c200'},{id:'cyan',ko:'청록',hex:'#11b5d6'},{id:'magenta',ko:'자홍',hex:'#d1269b'},
+  {id:'white',ko:'흰색',hex:'#f4f4f4'},{id:'black',ko:'검정',hex:'#151515'}
+];
+var KO = {}, HEX = {};
+LABELS.forEach(function(l){ KO[l.id] = l.ko; HEX[l.id] = l.hex; });
+var PATCHES = ['red','green','blue','yellow','cyan','magenta'];
+/* 컬러판 칸 순서: 윗줄 빨강·초록·파랑, 아랫줄 노랑·청록·자홍. 조명별로 이상적으로 보여야 하는 색 */
+var EXPECT = {
+  red:    ['red','black','black','red','black','red'],
+  green:  ['black','green','black','green','green','black'],
+  blue:   ['black','black','blue','black','blue','blue'],
+  yellow: ['red','green','black','yellow','green','red'],
+  cyan:   ['black','green','blue','green','cyan','blue'],
+  magenta:['red','black','blue','red','blue','magenta'],
+  white:  ['red','green','blue','yellow','cyan','magenta']
+};
+var ILLUM = [
+  {id:'red',ko:'빨강',hex:'#e5322d'},{id:'green',ko:'초록',hex:'#1fa84f'},{id:'blue',ko:'파랑',hex:'#2f5de0'},
+  {id:'yellow',ko:'노랑',hex:'#f2c200'},{id:'cyan',ko:'청록',hex:'#11b5d6'},{id:'magenta',ko:'자홍',hex:'#d1269b'},
+  {id:'white',ko:'흰색',hex:'#f4f4f4'}
+];
+var KEY = 'colorClassifier.samples.v1';
+
+function $(id){ return document.getElementById(id); }
+var view = $('view'), vctx = view.getContext('2d');
+var work = document.createElement('canvas');
+var wctx = work.getContext('2d', {willReadFrequently:true});
+work.width = W; work.height = H;
+
+var S = {mode:'demo', frozen:false, illum:null, demoIllum:false, sel:null, engine:'rule', samples:[], cells:[], resetArmed:false};
+
+function msg(t){ $('msg').textContent = t || ''; }
+function badge(t){ $('badge').textContent = t; }
+
+/* ---------- 설정 값 ---------- */
+function P(){
+  return {cx:+$('gx').value, cy:+$('gy').value, gw:+$('gw').value, gh:+$('gh').value,
+          black:+$('tb').value/100, sat:+$('ts').value/100};
+}
+function geom(){
+  var p = P(), gw = W*p.gw/100, gh = H*p.gh/100;
+  var gx = W*p.cx/100 - gw/2, gy = H*p.cy/100 - gh/2, cw = gw/3, ch = gh/2, out = [];
+  for(var i=0;i<6;i++){ var c = i%3, r = (i/3)|0; out.push({x:gx+c*cw, y:gy+r*ch, w:cw, h:ch}); }
+  return out;
+}
+
+/* ---------- 색 계산 ---------- */
+function hsv(r,g,b){
+  r/=255; g/=255; b/=255;
+  var mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx-mn, h = 0;
+  if(d>0){
+    if(mx===r) h = 60*(((g-b)/d)%6);
+    else if(mx===g) h = 60*((b-r)/d+2);
+    else h = 60*((r-g)/d+4);
+    if(h<0) h += 360;
+  }
+  return {h:h, s: mx===0 ? 0 : d/mx, v:mx};
+}
+function rule(rgb, maxV, p){
+  var c = hsv(rgb[0],rgb[1],rgb[2]);
+  if(c.v < p.black || c.v < 0.25*maxV) return 'black';
+  if(c.s < p.sat) return 'white';
+  var h = c.h;
+  if(h>=345 || h<25) return 'red';
+  if(h<95) return 'yellow';
+  if(h<165) return 'green';
+  if(h<215) return 'cyan';
+  if(h<275) return 'blue';
+  return 'magenta';
+}
+function knn(rgb){
+  var n = S.samples.length; if(!n) return null;
+  var k = Math.min(3, n);
+  var ds = S.samples.map(function(s){
+    return {l:s.l, d:Math.sqrt(Math.pow(s.c[0]-rgb[0],2)+Math.pow(s.c[1]-rgb[1],2)+Math.pow(s.c[2]-rgb[2],2))};
+  }).sort(function(a,b){ return a.d-b.d; }).slice(0,k);
+  var vote = {};
+  ds.forEach(function(x){ vote[x.l] = (vote[x.l]||0) + 1/(x.d+8); });
+  return Object.keys(vote).sort(function(a,b){ return vote[b]-vote[a]; })[0];
+}
+function sampleCell(c){
+  var x = Math.max(0, Math.round(c.x + c.w*0.25)), y = Math.max(0, Math.round(c.y + c.h*0.25));
+  var w = Math.max(1, Math.min(W-x, Math.round(c.w*0.5))), h = Math.max(1, Math.min(H-y, Math.round(c.h*0.5)));
+  var d = wctx.getImageData(x,y,w,h).data, r=0, g=0, b=0, n = d.length/4;
+  for(var i=0;i<d.length;i+=4){ r+=d[i]; g+=d[i+1]; b+=d[i+2]; }
+  return [r/n, g/n, b/n];
+}
+function analyze(){
+  var p = P(), g = geom();
+  var rgbs = g.map(sampleCell);
+  var maxV = Math.max.apply(null, rgbs.map(function(c){ return Math.max(c[0],c[1],c[2])/255; }));
+  S.cells = rgbs.map(function(rgb,i){
+    var label = null, by = 'rule';
+    if(S.engine==='ai'){ label = knn(rgb); if(label) by = 'ai'; }
+    if(!label) label = rule(rgb, maxV, p);
+    return {rgb:rgb, label:label, by:by, geom:g[i]};
+  });
+}
+
+/* ---------- 그리기 ---------- */
+function draw(){
+  vctx.drawImage(work,0,0);
+  S.cells.forEach(function(c,i){
+    var q = c.geom, sel = (S.sel===i);
+    if(sel){ vctx.fillStyle = 'rgba(255,255,255,.14)'; vctx.fillRect(q.x,q.y,q.w,q.h); }
+    vctx.setLineDash([]);
+    vctx.strokeStyle = 'rgba(0,0,0,.8)'; vctx.lineWidth = sel?5:3.5; vctx.strokeRect(q.x,q.y,q.w,q.h);
+    vctx.strokeStyle = '#fff'; vctx.lineWidth = sel?2.5:1.5; vctx.strokeRect(q.x,q.y,q.w,q.h);
+    var ix = q.x+q.w*0.25, iy = q.y+q.h*0.25, iw = q.w*0.5, ih = q.h*0.5;
+    vctx.setLineDash([6,4]);
+    vctx.strokeStyle = 'rgba(0,0,0,.8)'; vctx.lineWidth = 3; vctx.strokeRect(ix,iy,iw,ih);
+    vctx.strokeStyle = '#fff'; vctx.lineWidth = 1.5; vctx.strokeRect(ix,iy,iw,ih);
+    vctx.setLineDash([]);
+    vctx.fillStyle = 'rgba(0,0,0,.72)'; vctx.beginPath(); vctx.arc(q.x+17,q.y+17,13,0,Math.PI*2); vctx.fill();
+    vctx.fillStyle = '#fff'; vctx.font = '700 16px sans-serif'; vctx.textAlign = 'center'; vctx.textBaseline = 'middle';
+    vctx.fillText(String(i+1), q.x+17, q.y+18);
+  });
+}
+
+var cellEls = [];
+(function buildCells(){
+  var host = $('cells');
+  for(var i=0;i<6;i++){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'cell'; b.setAttribute('aria-pressed','false');
+    b.innerHTML = '<span class="cap"></span><span class="sw"></span><span class="name"><i class="dot"></i><span class="nm"></span></span><span class="num"></span><span class="flag"></span>';
+    (function(idx){ b.addEventListener('click', function(){ select(idx); }); })(i);
+    host.appendChild(b);
+    cellEls.push({root:b, cap:b.querySelector('.cap'), sw:b.querySelector('.sw'), dot:b.querySelector('.dot'),
+                  nm:b.querySelector('.nm'), num:b.querySelector('.num'), flag:b.querySelector('.flag')});
+  }
+})();
+
+function renderCells(){
+  var exp = S.illum ? EXPECT[S.illum] : null, hit = 0;
+  S.cells.forEach(function(c,i){
+    var e = cellEls[i], r = Math.round(c.rgb[0]), g = Math.round(c.rgb[1]), b = Math.round(c.rgb[2]);
+    e.cap.textContent = (i+1) + '번 · ' + KO[PATCHES[i]] + ' 칸';
+    e.sw.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
+    e.dot.style.background = HEX[c.label];
+    e.nm.textContent = KO[c.label] + (c.by==='ai' ? ' (AI)' : '');
+    e.num.textContent = '';
+    e.num.appendChild(document.createTextNode('RGB ' + r + '·' + g + '·' + b));
+    e.num.appendChild(document.createElement('br'));
+    e.num.appendChild(document.createTextNode('밝기 ' + Math.round(Math.max(r,g,b)/255*100) + '%'));
+    e.root.setAttribute('aria-pressed', S.sel===i ? 'true' : 'false');
+    e.flag.className = 'flag';
+    if(exp){
+      if(exp[i]===c.label){ hit++; e.flag.textContent = '✓ 이론과 같아요'; e.flag.classList.add('ok'); }
+      else { e.flag.textContent = '✗ 이론: ' + KO[exp[i]]; e.flag.classList.add('bad'); }
+    } else { e.flag.textContent = ''; }
+  });
+  if(exp){
+    $('score').innerHTML = '이론과 일치 <b>' + hit + ' / 6</b>';
+    $('barWrap').hidden = false; $('bar').style.width = (hit/6*100) + '%';
+  } else {
+    $('score').textContent = '조명을 고르면 점수가 나와요';
+    $('barWrap').hidden = true;
+  }
+}
+function refresh(){ analyze(); draw(); renderCells(); updateTeachUI(); }
+
+/* ---------- 조명 선택 ---------- */
+var chipEls = {};
+(function buildChips(){
+  var host = $('ill');
+  ILLUM.forEach(function(it){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.setAttribute('aria-pressed','false');
+    var d = document.createElement('i'); d.className = 'dot'; d.style.background = it.hex;
+    b.appendChild(d); b.appendChild(document.createTextNode(it.ko));
+    b.addEventListener('click', function(){
+      S.demoIllum = false;
+      S.illum = (S.illum===it.id) ? null : it.id;
+      syncChips(); renderCells();
+    });
+    host.appendChild(b); chipEls[it.id] = b;
+  });
+})();
+function syncChips(){ ILLUM.forEach(function(it){ chipEls[it.id].setAttribute('aria-pressed', S.illum===it.id ? 'true' : 'false'); }); }
+function clearDemoIllum(){ if(S.demoIllum){ S.illum = null; S.demoIllum = false; syncChips(); } }
+
+/* ---------- 화면 원본 ---------- */
+function setSize(sw, sh){
+  var nh = Math.max(1, Math.round(W*sh/sw));
+  if(nh===H && work.height===H) return;
+  H = nh; work.width = W; work.height = H; view.width = W; view.height = H;
+}
+function drawSource(src, sw, sh){ setSize(sw, sh); wctx.drawImage(src, 0, 0, W, H); }
+
+function drawDemo(){
+  setSize(4,3);
+  var g = geom(), ill = [1,0.85,0.03];
+  function col(rf){ return 'rgb(' + rf.map(function(r,i){ return Math.round(Math.min(255, r*ill[i]*255)); }).join(',') + ')'; }
+  wctx.fillStyle = col([0.12,0.12,0.12]); wctx.fillRect(0,0,W,H);
+  var gx = g[0].x, gy = g[0].y, gw = g[2].x+g[2].w-gx, gh = g[3].y+g[3].h-gy, pad = 22;
+  wctx.fillStyle = col([0.9,0.9,0.9]); wctx.fillRect(gx-pad, gy-pad, gw+2*pad, gh+2*pad);
+  var R = [[0.8,0.08,0.08],[0.08,0.6,0.15],[0.08,0.15,0.6],[0.85,0.75,0.1],[0.08,0.65,0.7],[0.8,0.1,0.55]];
+  g.forEach(function(c,i){ var m = c.w*0.12; wctx.fillStyle = col(R[i]); wctx.fillRect(c.x+m, c.y+m, c.w-2*m, c.h-2*m); });
+  var img = wctx.getImageData(0,0,W,H), d = img.data;
+  for(var i=0;i<d.length;i+=4){ var n = (Math.random()-0.5)*8; d[i]+=n; d[i+1]+=n; d[i+2]+=n; }
+  wctx.putImageData(img,0,0);
+}
+
+/* 사진 */
+function loadFile(file){
+  if(!file) return;
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onload = function(){
+    stopLive();
+    S.mode = 'photo'; S.sel = null;
+    drawSource(img, img.naturalWidth, img.naturalHeight);
+    URL.revokeObjectURL(url);
+    clearDemoIllum(); badge('사진'); refresh();
+    msg('사진을 읽었어요. 흰 테두리가 컬러판에 맞는지 확인하고, 켠 조명을 골라 보세요.');
+  };
+  img.onerror = function(){ URL.revokeObjectURL(url); msg('사진을 읽지 못했어요. 다른 사진으로 다시 해 보세요.'); };
+  img.src = url;
+}
+$('inShoot').addEventListener('change', function(e){ var f = e.target.files && e.target.files[0]; loadFile(f); e.target.value = ''; });
+$('inAlbum').addEventListener('change', function(e){ var f = e.target.files && e.target.files[0]; loadFile(f); e.target.value = ''; });
+
+/* 실시간 카메라 */
+var stream = null, timer = 0;
+var vid = document.createElement('video');
+vid.setAttribute('playsinline',''); vid.muted = true; vid.className = 'vid';
+document.body.appendChild(vid);
+
+function setLiveUI(on){ $('liveActions').hidden = !on; }
+function noLive(){
+  msg('이 화면에서는 실시간 카메라를 쓸 수 없어요. ‘사진 촬영’을 쓰거나, 이 파일을 HTTPS 주소(예: GitHub Pages)에 올려 여세요.');
+}
+function startLive(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ noLive(); return; }
+  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}}, audio:false})
+  .then(function(st){
+    stopLive();
+    stream = st; vid.srcObject = st;
+    var pl = vid.play(); if(pl && pl.catch) pl.catch(function(){});
+    S.mode = 'live'; S.frozen = false; S.sel = null;
+    clearDemoIllum(); badge('실시간'); $('btnFreeze').textContent = '정지'; setLiveUI(true);
+    msg('컬러판을 비추고 흰 테두리를 맞춘 뒤, 결과가 안정되면 ‘정지’를 눌러 보세요.');
+    loop();
+  }).catch(function(){ noLive(); });
+}
+function stopLive(){
+  clearTimeout(timer);
+  if(stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
+  vid.srcObject = null; setLiveUI(false);
+}
+function loop(){
+  clearTimeout(timer);
+  if(S.mode!=='live') return;
+  if(!S.frozen && vid.readyState>=2 && vid.videoWidth){
+    drawSource(vid, vid.videoWidth, vid.videoHeight); refresh();
+  }
+  timer = setTimeout(loop, 150);
+}
+$('btnLive').addEventListener('click', startLive);
+$('btnFreeze').addEventListener('click', function(){
+  S.frozen = !S.frozen;
+  $('btnFreeze').textContent = S.frozen ? '계속' : '정지';
+  badge(S.frozen ? '정지' : '실시간');
+});
+$('btnLock').addEventListener('click', function(){
+  var track = stream && stream.getVideoTracks()[0];
+  if(!track || !track.getCapabilities){ msg('이 기기에서는 고정을 지원하지 않아요. 기본 카메라 앱의 프로 모드로 찍은 사진을 쓰세요.'); return; }
+  var caps = track.getCapabilities(), set = track.getSettings(), adv = {}, done = [];
+  if(caps.whiteBalanceMode && caps.whiteBalanceMode.indexOf('manual')>=0){
+    adv.whiteBalanceMode = 'manual';
+    if(caps.colorTemperature){
+      var t = set.colorTemperature || Math.round((caps.colorTemperature.min+caps.colorTemperature.max)/2);
+      adv.colorTemperature = Math.min(caps.colorTemperature.max, Math.max(caps.colorTemperature.min, t));
+    }
+    done.push('색온도');
+  }
+  if(caps.exposureMode && caps.exposureMode.indexOf('manual')>=0){ adv.exposureMode = 'manual'; done.push('노출'); }
+  if(!done.length){ msg('이 기기에서는 고정을 지원하지 않아요. 기본 카메라 앱의 프로 모드로 찍은 사진을 쓰세요.'); return; }
+  track.applyConstraints({advanced:[adv]})
+    .then(function(){ msg(done.join('·') + ' 고정을 요청했어요. 색이 계속 흔들리면 사진 모드를 쓰세요.'); })
+    .catch(function(){ msg('고정에 실패했어요. 기본 카메라 앱의 프로 모드로 찍은 사진을 쓰세요.'); });
+});
+
+/* ---------- 칸 선택 ---------- */
+function select(i){ S.sel = i; draw(); renderCells(); updateTeachUI(); }
+view.addEventListener('click', function(e){
+  var r = view.getBoundingClientRect();
+  var x = (e.clientX-r.left)*view.width/r.width, y = (e.clientY-r.top)*view.height/r.height;
+  var g = geom(), idx = -1;
+  for(var i=0;i<g.length;i++){ var c = g[i]; if(x>=c.x && x<c.x+c.w && y>=c.y && y<c.y+c.h){ idx = i; break; } }
+  select(idx<0 ? null : idx);
+});
+
+/* ---------- AI 가르치기 ---------- */
+function valid(s){ return s && Array.isArray(s.c) && s.c.length===3 && s.c.every(function(n){ return typeof n==='number'; }) && KO[s.l]; }
+function loadSamples(){
+  try{ var t = localStorage.getItem(KEY); if(t){ var a = JSON.parse(t); if(Array.isArray(a)) S.samples = a.filter(valid); } }catch(e){}
+}
+function saveSamples(){ try{ localStorage.setItem(KEY, JSON.stringify(S.samples)); }catch(e){} }
+
+var teachHost = $('teachBtns');
+LABELS.forEach(function(l){
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip';
+  var d = document.createElement('i'); d.className = 'dot'; d.style.background = l.hex;
+  b.appendChild(d); b.appendChild(document.createTextNode(l.ko));
+  b.addEventListener('click', function(){
+    if(S.sel===null || !S.cells[S.sel]){ $('selInfo').textContent = '먼저 위 사진이나 결과 칸을 눌러 칸을 고르세요.'; return; }
+    S.samples.push({c:S.cells[S.sel].rgb.map(Math.round), l:l.id});
+    if(S.samples.length>200) S.samples.shift();
+    saveSamples();
+    if(S.engine==='ai'){ refresh(); } else { updateTeachUI(); }
+  });
+  teachHost.appendChild(b);
+});
+function updateTeachUI(){
+  $('selInfo').textContent = (S.sel===null)
+    ? '고른 칸 없음. 위 사진이나 결과 칸을 눌러 고르세요.'
+    : '고른 칸: ' + (S.sel+1) + '번 (' + KO[PATCHES[S.sel]] + ' 칸). 이 칸이 어떤 색인가요?';
+  var cnt = {}; S.samples.forEach(function(s){ cnt[s.l] = (cnt[s.l]||0)+1; });
+  var parts = LABELS.filter(function(l){ return cnt[l.id]; }).map(function(l){ return l.ko + ' ' + cnt[l.id]; });
+  var line = S.samples.length ? '배운 샘플 ' + S.samples.length + '개 (' + parts.join(' · ') + ')' : '아직 배운 샘플이 없어요.';
+  if(S.engine==='ai' && !S.samples.length) line += ' 지금은 기본 규칙으로 분류해요.';
+  $('teachCount').textContent = line;
+  $('btnReset').textContent = S.resetArmed ? '정말 지울까요? 한 번 더 누르세요' : '배운 샘플 모두 지우기';
+}
+$('btnReset').addEventListener('click', function(){
+  if(!S.resetArmed){ S.resetArmed = true; updateTeachUI(); setTimeout(function(){ S.resetArmed = false; updateTeachUI(); }, 4000); return; }
+  S.resetArmed = false; S.samples = []; saveSamples(); refresh();
+});
+Array.prototype.forEach.call(document.querySelectorAll('input[name=engine]'), function(r){
+  r.addEventListener('change', function(){ if(r.checked){ S.engine = r.value; refresh(); } });
+});
+
+/* ---------- 슬라이더 ---------- */
+['gx','gy','gw','gh','tb','ts'].forEach(function(id){
+  var el = $(id), out = $(id+'o');
+  el.addEventListener('input', function(){ out.textContent = el.value; refresh(); });
+});
+
+/* ---------- 시작 ---------- */
+loadSamples();
+drawDemo();
+S.illum = 'yellow'; S.demoIllum = true; syncChips();
+badge('예시 화면');
+msg('예시 화면이에요(노란 조명). 사진을 찍거나 카메라를 켜서 컬러판을 비춰 보세요.');
+refresh();
+window.__cc = S; /* 점검용 */
+})();
+</script>
+
+</body></html>
