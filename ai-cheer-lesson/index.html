@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 응원봉 만들기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* DK microbit 책 형식: 양면 펼침, 한 쪽 = 폭 100u × 높이 128u. 쪽마다 장 색(--c)을 쓰고, 넘치면 글씨를 줄여 한 쪽에 맞춘다 */
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:rgba(11,11,16,.16);--acc:#7c4dff;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;overflow:hidden;word-break:keep-all;overflow-wrap:break-word;color:var(--ink);
+  background:radial-gradient(120% 90% at 72% 18%,#fbfbfc 0%,#ececf1 58%,#dedee8 100%) fixed;
+  font-family:"Inter Tight","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;display:flex;flex-direction:column}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+header{flex:none;height:64px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 clamp(16px,3vw,40px)}
+.brand{display:inline-flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+.mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
+.mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
+.prog{flex:1;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+.prog .bar{width:100%;height:5px;border-radius:9px;background:rgba(11,11,16,.12);overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--ink);border-radius:9px;transition:width .3s}
+.ctrl{display:flex;gap:8px;align-items:center}
+.pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:14px;background:transparent;color:var(--ink);transition:background .25s,color .25s;text-decoration:none;display:inline-flex;align-items:center;white-space:nowrap}
+.pill:hover:not(:disabled){background:var(--ink);color:#fff}
+.pill.solid{background:var(--ink);color:#fff}
+.pill.solid:hover:not(:disabled){background:var(--acc);border-color:var(--acc)}
+.pill:focus-visible,.nav:focus-visible,.cell:focus-visible,.chip:focus-visible,.tocbtn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.toc button:focus-visible,.play:focus-visible,a:focus-visible{outline:3px solid #ff9f0a;outline-offset:2px}
+/* 책 무대 */
+.stage{flex:1;min-height:0;display:flex;overflow:hidden;touch-action:pan-y pinch-zoom;position:relative}
+.book{position:relative;margin:auto;flex:none;filter:drop-shadow(0 30px 40px rgba(30,20,70,.18));transition:opacity .22s}
+.book.fade{opacity:0}
+.leaf{position:absolute;top:0;height:100%;width:50%;overflow:hidden}
+.leaf.left{left:0}.leaf.right{left:50%}
+.book.one .leaf.right{left:0;width:100%}.book.one .leaf.left{display:none}
+.page{--k:1;--u:calc(var(--U)*var(--k));position:absolute;inset:0;background:rgba(255,255,255,.86);border:1.5px solid var(--line);
+  padding:calc(var(--U)*5.2) calc(var(--U)*6) calc(var(--U)*7.2);display:flex;flex-direction:column;overflow:hidden;
+  font-size:calc(var(--u)*3.15);line-height:1.55;--c:var(--acc)}
+.leaf.left .page{border-radius:calc(var(--U)*4) 0 0 calc(var(--U)*4);border-right-color:rgba(11,11,16,.08)}
+.leaf.right .page{border-radius:0 calc(var(--U)*4) calc(var(--U)*4) 0;border-left-color:rgba(11,11,16,.08)}
+.book.one .leaf.right .page{border-radius:calc(var(--U)*4)}
+.leaf.left .page::after{content:"";position:absolute;top:0;right:0;bottom:0;width:calc(var(--U)*7);background:linear-gradient(90deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.leaf.right .page::after{content:"";position:absolute;top:0;left:0;bottom:0;width:calc(var(--U)*7);background:linear-gradient(270deg,transparent,rgba(11,11,16,.10));pointer-events:none}
+.book.one .leaf.right .page::after{display:none}
+.pfoot{position:absolute;left:calc(var(--U)*6);right:calc(var(--U)*6);bottom:calc(var(--U)*3);display:flex;justify-content:space-between;font-size:calc(var(--U)*2.3);font-weight:700;color:var(--muted)}
+.leaf.right .pfoot{flex-direction:row-reverse}
+/* 쪽 내용 */
+.eb{font-size:calc(var(--u)*2.6);font-weight:800;color:var(--c);letter-spacing:.01em;margin:0 0 calc(var(--u)*1.6)}
+.ttl{margin:0;font-size:calc(var(--u)*5.4);line-height:1.18;letter-spacing:-.045em;font-weight:800;text-wrap:balance}
+.body{margin-top:calc(var(--u)*3.4);display:flex;flex-direction:column;gap:calc(var(--u)*2.1);min-height:0;flex:1}
+.body p{margin:0}
+.bl,.nums{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.bl{gap:calc(var(--u)*1.9)}
+.bl li{position:relative;padding-left:calc(var(--u)*4.4);font-weight:500}
+.bl li::before{content:"";position:absolute;left:calc(var(--u)*.6);top:calc(var(--u)*1.55);width:calc(var(--u)*1.7);height:calc(var(--u)*1.7);border-radius:50%;background:var(--c)}
+.nums{gap:calc(var(--u)*2.6)}
+.nums li{display:flex;gap:calc(var(--u)*2.8);align-items:flex-start;font-weight:500;font-size:calc(var(--u)*3.25)}
+.nums .n{flex:none;width:calc(var(--u)*6.4);height:calc(var(--u)*6.4);border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:800;font-size:calc(var(--u)*3.2);margin-top:calc(var(--u)*-.4)}
+.nums b{font-weight:800}
+.nt{list-style:none;margin:0;padding:calc(var(--u)*2.6) calc(var(--u)*3);background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.4);font-size:calc(var(--u)*2.8);color:#454552;font-weight:500}
+.nt li{position:relative;padding-left:calc(var(--u)*2.8)}
+.nt li::before{content:"※";position:absolute;left:0;color:var(--c);font-weight:800}
+.stm{font-size:calc(var(--u)*4.4);line-height:1.4;font-weight:700;letter-spacing:-.03em}
+.para{font-size:calc(var(--u)*3.3);line-height:1.65;font-weight:500;color:#25252d;text-wrap:pretty}
+.chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*1)}
+.chip{display:inline-flex;align-items:center;gap:calc(var(--u)*1.2);border:1.5px solid var(--c);color:var(--c);border-radius:999px;padding:calc(var(--u)*1.3) calc(var(--u)*3.2);font-weight:800;font-size:calc(var(--u)*2.9);text-decoration:none;background:transparent;line-height:1.3;text-align:left}
+a.chip,button.chip{cursor:pointer}
+a.chip:hover,button.chip:hover{background:var(--c);color:#fff}
+.chip[aria-pressed="true"]{background:var(--c);color:#fff}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.2)}
+.card{border:1.5px solid var(--line);border-radius:calc(var(--u)*3);padding:calc(var(--u)*2.4) calc(var(--u)*2.6);background:rgba(255,255,255,.8);font-weight:500;font-size:calc(var(--u)*2.9);line-height:1.4}
+.card b{display:block;font-size:calc(var(--u)*3.6);font-weight:800;color:var(--c);margin-bottom:calc(var(--u)*.6)}
+.rows{display:flex;flex-direction:column;gap:calc(var(--u)*1.6)}
+.rows .r{border:1.5px solid var(--line);border-radius:calc(var(--u)*2.4);padding:calc(var(--u)*1.8) calc(var(--u)*2.6);background:rgba(255,255,255,.8);font-weight:500;font-size:calc(var(--u)*2.95);line-height:1.4}
+.rows .r b{display:block;font-weight:800;font-size:calc(var(--u)*3.2)}
+.rows .r span{color:var(--muted)}
+/* 표지 · 장 표지 */
+.page.cover{background:#0b0b10;color:#fff;border-color:#0b0b10}
+.page.cover .pfoot{color:rgba(255,255,255,.55)}
+.page.cover::after{display:none}
+.rgb{flex:1;min-height:0;margin:calc(var(--u)*2) 0;display:grid;grid-template-columns:repeat(5,1fr);gap:5%;align-content:center;padding:0 24%}
+.led{aspect-ratio:1;border-radius:50%;background:#2a2a33}
+.led.on{background:#ff3b30;box-shadow:0 0 calc(var(--u)*3) #ff3b30}
+.cv-t{font-size:calc(var(--u)*9.5);font-weight:800;letter-spacing:-.06em;line-height:1.02}
+.cv-s{font-size:calc(var(--u)*3.6);font-weight:700;opacity:.7;margin-top:calc(var(--u)*1.6)}
+.cv-e{font-size:calc(var(--u)*2.8);font-weight:700;opacity:.65;margin-bottom:calc(var(--u)*2)}
+.cv-go{display:block;margin:calc(var(--u)*2.4) 0 calc(var(--u)*1.6);padding:calc(var(--u)*2.2) calc(var(--u)*3);border-radius:calc(var(--u)*3);background:#fff;color:#0b0b10;font-size:calc(var(--u)*4);font-weight:800;text-align:center;text-decoration:none;letter-spacing:-.03em}
+.cv-go:hover{background:#ffe6e3}
+.page.cover .chip{color:#fff;border-color:rgba(255,255,255,.7)}
+.page.cover a.chip:hover{background:#fff;color:#0b0b10}
+.page.divider{justify-content:flex-end}
+.page.divider .no{font-size:calc(var(--u)*3.2);font-weight:800;color:var(--c);margin-bottom:calc(var(--u)*1.6)}
+.big{font-size:calc(var(--u)*10.5);font-weight:800;letter-spacing:-.06em;line-height:1.05;text-wrap:balance}
+.page.divider .sub{margin-top:calc(var(--u)*3);font-size:calc(var(--u)*3.4);font-weight:500;color:#454552}
+.page.divider .dot{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%;background:var(--c);margin-bottom:calc(var(--u)*5)}
+/* 영상 */
+.play{position:relative;display:block;width:100%;padding:0;border:0;border-radius:calc(var(--u)*2.4);overflow:hidden;background:#111;aspect-ratio:16/9;text-decoration:none}
+.play .tri{position:absolute;left:50%;top:50%;width:calc(var(--u)*13);height:calc(var(--u)*13);margin:calc(var(--u)*-6.5) 0 0 calc(var(--u)*-6.5);border-radius:50%;background:#ff3b30;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.play .tri::after{content:"";position:absolute;left:38%;top:28%;border-style:solid;border-width:calc(var(--u)*3.6) 0 calc(var(--u)*3.6) calc(var(--u)*5.6);border-color:transparent transparent transparent #fff}
+.play span.cap{position:absolute;left:0;right:0;bottom:calc(var(--u)*2);text-align:center;color:#fff;font-weight:700;font-size:calc(var(--u)*2.9)}
+/* 활동지 입력 */
+.fm{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.2)}
+.fm .g{border:1.5px solid var(--line);border-radius:calc(var(--u)*3);padding:calc(var(--u)*2.2) calc(var(--u)*2.4);background:#fff;display:flex;flex-direction:column;gap:calc(var(--u)*1.2)}
+.fm .g h3{margin:0;font-size:calc(var(--u)*3.6);font-weight:800;color:var(--c)}
+.fi{display:flex;flex-direction:column;gap:calc(var(--u)*.4)}
+.fi span,.ff span{font-weight:800;font-size:calc(var(--u)*2.6);color:var(--c)}
+.fi input,.ff textarea,select{width:100%;border:1.5px solid var(--line);border-radius:calc(var(--u)*1.8);padding:calc(var(--u)*1.1) calc(var(--u)*1.8);font:inherit;font-size:calc(var(--u)*2.9);line-height:1.4;background:#fff;color:var(--ink);user-select:text;-webkit-user-select:text}
+.fi input{min-height:calc(var(--u)*6.4)}
+.fi input:focus,.ff textarea:focus,select:focus{outline:2px solid var(--c);outline-offset:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2)}
+.fields{display:flex;flex-direction:column;gap:calc(var(--u)*2);flex:1 1 0;min-height:0}
+.ff{display:flex;flex-direction:column;gap:calc(var(--u)*.8);flex:1 1 0;min-height:0}
+.ff textarea{flex:1;min-height:calc(var(--u)*7);resize:none}
+.ck{display:flex;gap:calc(var(--u)*2.4);align-items:flex-start;font-weight:500;font-size:calc(var(--u)*3.2);line-height:1.45;cursor:pointer}
+.ck input{flex:none;width:calc(var(--u)*4.6);height:calc(var(--u)*4.6);margin:calc(var(--u)*.4) 0 0;accent-color:var(--c)}
+table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-height:1.4}
+.tb th,.tb td{border:1.5px solid var(--line);padding:calc(var(--u)*1.2) calc(var(--u)*1.6);text-align:left;vertical-align:top;font-weight:500}
+.tb th{background:rgba(11,11,16,.05);font-weight:800}
+.tb td.c,.tb th.c{text-align:center}
+.tb td b{font-weight:800}
+.cell{width:calc(var(--u)*9.5);height:calc(var(--u)*7);border:1.5px solid var(--line);border-radius:calc(var(--u)*1.8);background:#fff;color:var(--ink);font:800 calc(var(--u)*4.4) "Inter Tight","Noto Sans KR",sans-serif;padding:0}
+.cell[data-v="o"]{background:#e8f6ee;color:#0b7a45;border-color:#0b9a5b}
+.cell[data-v="x"]{background:#fdeceb;color:#c0261b;border-color:#e04a3f}
+.cnt{font-weight:800;font-size:calc(var(--u)*3.4);font-variant-numeric:tabular-nums;white-space:nowrap}
+.result{font-weight:800;font-size:calc(var(--u)*3.2);padding:calc(var(--u)*1.8) calc(var(--u)*2.6);border-radius:calc(var(--u)*2.2);background:rgba(11,11,16,.05)}
+.result.up{background:#e8f6ee;color:#0b7a45}.result.down{background:#fdeceb;color:#c0261b}
+.blank{display:inline-block;width:calc(var(--u)*15);border:0;border-bottom:calc(var(--u)*.7) solid var(--c);background:transparent;font:inherit;font-weight:800;color:var(--c);text-align:center;padding:0;border-radius:0}
+.fill{display:inline-block;min-width:8em;border-bottom:calc(var(--u)*.7) solid var(--c);color:var(--c);font-weight:800;padding:0 calc(var(--u)*1)}
+.out{white-space:pre-wrap;background:rgba(11,11,16,.05);border-radius:calc(var(--u)*2.2);padding:calc(var(--u)*2) calc(var(--u)*2.6);font-size:calc(var(--u)*2.6);line-height:1.5;flex:1 1 0;min-height:0;overflow:hidden;font-weight:500}
+.btns{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.6)}
+.ask{background:#fff4d6;color:#8a4b00;border-radius:calc(var(--u)*2.2);padding:calc(var(--u)*2) calc(var(--u)*2.6);font-weight:700;font-size:calc(var(--u)*2.9)}
+/* 좌우 버튼 */
+.nav{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--ink);background:rgba(255,255,255,.85);display:grid;place-items:center;color:var(--ink);transition:background .25s,color .25s;box-shadow:0 8px 24px rgba(30,20,70,.14);padding:0}
+.nav.prev{left:clamp(10px,2vw,28px)}.nav.next{right:clamp(10px,2vw,28px);background:var(--ink);color:#fff}
+.nav:hover:not(:disabled){background:var(--acc);color:#fff;border-color:var(--acc)}
+.nav:disabled{opacity:.3;cursor:default}
+.nav svg{width:24px;height:24px}
+@media (max-width:900px){.nav{top:auto;bottom:10px;transform:none;width:46px;height:46px}.brand span{display:none}.pill{padding:8px 12px}}
+/* 목차 */
+.toc{position:fixed;inset:0;z-index:50;display:none;background:rgba(11,11,16,.32)}
+.toc.on{display:block}
+.toc-in{position:absolute;right:0;top:0;bottom:0;width:min(460px,92vw);background:#f4f4f8;overflow:auto;padding:22px clamp(18px,3vw,32px) 40px;box-shadow:-12px 0 50px rgba(0,0,0,.22);animation:drawer .28s cubic-bezier(.3,.7,.2,1)}
+@keyframes drawer{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.toc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.toc h3{font-size:clamp(30px,4vw,42px);letter-spacing:-.05em;margin:0;font-weight:800}
+.toc .ch{border-bottom:1.5px solid var(--line)}
+.toc .chap{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:17px 6px;font-size:clamp(22px,2.3vw,27px);font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.toc .chap::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.toc .chap .rg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700}
+.toc .chap:hover{background:rgba(11,11,16,.05)}
+.toc ol{list-style:none;margin:0 0 12px 26px;padding:0;display:none}
+.toc .ch.open ol{display:block}
+.toc li button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 10px;font-size:clamp(15px,1.4vw,16.5px);font-weight:600;letter-spacing:-.03em;color:var(--ink);border-radius:0}
+.toc li button:hover{background:rgba(11,11,16,.05)}
+.toc li button.cur{background:var(--c);color:#fff;border-radius:10px}
+.toc li .pg{margin-left:auto;font-size:14px;color:var(--muted);font-weight:700}
+.toc li button.cur .pg{color:rgba(255,255,255,.85)}
+/* 타이머 */
+.tmr{position:fixed;top:72px;right:clamp(16px,3vw,40px);z-index:40;width:min(340px,calc(100vw - 32px));background:#fff;border:1.5px solid var(--ink);border-radius:18px;padding:16px 18px;box-shadow:0 20px 50px rgba(30,20,70,.25);display:none}
+.tmr.on{display:block}
+.clock{font-size:64px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.clock.end{color:#e04a3f;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+.tmr .pn{font-weight:800;color:var(--muted);font-size:14px;margin:4px 0 10px}
+.tmr .ph{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tmr .ph button,.tmr .row button{border:1.5px solid var(--ink);border-radius:999px;background:#fff;padding:6px 12px;font-weight:700;font-size:13px;color:var(--ink)}
+.tmr .ph button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tmr .row{display:flex;gap:6px;flex-wrap:wrap}
+.tmr .row .go{background:var(--ink);color:#fff}
+.tmr .msg{font-size:13px;color:var(--muted);margin-top:8px;font-weight:600}
+
+/* PDF용 활동지 (화면 밖에서만 그려 PDF로 만든다) */
+.rp-host{position:fixed;left:-10000px;top:0;width:794px;background:#fff}
+.sheet{width:794px;height:1123px;padding:52px 56px;background:#fff;color:#0b0b10;font-family:"Noto Sans KR","Malgun Gothic",sans-serif;font-size:15px;line-height:1.5;overflow:hidden;position:relative}
+.sheet h1{font-size:28px;margin:0 0 4px;letter-spacing:-.04em}
+.sheet .meta{color:#454552;font-weight:500;margin-bottom:18px;font-size:.95em}
+.sheet h2{font-size:1.2em;margin:18px 0 8px;color:#4a2bd6}
+.sheet table{border-collapse:collapse;width:100%;margin:6px 0 10px}
+.sheet th,.sheet td{border:1.5px solid #b9b9c6;padding:6px 10px;text-align:left;vertical-align:top;font-weight:500}
+.sheet th{background:#f0f0f6;font-weight:700}
+.sheet td.c,.sheet th.c{text-align:center}
+.sheet .rl{font-weight:700;font-size:.92em;margin:10px 0 3px}
+.sheet .rv{border:1.5px solid #b9b9c6;border-radius:8px;padding:8px 12px;white-space:pre-wrap;min-height:34px}
+.sheet .fr{font-weight:700;margin:10px 0 2px}
+.sheet .big{font-size:1.1em;font-weight:700;margin-top:8px}
+.sheet .pg{position:absolute;right:56px;bottom:24px;font-size:12px;color:#6a6a76}
+@media (prefers-reduced-motion:reduce){.clock.end{animation:none}.book{transition:none}.toc-in{animation:none}.prog .bar i{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="https://dkent12h.github.io/dkmicrobit/" target="_blank" rel="noopener"><span class="mini" aria-hidden="true"><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i></span><span>DK microbit</span></a>
+  <div class="prog" aria-live="polite"><div id="pgno">1–2 / 28</div><div class="bar"><i id="pgbar" style="width:0"></i></div></div>
+  <div class="ctrl">
+    <button class="pill" id="b-timer" type="button" aria-expanded="false">타이머</button>
+    <a class="pill solid" id="b-createai" href="https://createai.microbit.org/" target="_blank" rel="noopener">CreateAI ↗</a>
+    <button class="pill" id="b-full" type="button">전체화면</button>
+    <button class="pill" id="b-toc" type="button">목차</button>
+  </div>
+</header>
+
+<div class="tmr" id="tmr" role="region" aria-label="수업 타이머">
+  <div class="clock" id="clock">05:00</div>
+  <div class="pn" id="pn">도입</div>
+  <div class="ph" id="ph" role="group" aria-label="수업 단계"></div>
+  <div class="row"><button class="go" id="t-go" type="button">시작</button><button id="t-reset" type="button">처음으로</button><button id="t-next" type="button">다음 단계</button></div>
+  <div class="msg" id="t-msg" aria-live="polite">단계를 누르면 그 단계의 첫 쪽으로 가요.</div>
+</div>
+
+<div class="stage" id="stage">
+  <button class="nav prev" id="b-prev" type="button" aria-label="이전 쪽"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <div class="book" id="book"></div>
+  <button class="nav next" id="b-next" type="button" aria-label="다음 쪽"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+
+<div class="toc" id="toc"><div class="toc-in" role="dialog" aria-label="목차"><div class="toc-hd"><h3>목차</h3><button class="pill" id="toc-x" type="button">닫기</button></div><div id="toc-list"></div></div></div>
+
+<script>
+(function(){
+  var VIDEO='https://youtu.be/st9Rm93vcu8', CAI='https://createai.microbit.org/', MC='https://makecode.microbit.org/';
+  var KEY='cheer-book-v4', S={v:{},g:{},ck:{},chips:{err:[],imp:[]},b:[],a:[]};
+  try{var raw=localStorage.getItem(KEY); if(raw){var o=JSON.parse(raw); if(o&&typeof o==='object') S=Object.assign(S,o);}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  function $(s,r){return (r||document).querySelector(s)} function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function V(k){return (S.v[k]||'').trim()}
+
+  /* ---- 장 ---- */
+  var CH=[{n:'시작',c:'#7c4dff'},{n:'도입',c:'#ff3b30'},{n:'활동 1',c:'#7c4dff'},{n:'활동 2',c:'#d63de8'},{n:'활동 3',c:'#0b9a5b'},{n:'정리',c:'#1769e0'},{n:'평가·지도안',c:'#c26a00'}];
+  var STATES=['동작 1','동작 2','정지'];
+  var COND=['같게','속도 바꿈','방향 바꿈'];
+  var ERR=['방향이 달랐어요','속도가 달랐어요','크기가 달랐어요','입력한 자료가 적어요','한 사람의 동작만 입력했어요','코드를 고쳐야 해요'];
+  var IMP=['자료를 더 많이 넣어요','속도를 다양하게 넣어요','방향을 다양하게 넣어요','다른 친구의 자료도 함께 넣어요','정지 자료를 늘려요'];
+  var GC={f0:['학습한 친구','옆 친구','옆 친구·바꿔서'],f1:COND,f2:COND};
+  var SUM0=['같은 동작을 여러 번 입력한','서로 다른 사람이 다양한 방향·속도로 입력한','동작과 정지가 분명히 다른','학습하지 않은 사람이 같은 조건으로 다시 시험해 확인한'];
+
+  /* ---- 조각 ---- */
+  var E=function(s){return '<p class="eb">'+s+'</p>'}, T=function(s){return '<h2 class="ttl">'+s+'</h2>'}, B=function(s){return '<div class="body">'+s+'</div>'};
+  var nums=function(a){return '<ol class="nums">'+a.map(function(t,i){return '<li><span class="n">'+(i+1)+'</span><span>'+t+'</span></li>'}).join('')+'</ol>'};
+  var nt=function(a){return '<ul class="nt">'+a.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul>'};
+  var bl=function(a){return '<ul class="bl">'+a.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul>'};
+  var fi=function(l,k,ph){return '<label class="fi"><span>'+l+'</span><input type="text" data-k="'+k+'"'+(ph?' placeholder="'+ph+'"':'')+'></label>'};
+  var ff=function(l,k){return '<label class="ff"><span>'+l+'</span><textarea data-k="'+k+'"></textarea></label>'};
+  var ck=function(k,t){return '<label class="ck"><input type="checkbox" data-ck="'+k+'"><span>'+t+'</span></label>'};
+  function grid(key,cols){
+    cols=cols||COND;
+    var h='<table class="tb"><tr><th>상태</th>'+cols.map(function(c){return '<th class="c">'+c+'</th>'}).join('')+'<th class="c">맞은 수</th></tr>';
+    STATES.forEach(function(s,r){h+='<tr><td><b>'+s+'</b></td>';for(var c=0;c<3;c++)h+='<td class="c"><button type="button" class="cell" data-g="'+key+'" data-r="'+r+'" data-c="'+c+'" aria-label="'+s+' '+cols[c]+'"></button></td>';h+='<td class="c"><span class="cnt" data-n="'+key+'-'+r+'">0 / 3</span></td></tr>'});
+    return h+'</table>';
+  }
+  function sel(id){var h='<select data-sel="'+id+'" aria-label="맞은 수"><option value="">-</option>';for(var i=0;i<=3;i++)h+='<option value="'+i+'">'+i+' / 3</option>';return h+'</select>'}
+  var cover=function(){return '<div class="cv-e">DK microbit · 6학년 실과 · 디지털 사회와 인공지능</div><div class="cv-t">AI 응원봉<br>만들기</div><div class="cv-s">좋은 학습 자료의 조건 찾기</div><div class="rgb" aria-hidden="true">'+'01010111111111101110 00100'.replace(' ','').split('').map(function(x){return '<i class="led'+(x==='1'?' on':'')+'"></i>'}).join('')+'</div><a class="cv-go" href="'+CAI+'" target="_blank" rel="noopener">CreateAI 작성 페이지 바로가기 ↗</a><div class="chips"><a class="chip" href="'+VIDEO+'" target="_blank" rel="noopener">▶ 동기 유발 영상</a><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode ↗</a></div>'};
+  function divider(no,big,sub,extra){return '<div class="dot"></div><div class="no">'+no+'</div><div class="big">'+big+'</div><div class="sub">'+sub+'</div>'+(extra||'')}
+
+  /* ---- 쪽 (홀수=왼쪽, 짝수=오른쪽) ---- */
+  var P=[
+   {ch:0,n:'표지',cls:'cover',h:cover},
+   {ch:0,n:'학습 목표',h:function(){return E('학습 목표')+B('<div class="stm">응원봉 시험 결과를 근거로, AI가 동작을 잘 구별하려면 어떤 학습 자료가 필요한지 설명할 수 있다.</div><div><p class="eb">탐구 질문</p><p class="para">여러 사람이 써도 응원봉이 동작을 잘 구별하려면 어떤 학습 자료가 필요할까?</p></div>'+nt(['오늘의 목표는 응원봉을 만드는 기술이 아니에요. 좋은 응원봉이 되는 조건, 곧 AI가 잘 배우는 조건을 찾는 거예요.']))}},
+   {ch:1,n:'도입',cls:'divider',h:function(){return divider('01 · 3분','응원봉 영상 보기','동기를 일으키고, 오늘의 목표를 알아요.')}},
+   {ch:1,n:'동기 유발 영상',h:function(){return E('도입 · 3분')+T('영상을 보고 떠올려요')+B('<a class="play" href="'+VIDEO+'" target="_blank" rel="noopener"><span class="tri"></span><span class="cap">영상 열기 ↗ (새 탭)</span></a>'+bl(['응원 장면에서 응원봉이 어떻게 반응하는지 살펴봐요.','영상을 본 뒤 이 화면으로 돌아와요.'])+nt(['교사 “수업을 시작하겠습니다. 먼저 응원봉 영상을 볼까요?”','영상 뒤 “우리도 응원봉을 만들어 봅시다.”']))}},
+   {ch:1,n:'지난 시간에 배운 것',h:function(){return E('도입 · 3분')+T('지난 시간에 배운 것으로')+B('<div class="stm">동작인식 AI는 센서가 알려 주는 움직임 숫자를 학습 자료와 비교해, 가장 비슷한 동작을 찾아내요.</div>'+nums(['<b>지난 시간</b> CreateAI로 여러 동작을 구별하는 AI를 학습시켰어요.','<b>그 내용으로</b> 동작에 따라 다른 모양과 소리가 나는 응원봉을 만들 수 있어요.','<b>오늘은</b> 응원봉을 만들며, AI가 동작을 잘 구별하는 데 필요한 학습 자료의 조건을 찾아요.'])+nt(['교사 “지난 시간에 무엇을 배웠죠?” “그 내용으로 어떤 응원봉을 만들 수 있을까요?”','학생이 말한 뒤 학습 목표를 함께 읽어요.']))}},
+   {ch:1,n:'오늘의 수업 흐름',h:function(){return E('도입 · 3분')+T('오늘 수업은 이렇게 해요')+B(nums(['<b>활동 1 · 10분</b> 한 사람이 학습시키고, 옆 친구와 먼저 확인해요.','<b>활동 2 · 14분</b> 안 된 까닭을 이야기하고, 자료를 더해 다시 학습한 뒤, 상대 팀이 시험해요.','<b>활동 3 · 11분</b> LED·소리를 코딩해 완성하고 발표해요.','<b>정리 · 2분</b> 빈칸 두 문장을 함께 채워요.'])+nt(['안전 약속: 자료를 모으기 전 친구에게 동의를 구해요. 주변과 간격을 두고 작은 동작으로 시험해요. 짧고 작은 소리를 써요. 결과는 있는 그대로 기록해요.']))}},
+   {ch:2,n:'활동 1',cls:'divider',h:function(){return divider('02 · 10분','학습시키고 팀 안에서 확인하기','한 사람이 학습시키고, 옆 친구와 잘 되는지 먼저 봐요.','<div class="chips"><a class="chip" href="'+CAI+'" target="_blank" rel="noopener">CreateAI 바로가기 ↗</a></div>')}},
+   {ch:2,n:'AI 가르치기',h:function(){return E('활동 1 · 학습 6분')+T('CreateAI로 가르쳐요')+B(nums(['4명 모둠에서 <b>두 동작</b>을 정하고, 2명씩 두 팀이 응원봉 AI를 1개씩 만들어요.','팀의 <b>한 사람(처음 학습자)</b>이 동작 1·동작 2·정지를 <b>각각 3번씩만</b> 입력해 학습해요.','학습이 끝나면 화면에 나오는 인식 결과로 시험할 준비를 해요.'])+nt(['3번만 입력하면 틀리기 쉬워요. 그 틀림이 활동 2의 출발점이에요.','LED·소리 코딩은 활동 3에서 해요.','종료 신호가 울리면 시험을 멈추고 모둠을 보아요.'])+'<div class="chips"><a class="chip" href="'+CAI+'" target="_blank" rel="noopener">CreateAI 바로가기 ↗</a></div>')}},
+   {ch:2,n:'팀 안에서 확인',h:function(){return E('활동 1 · 확인 4분')+T('옆 친구와 먼저 확인해요')+B(nums(['<b>학습한 친구</b>가 먼저 흔들어 보고 잘 되는지 봐요.','<b>옆 친구</b>(같은 팀)도 흔들어 보고, 결과를 활동지에 ○ ×로 써요.','잘 된 점과 안 된 점을 모둠 이야기를 위해 한 줄씩 적어 두어요.'])+nt(['이 확인은 <b>예비 확인</b>이에요. 본 시험은 활동 2에서 <b>상대 팀</b>이 해요.','옆 친구는 학습에 참여하지 않았지만, 같은 팀이라 움직임이 비슷할 수 있어요.']))}},
+   {ch:2,n:'역할과 시험 약속',h:function(){return E('활동 1·2 공통')+T('누가 무엇을 하나요')+B('<div class="rows"><div class="r"><b>처음 학습자 (팀 1명)</b><span>활동 1에서 동작을 3번씩 입력해요.</span></div><div class="r"><b>옆 친구 (같은 팀)</b><span>활동 1에서 예비 확인을 하고, 활동 2에서 자료를 더 입력해요.</span></div><div class="r"><b>상대 팀 두 친구</b><span>활동 2에서 본 시험을 해요. 이 응원봉의 학습에 참여하지 않은 사람만 시험해요.</span></div></div>'+nt(['A팀 응원봉은 B팀 두 친구가, B팀 응원봉은 A팀 두 친구가 시험해요.','학습에 참여한 사람은 그 응원봉을 본 시험에서 시험하지 않아요.']))}},
+   {ch:2,n:'활동지 ① 동작 정하기',h:function(){return E('활동지 ①')+T('동작을 정하고 가르쳐요')+B('<div class="two">'+fi('모둠','group')+fi('이름 (두 사람)','names')+'</div><div class="two">'+fi('처음 학습한 사람','tr1')+fi('나중에 자료를 더할 사람','tr2')+'</div><div class="fm"><div class="g"><h3>동작 1</h3>'+fi('이름','a1n')+fi('방법 (방향·속도·크기)','a1w')+'</div><div class="g"><h3>동작 2</h3>'+fi('이름','a2n')+fi('방법 (방향·속도·크기)','a2w')+'</div></div><p class="para" style="font-size:calc(var(--u)*3)"><b>정지</b> 응원봉을 잡은(찬) 채 가만히 있기. 세 상태를 각각 3번씩 입력해요.</p>')}},
+   {ch:2,n:'활동지 ① 팀 안 확인',h:function(){return E('활동지 ①')+T('팀 안에서 확인한 결과')+B('<div class="two">'+fi('시험한 옆 친구','f0n')+fi('잡는(찬) 방향','f0d')+'</div>'+grid('f0',GC.f0)+'<div class="fields">'+ff('잘 된 점은?','g1')+ff('잘 안 된 점은?','g2')+'</div>'+nt(['칸을 누르면 ○ → × → 빈칸 순서로 바뀌어요.']))}},
+
+   {ch:3,n:'활동 2',cls:'divider',h:function(){return divider('03 · 14분','고민하고 다시 가르치고 시험하기','이야기 4분 · 다시 가르치기 4분 · 상대 팀 시험 6분')}},
+   {ch:3,n:'안 된 까닭과 개선 방법',h:function(){return E('활동 2 · 이야기 4분')+T('어떻게 하면 더 잘될까요')+B('<p class="para">활동 1에서 잘 안 된 것, 또는 더 잘되게 하고 싶은 것을 모둠에서 이야기해요. 이 응원봉은 <b>여러 사람</b>이 쓸 거예요.</p><div class="chips">'+IMP.map(function(t){return '<button type="button" class="chip" data-chip="imp" data-t="'+t+'" aria-pressed="false">'+t+'</button>'}).join('')+'</div><div class="fields">'+ff('우리 팀이 고른 개선 방법과 까닭','im1')+ff('동작을 잘 구분하려면 무엇이 필요할까요?','q2')+'</div>')}},
+   {ch:3,n:'다시 가르치기',h:function(){return E('활동 2 · 다시 가르치기 4분')+T('자료를 더해 다시 학습해요')+B(nums(['정한 개선 방법대로 <b>같은 팀의 다른 친구(추가 학습자)</b>가 자료를 <b>2~3개씩 더</b> 입력해요.','같은 이름의 상태로 학습하고, 모델을 다시 만들어요.','시험은 아직 하지 않아요. 상대 팀이 해요.'])+'<div class="fields">'+ff('누가 · 어떤 동작을 · 어떻게 몇 개 더 넣었나요?','m2')+'</div>'+nt(['추가 학습자가 시험하면 안 돼요. 학습에 참여했기 때문이에요.']))}},
+   {ch:3,n:'시험 체크리스트',h:function(){return E('활동 2 · 상대 팀 시험 6분')+T('시험 체크리스트')+B(ck('ck5','시험하는 친구는 이 응원봉의 <b>학습에 참여하지 않은 사람</b>이에요. (상대 팀 두 친구)')+ck('ck1','세 상태를 각각 <b>3가지 조건</b>으로 시험해요: ① 학습할 때와 똑같이 ② 속도만 바꿔서 ③ 방향만 바꿔서.')+ck('ck2','화면에 나온 동작 이름이 맞으면 ○, 아니면 ×를 써요.')+ck('ck3','정지인데 다른 동작으로 나오면 ×예요.')+ck('ck4','두 친구가 같은 조건으로 시험해요.')+nt(['상대 팀의 두 친구가 차례로 시험하고, 학습한 팀 친구가 결과를 기록해요.']))}},
+   {ch:3,n:'오류 찾기 기준',h:function(){return E('활동 2')+T('이런 반응이면 오류(×)예요')+B('<div class="rows"><div class="r"><b>동작 1을 했는데 동작 2로 나왔다</b><span>두 동작의 방향·속도가 비슷하지 않았나요?</span></div><div class="r"><b>동작을 했는데 아무것도 인식하지 못했다</b><span>입력한 자료와 다른 방향·속도로 하지 않았나요?</span></div><div class="r"><b>가만히 있는데 동작으로 나왔다</b><span>정지 자료가 충분했나요? 손이 흔들리지 않았나요?</span></div><div class="r"><b>친구마다 결과가 다르다</b><span>학습한 사람과 시험한 사람의 움직임이 어떻게 달랐나요?</span></div></div>'+nt(['오류는 <b>누가 · 어느 상태에서 · 무엇을 바꿨을 때 · 어떤 반응이 나왔는지</b> 네 가지로 기록해요. 횟수보다 <b>어떤 조건에서 틀렸는지</b>가 중요해요.']))}},
+   {ch:3,n:'활동지 ② 첫 번째 친구',h:function(){return E('활동지 ②')+T('첫 번째 친구가 시험해요')+B('<div class="two">'+fi('이름 (상대 팀)','f1n')+fi('잡는(찬) 방향','f1d')+'</div>'+grid('f1',GC.f1)+nt(['칸을 누르면 ○ → × → 빈칸 순서로 바뀌어요.','같게: 학습할 때와 똑같이 · 속도 바꿈: 더 빠르게(느리게) · 방향 바꿈: 다른 방향으로','학습에 참여하지 않은 친구만 시험해요.']))}},
+   {ch:3,n:'활동지 ② 두 번째 친구',h:function(){return E('활동지 ②')+T('두 번째 친구가 시험해요')+B('<div class="two">'+fi('이름 (상대 팀)','f2n')+fi('잡는(찬) 방향','f2d')+'</div>'+grid('f2',GC.f2)+'<div><p class="eb">오류가 난 까닭은?</p><div class="chips">'+ERR.map(function(t){return '<button type="button" class="chip" data-chip="err" data-t="'+t+'" aria-pressed="false">'+t+'</button>'}).join('')+'</div></div>')}},
+   {ch:3,n:'활동지 ② 결과 비교',h:function(){return E('활동지 ②')+T('결과를 비교하고 기록해요')+B('<div class="result" id="cmp-res"></div><div class="fields">'+ff('누가 · 어느 상태에서 · 무엇을 바꿨더니 · 어떤 반응이 나왔나요?','e1')+ff('팀 안 확인과 상대 팀 시험 결과가 달랐다면, 왜 그럴까요?','e2')+'</div>')}},
+
+   {ch:4,n:'활동 3',cls:'divider',h:function(){return divider('04 · 11분','코딩으로 완성하고 발표하기','코딩 6분 · 발표 5분','<div class="chips"><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode 바로가기 ↗</a></div>')}},
+   {ch:4,n:'코딩으로 완성',h:function(){return E('활동 3 · 코딩 6분')+T('LED와 소리를 코딩해요')+B(nums(['완성된 AI 응원봉이 <b>동작을 인식하면</b> 어떤 LED 모양과 소리를 낼지 팀마다 정해요.','동작 1과 동작 2는 <b>서로 다른</b> 모양과 짧은 소리로, 정지는 화면 지우기로 해요.','내려받아 움직여 보고, 인식된 동작에 맞게 반응하는지 확인해요.'])+nt(['코드는 인식된 뒤의 <b>반응</b>을, 학습 자료는 <b>인식(동작 구분)</b>을 바꿔요.','팀마다 다르게 꾸미면 서로 다른 AI 응원봉이 돼요.','잘 안 되면 LED·소리 코드와 연결부터 다시 확인해요.'])+'<div class="chips"><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode 바로가기 ↗</a></div>')}},
+   {ch:4,n:'활동지 ④ 코딩 기록',h:function(){return E('활동지 ④')+T('우리 팀 응원봉을 기록해요')+B('<div class="fm"><div class="g"><h3>동작 1</h3>'+fi('LED 모양','a1l')+fi('소리','a1s')+'</div><div class="g"><h3>동작 2</h3>'+fi('LED 모양','a2l')+fi('소리','a2s')+'</div></div><div class="fields">'+ff('응원봉이 잘 작동하려면 무엇이 필요할까요? (코드·연결·전원)','nc3')+'</div>')}},
+   {ch:4,n:'발표',h:function(){return E('활동 3 · 발표 5분')+T('우리 응원봉을 발표해요')+B(fi('동작과 반응','p1','예: 팔을 위아래로 흔들면 하트와 도 소리')+fi('고친 점(추가한 자료와 이유)','p2','예: 빠르게 흔드는 자료 3개를 더 넣음')+fi('달라진 결과','p3','예: 속도를 바꿔도 맞게 인식됨')+'<div class="out" id="pres-out" style="flex:none;min-height:calc(var(--u)*11)"></div><div class="btns"><button class="chip" type="button" data-copy="pres-out">발표 문장 복사</button></div>'+nt(['모둠 안에서 두 팀이 서로 보여 주고 설명해요. 대표 한두 팀은 전체 앞에서 해요.']))}},
+
+   {ch:5,n:'정리',cls:'divider',h:function(){return divider('05 · 2분','오늘 활동을 정리해요','빈칸에 들어갈 말을 함께 생각해요.')}},
+   {ch:5,n:'오늘의 정리',h:function(){return E('정리 · 빈칸 채우기')+T('빈칸에 들어갈 말은?')+B('<p class="stm" style="font-size:calc(var(--u)*4.2)">AI가 동작을 잘 구별하려면 <input class="blank" data-k="s1" aria-label="빈칸 1"> 사람이 <input class="blank" data-k="s2" aria-label="빈칸 2"> 속도와 방향으로 <input class="blank" data-k="s3" aria-label="빈칸 3"> 입력한 자료가 필요하다.</p><p class="stm" style="font-size:calc(var(--u)*4.2)">시험은 학습에 <input class="blank" style="width:calc(var(--u)*27)" data-k="s4" aria-label="빈칸 4"> 사람이 해야 정확하게 확인할 수 있다.</p><div class="btns"><button class="chip" type="button" id="reveal">함께 확인하기</button></div><div class="result" id="ans" style="display:none">여러 · 다양한 · 많이 / 참여하지 않은</div>'+nt(['교사 “오늘 활동을 정리해 보겠습니다. 빈칸에 들어갈 말이 무엇일지 생각해 볼까요?” 함께 읽으며 채워요.']))}},
+
+   {ch:6,n:'학습 목표·활동·평가 연결',h:function(){return E('평가')+T('목표 · 활동 · 평가가 이어져요')+B('<table class="tb"><tr><th>단계</th><th>하는 일</th><th>평가 요소</th><th>찾는 조건</th></tr><tr><td><b>활동 1</b></td><td>한 사람이 3번씩 학습, 옆 친구와 예비 확인</td><td>동작·방법·팀 안 확인 결과를 기록</td><td>자료는 얼마나, 몇 사람이 입력했나</td></tr><tr><td><b>활동 2</b></td><td>안 된 까닭과 개선 방법 이야기, 자료 더하기, 상대 팀 시험</td><td>개선 방법과 까닭, 시험 결과와 오류 조건을 기록</td><td>다양한 사람·속도·방향, 학습하지 않은 사람의 시험</td></tr><tr><td><b>활동 3</b></td><td>LED·소리 코딩, 발표</td><td>동작·반응·고친 점·달라진 결과를 설명</td><td>코드는 반응, 자료는 동작 구분</td></tr><tr><td><b>정리</b></td><td>빈칸 두 문장 채우기</td><td>학습 목표 도달 확인</td><td>여러·다양한·많이, 참여하지 않은 사람의 시험</td></tr></table>'+nt(['주 성취기준 [6실05-05], 연계 [6실05-02]']))}},
+   {ch:6,n:'성취 수준',h:function(){return E('평가')+T('성취 수준')+B('<div class="rows"><div class="r"><b>매우 잘함</b>시험 기록을 근거로 필요한 학습 자료의 조건(사람·속도·방향·양)과 학습하지 않은 사람이 시험해야 하는 까닭을 설명함</div><div class="r"><b>잘함</b>팀 안 확인과 상대 팀 시험 결과를 비교하고 필요한 학습 자료를 제안함</div><div class="r"><b>기초</b>안내에 따라 시험 결과를 기록하고, 오류의 예나 추가할 자료의 예를 말함</div></div>'+nt(['개선 후에도 결과가 같거나 낮아도, 실제 기록을 근거로 설명하면 평가해요.']))}},
+   {ch:6,n:'지도안 요약',h:function(){return E('지도안')+T('지도안 요약')+B('<table class="tb"><tr><th>수업 주제</th><td>AI 응원봉을 만들며 좋은 학습 자료의 조건 찾기</td></tr><tr><th>교과·단원</th><td>실과 6학년 2학기 · 디지털 사회와 인공지능 (2/2차시, 40분)</td></tr><tr><th>시간</th><td>도입 3 · 활동 1 10 · 활동 2 14 · 활동 3 11 · 정리 2</td></tr><tr><th>시험 원칙</th><td>한 사람이 먼저 학습하고, 같은 팀 다른 사람이 자료를 더한다. 본 시험은 학습에 참여하지 않은 상대 팀 두 친구가 한다.</td></tr><tr><th>정리 빈칸 답</th><td>여러 · 다양한 · 많이 / 참여하지 않은</td></tr><tr><th>도구·자료</th><td>CreateAI, MakeCode, 마이크로비트 V2(스마트 시계 키트), 컴퓨터, USB 케이블, 영상, 활동지</td></tr></table>')}},
+   {ch:6,n:'수업 전 준비·안전',h:function(){return E('지도안')+T('수업 전 준비와 안전')+B(ck('pr1','시계 키트 조립(CR2025 2개), 전원·부저 확인')+ck('pr2','조별 컴퓨터에서 CreateAI 접속, 마이크로비트 연결 확인')+ck('pr3','영상 재생과 소리 확인, 타이머 준비')+ck('pr4','활동지: 이 책의 활동지 쪽을 학생 기기에서 열기')+ck('pr5','MakeCode 접속과 LED·소리 블록 안내 화면 준비')+nt(['동작 자료를 모으기 전 참여자 동의 확인 · 주변과 간격을 두고 작은 동작으로 시험 · 짧고 작은 소리 · 실제 결과 기록','시간이 빠듯해요. 키트 조립과 동작 정하기는 수업 전에 해 두면 학습 6분을 지킬 수 있어요.']))}},
+   {ch:6,n:'활동지 출력',h:function(){return E('활동지')+T('내 활동지를 PDF로 저장해요')+B('<p class="para">지금까지 쓴 내용만 활동지 3쪽짜리 PDF로 만들어요. 쪽을 넘겨도 내용은 그대로 남아 있어요.</p><div class="btns"><button class="chip" type="button" id="pdf-save" style="background:var(--c);color:#fff">활동지 PDF로 저장</button><button class="chip" type="button" data-copy="all-out">내용 복사</button><button class="chip" type="button" id="clear-open">활동지 지우기</button></div><div class="result" id="pdf-msg" aria-live="polite">버튼을 누르면 PDF가 만들어져요.</div><div class="ask" id="clear-ask" style="display:none">입력한 내용이 모두 지워져요. 정말 지울까요?<div class="btns" style="margin-top:calc(var(--u)*1.6)"><button class="chip" type="button" id="clear-yes">지우기</button><button class="chip" type="button" id="clear-no">취소</button></div></div><div class="out" id="all-out"></div><p class="para" style="font-size:calc(var(--u)*2.4);color:#6a6a76">입력한 내용은 이 기기의 이 브라우저에만 저장돼요.</p>')}}
+  ];
+  var N=P.length;
+
+  /* ---- 레이아웃 ---- */
+  var book=$('#book'), stage=$('#stage'), idx=1, one=false;
+  function layout(){
+    var w=stage.clientWidth, h=stage.clientHeight;
+    one = w<820 || w/h<1.15;
+    var availW=one? w-24 : w-2*84, availH=h-24;
+    var pw=Math.max(200,Math.min(one?availW:availW/2, availH/1.28, 640));
+    book.style.setProperty('--U',(pw/100)+'px');
+    book.style.width=(one?pw:pw*2)+'px'; book.style.height=(pw*1.28)+'px';
+    book.classList.toggle('one',one);
+  }
+  function pageHTML(i,side){
+    var p=P[i-1]; if(!p) return '';
+    var ch=CH[p.ch], num=i;
+    return '<div class="page'+(p.cls?' '+p.cls:'')+'" style="--c:'+ch.c+'" data-i="'+i+'">'+p.h()+'<div class="pfoot"><span>'+ch.n+' · '+p.n+'</span><span>'+num+'</span></div></div>';
+  }
+  function fit(pg){
+    for(var k=1;k>=.5;k-=.04){
+      pg.style.setProperty('--k',k.toFixed(2));
+      var bd=$('.body',pg);
+      var over=(pg.scrollHeight>pg.clientHeight+1)||(bd&&bd.scrollHeight>bd.clientHeight+1)||(pg.scrollWidth>pg.clientWidth+1);
+      if(!over) break;
+    }
+  }
+  function render(){
+    if(one){ idx=Math.max(1,Math.min(N,idx)); } else { idx=Math.max(1,Math.min(N,idx)); if(idx%2===0) idx--; }
+    var html='';
+    if(one) html='<div class="leaf right">'+pageHTML(idx)+'</div>';
+    else html='<div class="leaf left">'+pageHTML(idx)+'</div><div class="leaf right">'+(idx+1<=N?pageHTML(idx+1):'')+'</div>';
+    book.innerHTML=html;
+    hydrate();
+    $$('.page',book).forEach(fit);
+    var a=idx,b=one?idx:Math.min(idx+1,N);
+    $('#pgno').textContent=(a===b?a:a+'–'+b)+' / '+N;
+    $('#pgbar').style.width=(b/N*100)+'%';
+    $('#b-prev').disabled=idx<=1; $('#b-next').disabled=(one?idx>=N:idx+1>=N);
+    try{history.replaceState(null,'','#p'+idx)}catch(e){}
+    paintToc();
+  }
+  function go(i,anim){
+    var t=Math.max(1,Math.min(N,i)); if(!one&&t%2===0)t--;
+    if(t===idx&&book.innerHTML) return;
+    idx=t;
+    if(anim===false){render();return}
+    book.classList.add('fade'); setTimeout(function(){render(); book.classList.remove('fade')},160);
+  }
+  function step(d){ go(one? idx+d : (d>0? idx+2 : idx-2)); }
+  $('#b-prev').addEventListener('click',function(){step(-1)});
+  $('#b-next').addEventListener('click',function(){step(1)});
+  document.addEventListener('keydown',function(e){
+    var tg=e.target&&e.target.tagName; if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;
+    if(e.key==='ArrowRight'||e.key==='PageDown') step(1); else if(e.key==='ArrowLeft'||e.key==='PageUp') step(-1);
+  });
+  var sx=null; stage.addEventListener('touchstart',function(e){if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){sx=null;return}sx=e.touches[0].clientX},{passive:true});
+  stage.addEventListener('touchend',function(e){if(sx==null)return; var dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>60) step(dx<0?1:-1)});
+  window.addEventListener('resize',function(){var o=one; layout(); if(o!==one && !one && idx%2===0) idx--; render()});
+  window.addEventListener('hashchange',function(){var m=/^#p(\d+)$/.exec(location.hash); if(m){var t=+m[1]; if(!one&&t%2===0)t--; if(t!==idx){idx=t;render()}}});
+
+  /* ---- 상태 반영 ---- */
+  function paintGrid(key){
+    for(var r=0;r<3;r++){var n=0;
+      for(var c=0;c<3;c++){var v=(S.g[key]&&S.g[key][r]&&S.g[key][r][c])||''; var b=$('.cell[data-g="'+key+'"][data-r="'+r+'"][data-c="'+c+'"]'); if(b){b.dataset.v=v;b.textContent=v==='o'?'○':v==='x'?'×':''} if(v==='o')n++;}
+      var el=$('[data-n="'+key+'-'+r+'"]'); if(el) el.textContent=n+' / 3';
+    }
+  }
+  function presText(){
+    var p1=V('p1'),p2=V('p2'),p3=V('p3');
+    if(!p1&&!p2&&!p3) return '동작과 반응, 고친 점, 달라진 결과를 쓰면 발표 문장이 만들어져요.';
+    return '우리 팀 응원봉은 '+(p1||'___')+'. 고친 점은 '+(p2||'___')+'이고, 그 결과 '+(p3||'___')+'.';
+  }
+  function gridN(key){var g=S.g[key]||[['','',''],['','',''],['','','']],n=0,m=0;g.forEach(function(r){(r||[]).forEach(function(v){if(v==='o')n++;if(v)m++})});return [n,m]}
+  function gridTxt(key){var g=S.g[key]||[['','',''],['','',''],['','','']];return STATES.map(function(s,r){var n=0,m=(g[r]||[]).map(function(v){if(v==='o')n++;return v==='o'?'○':v==='x'?'×':'-'}).join(' ');return '  '+s+': '+m+' ('+n+'/3)'}).join('\n')}
+  function sumTxt(){return '① AI가 동작을 잘 구별하려면 '+(V('s1')||'___')+' 사람이 '+(V('s2')||'___')+' 속도와 방향으로 '+(V('s3')||'___')+' 입력한 자료가 필요하다.\n② 시험은 학습에 '+(V('s4')||'___')+' 사람이 해야 정확하게 확인할 수 있다.'}
+  function allText(){
+    return '[AI 응원봉 활동지]\n모둠 '+V('group')+' / '+V('names')+'\n처음 학습 '+V('tr1')+' / 나중에 자료를 더할 사람 '+V('tr2')+'\n\n1. 동작 1: '+V('a1n')+' / '+V('a1w')+'\n   동작 2: '+V('a2n')+' / '+V('a2w')+'\n   팀 안 확인('+V('f0n')+')\n'+gridTxt('f0')+'\n   잘 된 점: '+V('g1')+'\n   잘 안 된 점: '+V('g2')+'\n\n2. 개선 방법: '+(S.chips.imp.join(', ')||'-')+' / '+V('im1')+'\n   동작을 잘 구분하려면: '+V('q2')+'\n   더한 자료: '+V('m2')+'\n   상대 팀 첫 번째 '+V('f1n')+' ('+V('f1d')+')\n'+gridTxt('f1')+'\n   두 번째 '+V('f2n')+' ('+V('f2d')+')\n'+gridTxt('f2')+'\n   오류 까닭: '+(S.chips.err.join(', ')||'-')+'\n   '+cmpText()[0]+'\n   '+V('e1')+'\n   '+V('e2')+'\n\n3. 동작 1: LED '+V('a1l')+' / 소리 '+V('a1s')+'\n   동작 2: LED '+V('a2l')+' / 소리 '+V('a2s')+'\n   잘 작동하려면: '+V('nc3')+'\n   발표: '+presText()+'\n\n오늘의 정리\n'+sumTxt();
+  }
+  function cmpText(){
+    var a=gridN('f0'),b=gridN('f1'),c=gridN('f2');
+    if(!a[1]||(!b[1]&&!c[1])) return ['팀 안 확인과 상대 팀 시험 칸을 채우면 결과가 나타나요.',''];
+    var t='팀 안 확인 '+a[0]+'/9 → 상대 팀 첫 번째 '+b[0]+'/9'+(c[1]?', 두 번째 '+c[0]+'/9':'')+'.';
+    var m=Math.min(b[1]?b[0]:99,c[1]?c[0]:99);
+    return [t+(m<a[0]?' 다른 사람이 시험하자 결과가 달라졌어요.':' 결과를 있는 그대로 기록해요.'),m<a[0]?'down':'']
+  }
+  function deps(){
+    var e=$('#pres-out'); if(e) e.textContent=presText();
+        e=$('#all-out'); if(e) e.textContent=allText();
+    e=$('#cmp-res'); if(e){var c=cmpText(); e.textContent=c[0]; e.className='result'+(c[1]?' '+c[1]:'')}
+  }
+  function hydrate(){
+    $$('[data-k]',book).forEach(function(el){var k=el.dataset.k; el.value=S.v[k]||''});
+    $$('[data-ck]',book).forEach(function(el){el.checked=!!S.ck[el.dataset.ck]});
+    $$('[data-sel]',book).forEach(function(el){var id=el.dataset.sel,arr=id[0]==='b'?S.b:S.a,v=arr[+id[1]]; el.value=(v==null?'':String(v))});
+    ['f0','f1','f2'].forEach(function(k){if($('.cell[data-g="'+k+'"]',book)){if(!S.g[k])S.g[k]=[['','',''],['','',''],['','','']]; paintGrid(k)}});
+    $$('[data-chip]',book).forEach(function(el){var t=el.dataset.t,on=S.chips[el.dataset.chip].indexOf(t)>=0; el.setAttribute('aria-pressed',on?'true':'false')});
+    deps();
+  }
+  book.addEventListener('input',function(e){var el=e.target; if(el.dataset&&el.dataset.k){S.v[el.dataset.k]=el.value; save(); deps();}});
+  book.addEventListener('change',function(e){
+    var el=e.target; if(!el.dataset) return;
+    if(el.dataset.ck){S.ck[el.dataset.ck]=el.checked; save();}
+    if(el.dataset.sel){var id=el.dataset.sel,arr=id[0]==='b'?S.b:S.a; arr[+id[1]]=el.value; save(); deps();}
+  });
+  function copyText(txt,btn){
+    var o=btn.textContent;
+    var done=function(ok){btn.textContent=ok?'복사했어요':'복사하지 못했어요. 글을 직접 선택해 복사해요'; setTimeout(function(){btn.textContent=o},2200)};
+    function fb(){try{var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');document.body.removeChild(ta);done(ok)}catch(e){done(false)}}
+    try{navigator.clipboard.writeText(txt).then(function(){done(true)},fb)}catch(e){fb()}
+  }
+  book.addEventListener('click',function(e){
+    var t=e.target.closest('button'); if(!t) return;
+    if(t.classList.contains('cell')){var key=t.dataset.g,r=+t.dataset.r,c=+t.dataset.c; var v=S.g[key][r][c]; S.g[key][r][c]=(v===''?'o':v==='o'?'x':''); save(); paintGrid(key); deps(); return}
+    if(t.dataset.chip==='err'){var i=S.chips.err.indexOf(t.dataset.t); if(i>=0)S.chips.err.splice(i,1); else S.chips.err.push(t.dataset.t); t.setAttribute('aria-pressed',i<0?'true':'false'); save(); deps(); return}
+    if(t.dataset.chip==='imp'){var j=S.chips.imp.indexOf(t.dataset.t); if(j>=0)S.chips.imp.splice(j,1); else S.chips.imp.push(t.dataset.t); t.setAttribute('aria-pressed',j<0?'true':'false'); save(); deps(); return}
+    if(t.id==='reveal'){var an=$('#ans',book); if(an) an.style.display=(an.style.display==='none'?'block':'none'); return}
+    if(t.dataset.copy){var src=$('#'+t.dataset.copy,book); if(src) copyText(src.textContent,t); return}
+    if(t.id==='pdf-save'){makePdf(); return}
+    if(t.id==='clear-open'){$('#clear-ask',book).style.display='block'; return}
+    if(t.id==='clear-no'){$('#clear-ask',book).style.display='none'; return}
+    if(t.id==='clear-yes'){S.v={};S.g={};S.chips={err:[],imp:[]};S.b=[];S.a=[]; save(); render(); return}
+  });
+
+
+  /* ---- PDF 출력 ---- */
+  function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function rbox(l,v,min){return '<div class="rl">'+l+'</div><div class="rv" style="min-height:'+(min||34)+'px">'+esc(v)+'</div>'}
+  function rgrid(key){
+    var g=S.g[key]||[['','',''],['','',''],['','','']], cols=GC[key]||COND;
+    return '<table><tr><th>상태</th>'+cols.map(function(c){return '<th class="c">'+c+'</th>'}).join('')+'<th class="c">맞은 수</th></tr>'+STATES.map(function(s,r){var n=0;var cs=[0,1,2].map(function(c){var v=(g[r]||[])[c]||'';if(v==='o')n++;return '<td class="c">'+(v==='o'?'○':v==='x'?'×':'')+'</td>'}).join('');return '<tr><td><b>'+s+'</b></td>'+cs+'<td class="c"><b>'+n+' / 3</b></td></tr>'}).join('')+'</table>';
+  }
+  function reportHTML(){
+    var d=new Date(), ds=d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate();
+    var head='<h1>AI 응원봉 활동지</h1><div class="meta">6학년 실과 · 모둠 '+esc(V('group'))+' · 이름 '+esc(V('names'))+' · '+ds+'<br>처음 학습한 사람 '+esc(V('tr1'))+' · 나중에 자료를 더할 사람 '+esc(V('tr2'))+'</div>';
+    var s1=head+'<h2>1. 동작을 정하고 가르치기</h2><table><tr><th>상태</th><th>이름</th><th>방법 (방향·속도·크기)</th></tr>'
+      +'<tr><td><b>동작 1</b></td><td>'+esc(V('a1n'))+'</td><td>'+esc(V('a1w'))+'</td></tr>'
+      +'<tr><td><b>동작 2</b></td><td>'+esc(V('a2n'))+'</td><td>'+esc(V('a2w'))+'</td></tr>'
+      +'<tr><td><b>정지</b></td><td>가만히 있기</td><td></td></tr></table>'
+      +'<div class="fr">팀 안에서 확인 · 시험한 옆 친구: '+esc(V('f0n'))+' · 잡는(찬) 방향: '+esc(V('f0d'))+'</div>'+rgrid('f0')
+      +rbox('잘 된 점',V('g1'),34)+rbox('잘 안 된 점',V('g2'),34)
+      +'<h2>2. 개선 방법 고민하기</h2>'
+      +rbox('고른 개선 방법',S.chips.imp.join(', '),26)+rbox('우리 팀이 고른 개선 방법과 까닭',V('im1'),46)+rbox('동작을 잘 구분하려면 무엇이 필요할까요?',V('q2'),46)+rbox('더한 자료 (누가 · 어떤 동작을 · 몇 개)',V('m2'),46)+'<div class="pg">1 / 3</div>';
+    var s2='<h2>3. 상대 팀이 시험하기</h2>'
+      +'<div class="fr">첫 번째 친구: '+esc(V('f1n'))+' · 잡는(찬) 방향: '+esc(V('f1d'))+'</div>'+rgrid('f1')
+      +'<div class="fr">두 번째 친구: '+esc(V('f2n'))+' · 잡는(찬) 방향: '+esc(V('f2d'))+'</div>'+rgrid('f2')
+      +rbox('오류가 난 까닭',S.chips.err.join(', '),30)
+      +'<div class="big">'+esc(cmpText()[0])+'</div>'
+      +rbox('누가 · 어느 상태에서 · 무엇을 바꿨더니 · 어떤 반응이 나왔나요?',V('e1'),70)
+      +rbox('팀 안 확인과 상대 팀 시험 결과가 달랐다면, 왜 그럴까요?',V('e2'),70)+'<div class="pg">2 / 3</div>';
+    var s3='<h2>4. 코딩으로 완성하고 발표하기</h2><table><tr><th>상태</th><th>LED 모양</th><th>소리</th></tr>'
+      +'<tr><td><b>동작 1</b></td><td>'+esc(V('a1l'))+'</td><td>'+esc(V('a1s'))+'</td></tr>'
+      +'<tr><td><b>동작 2</b></td><td>'+esc(V('a2l'))+'</td><td>'+esc(V('a2s'))+'</td></tr>'
+      +'<tr><td><b>정지</b></td><td>화면 지우기</td><td>-</td></tr></table>'
+      +rbox('응원봉이 잘 작동하려면 무엇이 필요할까요? (코드·연결·전원)',V('nc3'),50)
+      +rbox('발표 (동작과 반응 → 고친 점 → 달라진 결과)',presText(),60)
+      +'<h2>오늘의 정리</h2><div class="big" style="white-space:pre-line;line-height:1.8">'+esc(sumTxt())+'</div><div class="pg">3 / 3</div>';
+    return [s1,s2,s3];
+  }
+  function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('load'))};document.head.appendChild(s)})}
+  function pdfMsg(t){var e=$('#pdf-msg'); if(e) e.textContent=t}
+  async function savePdf(blob,fn){
+    var dl=null; try{ if(window.claude&&window.claude.use) dl=await window.claude.use('downloads'); }catch(e){}
+    if(dl){
+      try{ await dl.save({filename:fn,data:blob}); pdfMsg('PDF를 저장했어요.'); return }
+      catch(e){ if(e&&e.code==='declined'){pdfMsg('저장을 취소했어요. 다시 누르면 저장할 수 있어요.');return} }
+    }
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fn; document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href); a.remove()},4000);
+    pdfMsg('PDF를 내려받았어요. 받은 파일을 확인해 주세요.');
+  }
+  var pdfBusy=false;
+  async function makePdf(){
+    if(pdfBusy) return; pdfBusy=true; pdfMsg('PDF를 만드는 중이에요. 잠시만 기다려요.');
+    var host=null;
+    try{
+      if(!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      if(!(window.jspdf&&window.jspdf.jsPDF)) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      try{ if(document.fonts&&document.fonts.ready) await document.fonts.ready }catch(e){}
+      host=document.createElement('div'); host.className='rp-host';
+      host.innerHTML=reportHTML().map(function(h){return '<div class="sheet">'+h+'</div>'}).join('');
+      document.body.appendChild(host);
+      var sheets=$$('.sheet',host);
+      sheets.forEach(function(sh){ for(var fs=15;fs>=9;fs-=.5){sh.style.fontSize=fs+'px'; if(sh.scrollHeight<=sh.clientHeight+1)break} });
+      var pdf=new window.jspdf.jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+      for(var i=0;i<sheets.length;i++){
+        var cv=await window.html2canvas(sheets[i],{scale:2,backgroundColor:'#ffffff',scrollX:0,scrollY:0,windowWidth:794});
+        if(i>0) pdf.addPage();
+        pdf.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,210,297);
+      }
+      var name=(V('group')||V('names')||'내').replace(/[\\/:*?"<>|]/g,'').slice(0,20);
+      await savePdf(pdf.output('blob'),'AI응원봉_활동지_'+name+'.pdf');
+    }catch(e){
+      pdfMsg('PDF를 만들지 못했어요. 인터넷 연결을 확인하고 다시 눌러요.');
+    }finally{ if(host&&host.parentNode) host.parentNode.removeChild(host); pdfBusy=false; }
+  }
+
+  /* ---- 목차 ---- */
+  var toc=$('#toc');
+  (function(){
+    var h=''; CH.forEach(function(c,ci){
+      var ps=[]; P.forEach(function(p,i){if(p.ch===ci)ps.push(i+1)});
+      h+='<div class="ch" style="--c:'+c.c+'" data-ch="'+ci+'"><button class="chap" type="button" data-open="'+ci+'">'+c.n+'<span class="rg">'+ps[0]+'–'+ps[ps.length-1]+'쪽</span></button><ol>'+ps.map(function(n){return '<li><button type="button" data-go="'+n+'">'+P[n-1].n+'<span class="pg">'+n+'</span></button></li>'}).join('')+'</ol></div>';
+    });
+    $('#toc-list').innerHTML=h;
+  })();
+  function paintToc(){
+    var p=P[idx-1]; $$('#toc .ch').forEach(function(c){c.classList.toggle('open',+c.dataset.ch===p.ch)});
+    $$('#toc li button').forEach(function(b){b.classList.toggle('cur',+b.dataset.go===idx||(!one&&+b.dataset.go===idx+1))});
+  }
+  $('#b-toc').addEventListener('click',function(){toc.classList.add('on'); paintToc()});
+  $('#toc-x').addEventListener('click',function(){toc.classList.remove('on')});
+  toc.addEventListener('click',function(e){
+    if(e.target===toc){toc.classList.remove('on');return}
+    var b=e.target.closest('button'); if(!b)return;
+    if(b.dataset.open!=null){b.parentNode.classList.toggle('open');return}
+    if(b.dataset.go){toc.classList.remove('on'); go(+b.dataset.go)}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){toc.classList.remove('on')}});
+
+  /* ---- 전체화면 ---- */
+  $('#b-full').addEventListener('click',function(){
+    var b=$('#b-full');
+    try{
+      if(document.fullscreenElement){document.exitFullscreen()}
+      else{var r=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); if(r&&r.catch) r.catch(function(){b.textContent='전체화면 안 됨'; setTimeout(function(){b.textContent='전체화면'},2000)})}
+    }catch(err){b.textContent='전체화면 안 됨'; setTimeout(function(){b.textContent='전체화면'},2000)}
+  });
+
+  /* ---- 타이머 ---- */
+  var PH=[{n:'도입',m:3,p:3},{n:'활동 1',m:10,p:7},{n:'활동 2',m:14,p:13},{n:'활동 3',m:11,p:21},{n:'정리',m:2,p:25}];
+  var cur=0,left=PH[0].m*60,run=false,tick=null,ctx=null;
+  var tmr=$('#tmr'),tg=$('#t-go'),msg=$('#t-msg'),clock=$('#clock');
+  PH.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.textContent=p.n+' '+p.m+'분';b.addEventListener('click',function(){setPhase(i,true)});$('#ph').appendChild(b)});
+  function fmt(s){var m=Math.floor(s/60),r=s%60;return (m<10?'0':'')+m+':'+(r<10?'0':'')+r}
+  function paintT(){clock.textContent=fmt(left);clock.classList.toggle('end',left===0);$('#pn').textContent=PH[cur].n;$$('#ph button').forEach(function(b,i){b.setAttribute('aria-pressed',i===cur?'true':'false')});tg.textContent=run?'멈춤':'시작'}
+  function beep(){try{if(!ctx){var AC=window.AudioContext||window.webkitAudioContext;if(AC)ctx=new AC()}if(!ctx)return;var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=880;g.gain.value=.15;o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.5)}catch(e){}}
+  function stop(){run=false;if(tick){clearInterval(tick);tick=null}}
+  function setPhase(i,jump){stop();cur=i;left=PH[i].m*60;msg.textContent=PH[i].n+' '+PH[i].m+'분. 시작을 누르세요.';paintT();if(jump)go(PH[i].p)}
+  tg.addEventListener('click',function(){
+    if(run){stop();msg.textContent='멈췄어요.';paintT();return}
+    if(left===0)left=PH[cur].m*60;
+    try{if(!ctx){var AC=window.AudioContext||window.webkitAudioContext;if(AC)ctx=new AC()}if(ctx&&ctx.state==='suspended')ctx.resume()}catch(e){}
+    run=true;msg.textContent=PH[cur].n+' 진행 중';
+    tick=setInterval(function(){left--;if(left<=0){left=0;stop();msg.textContent='종료 신호! '+PH[cur].n+' 시간이 끝났어요.';beep()}paintT()},1000);paintT();
+  });
+  $('#t-reset').addEventListener('click',function(){setPhase(0,false);msg.textContent='처음으로 돌아왔어요.'});
+  $('#t-next').addEventListener('click',function(){setPhase(Math.min(cur+1,PH.length-1),true)});
+  $('#b-timer').addEventListener('click',function(){var on=!tmr.classList.contains('on');tmr.classList.toggle('on',on);$('#b-timer').setAttribute('aria-expanded',on?'true':'false')});
+  paintT();
+
+  /* ---- 시작 ---- */
+  layout();
+  var m=/^#p(\d+)$/.exec(location.hash); if(m){idx=+m[1]}
+  render();
+})();
+</script>
+</body>
+</html>
