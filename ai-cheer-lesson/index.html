@@ -298,6 +298,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
 
    {ch:5,n:'정리',cls:'divider',h:function(){return divider('05','오늘 활동을 정리해요','빈칸에 들어갈 말을 함께 생각해요.')}},
    {ch:5,n:'오늘의 정리',h:function(){return E('정리 · 빈칸 채우기')+T('빈칸에 들어갈 말은?')+B('<p class="stm" style="font-size:calc(var(--u)*4.2)">① AI가 동작을 잘 구별하려면 학습 자료를 <input class="blank" data-k="s1" aria-label="빈칸 1"> 넣어야 한다.</p><p class="stm" style="font-size:calc(var(--u)*4.2)">② 테스트는 학습에 <input class="blank" style="width:calc(var(--u)*27)" data-k="s2" aria-label="빈칸 2"> 사람이 해야 한다.</p><p class="stm" style="font-size:calc(var(--u)*4.2)">③ 여러 사람이 쓰려면 <input class="blank" data-k="s3" aria-label="빈칸 3"> 사람의 자료도 넣어야 한다.</p><div class="btns"><button class="chip" type="button" id="reveal">함께 확인하기</button></div><div class="result" id="ans" style="display:none">많이 / 참여하지 않은 / 여러</div>'+nt(['교사 “오늘 활동을 정리해 보겠습니다. 빈칸에 들어갈 말이 무엇일지 생각해 볼까요?” 함께 읽으며 채워요.']))}},
+   {ch:5,n:'코드 링크 보내기',h:function(){return E('마무리')+T('코드 공유 링크를 보내요')+B(nums(['MakeCode 화면 오른쪽 아래의 <b>Share</b>를 눌러요.','<b>Publish project</b>를 누르면 공유 링크가 나와요. 링크를 <b>복사</b>해요.','아래 칸에 붙여 넣고, 선생님께 보내요.'])+fi('우리 모둠 코드 공유 링크','link','https://makecode.microbit.org/_...')+'<div class="chips"><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode 바로가기 ↗</a></div>'+nt(['모둠마다 링크 1개를 보내요. 선생님이 링크를 열어 코드를 확인해요.']))}},
 
    {ch:6,n:'학습 목표·활동·평가 연결',h:function(){return E('평가')+T('목표 · 활동 · 평가가 이어져요')+B('<table class="tb"><tr><th>단계</th><th>하는 일</th><th>평가 요소</th><th>알게 되는 것</th></tr><tr><td><b>활동 1</b></td><td>5개 학습, 더 잘 되려면? 10개 이상 더, 테스트는 누가?</td><td>시험 결과 기록, 모둠 생각 말하기</td><td>자료는 많이, 테스트는 다른 사람이</td></tr><tr><td><b>활동 2</b></td><td>여러 사람이 쓰려면? 다른 사람 자료 넣기</td><td>더한 자료(누가·무엇을·몇 개) 기록</td><td>여러 사람의 자료가 필요함</td></tr><tr><td><b>활동 3</b></td><td>소리·이미지 코딩, 모둠 응원봉 완성, 발표</td><td>동작·반응·고친 점·알게 된 점 설명</td><td>코드는 반응, 자료는 동작 구분</td></tr><tr><td><b>정리</b></td><td>빈칸 세 문장 채우기</td><td>학습 목표 도달 확인</td><td>많이 · 참여하지 않은 · 여러</td></tr></table>'+nt(['주 성취기준 [6실05-05], 연계 [6실05-02]']))}},
    {ch:6,n:'성취 수준',h:function(){return E('평가')+T('성취 수준')+B('<div class="rows"><div class="r"><b>매우 잘함</b>시험 기록을 근거로 필요한 학습 자료(많이, 여러 사람)와 학습하지 않은 사람이 테스트해야 하는 까닭을 설명함</div><div class="r"><b>잘함</b>자료를 더 넣었을 때의 결과를 비교하고 필요한 학습 자료를 제안함</div><div class="r"><b>기초</b>안내에 따라 시험 결과를 기록하고, 더 넣을 자료의 예를 말함</div></div>'+nt(['개선 후에도 결과가 같거나 낮아도, 실제 기록을 근거로 설명하면 평가해요.']))}},
@@ -381,7 +382,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
   function gridTxt(key){var g=S.g[key]||[['','',''],['','',''],['','',''],['','','']];return STATES.map(function(s,r){var n=0,m=(g[r]||[]).map(function(v){if(v==='o')n++;return v==='o'?'○':v==='x'?'×':'-'}).join(' ');return '  '+s+': '+m+' ('+n+'/3)'}).join('\n')}
   function sumTxt(){return '① AI가 동작을 잘 구별하려면 학습 자료를 '+(V('s1')||'___')+' 넣어야 한다.\n② 테스트는 학습에 '+(V('s2')||'___')+' 사람이 해야 한다.\n③ 여러 사람이 쓰려면 '+(V('s3')||'___')+' 사람의 자료도 넣어야 한다.'}
   function allText(){
-    return '[AI 응원봉 활동지]\n모둠 '+V('group')+' / '+V('names')+'\n역할을 나누는 까닭: '+V('why')+'\n\n1. 동작 1: '+V('a1n')+'\n   동작 2: '+V('a2n')+'\n   동작 3: '+V('a3n')+'\n   시험 결과 (5개·내가 / +10개·내가 / +10개·다른 사람)\n'+gridTxt('f0')+'\n   더 잘 되려면: '+V('g1')+'\n   테스트는 누가: '+V('g2')+'\n\n2. 여러 사람이 쓰려면: '+V('q2')+'\n   더한 자료: '+V('m2')+'\n\n3. 동작 1: LED '+V('a1l')+' / 소리 '+V('a1s')+'\n   동작 2: LED '+V('a2l')+' / 소리 '+V('a2s')+'\n   동작 3: LED '+V('a3l')+' / 소리 '+V('a3s')+'\n   개선된 모델: '+V('n2')+'\n   발표: '+presText()+'\n\n오늘의 정리\n'+sumTxt();
+    return '[AI 응원봉 활동지]\n모둠 '+V('group')+' / '+V('names')+'\n역할을 나누는 까닭: '+V('why')+'\n\n1. 동작 1: '+V('a1n')+'\n   동작 2: '+V('a2n')+'\n   동작 3: '+V('a3n')+'\n   시험 결과 (5개·내가 / +10개·내가 / +10개·다른 사람)\n'+gridTxt('f0')+'\n   더 잘 되려면: '+V('g1')+'\n   테스트는 누가: '+V('g2')+'\n\n2. 여러 사람이 쓰려면: '+V('q2')+'\n   더한 자료: '+V('m2')+'\n\n3. 동작 1: LED '+V('a1l')+' / 소리 '+V('a1s')+'\n   동작 2: LED '+V('a2l')+' / 소리 '+V('a2s')+'\n   동작 3: LED '+V('a3l')+' / 소리 '+V('a3s')+'\n   개선된 모델: '+V('n2')+'\n   코드 공유 링크: '+V('link')+'\n   발표: '+presText()+'\n\n오늘의 정리\n'+sumTxt();
   }
   function deps(){
     var e=$('#pres-out'); if(e) e.textContent=presText();
@@ -449,7 +450,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
       +'<tr><td><b>정지</b></td><td>화면 지우기</td><td>-</td></tr></table>'
       +rbox('개선된 모델로 1개 더 만든 응원봉은 무엇이 달라졌나요?',V('n2'),50)+'<div class="pg">2 / 3</div>';
     var s3='<h2>4. 발표</h2>'+rbox('동작과 반응',V('p1'),30)+rbox('고친 점',V('p2'),30)+rbox('알게 된 점',V('p3'),30)
-      +'<h2>오늘의 정리</h2><div class="big" style="white-space:pre-line;line-height:1.8">'+esc(sumTxt())+'</div><div class="pg">3 / 3</div>';
+      +rbox('우리 모둠 코드 공유 링크',V('link'),22)+'<h2>오늘의 정리</h2><div class="big" style="white-space:pre-line;line-height:1.8">'+esc(sumTxt())+'</div><div class="pg">3 / 3</div>';
     return [s1,s2,s3];
   }
   function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=function(){rej(new Error('load'))};document.head.appendChild(s)})}
