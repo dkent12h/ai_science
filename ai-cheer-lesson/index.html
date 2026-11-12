@@ -301,7 +301,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
 
    {ch:5,n:'정리',cls:'divider',h:function(){return divider('05','오늘 활동을 정리해요','빈칸에 들어갈 말을 함께 생각해요.')}},
    {ch:5,n:'오늘의 정리',h:function(){return E('정리 · 빈칸 채우기')+T('빈칸에 들어갈 말은?')+B('<p class="stm" style="font-size:calc(var(--u)*4.2)">① AI가 동작을 잘 구별하려면 학습 자료를 <input class="blank" data-k="s1" aria-label="빈칸 1"> 넣어야 한다.</p><p class="stm" style="font-size:calc(var(--u)*4.2)">② 테스트는 학습에 <input class="blank" style="width:calc(var(--u)*27)" data-k="s2" aria-label="빈칸 2"> 사람이 해야 한다.</p><p class="stm" style="font-size:calc(var(--u)*4.2)">③ 여러 사람이 쓰려면 <input class="blank" data-k="s3" aria-label="빈칸 3"> 사람의 자료도 넣어야 한다.</p><div class="btns"><button class="chip" type="button" id="reveal">함께 확인하기</button></div><div class="result" id="ans" style="display:none">많이 / 참여하지 않은 / 여러</div>'+nt(['교사 “오늘 활동을 정리해 보겠습니다. 빈칸에 들어갈 말이 무엇일지 생각해 볼까요?” 함께 읽으며 채워요.']))}},
-   {ch:5,n:'코드 링크 보내기',h:function(){return E('마무리')+T('코드 공유 링크를 보내요')+B(nums(['MakeCode 화면 오른쪽 아래의 <b>Share</b>를 눌러요.','<b>Publish project</b>를 누르면 공유 링크가 나와요. 링크를 <b>복사</b>해요.','아래 칸에 붙여 넣고, 선생님께 보내요.'])+fi('우리 모둠 코드 공유 링크','link','https://makecode.microbit.org/_...')+'<div class="chips"><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode 바로가기 ↗</a></div>'+nt(['모둠마다 링크 1개를 보내요. 선생님이 링크를 열어 코드를 확인해요.']))}},
+   {ch:5,n:'코드 링크 보내기',h:function(){return E('마무리')+T('코드 공유 링크를 보내요')+B(nums(['MakeCode 화면 오른쪽 아래의 <b>Share</b>를 눌러요.','<b>Publish project</b>를 누르면 공유 링크가 나와요. 링크를 <b>복사</b>해요.','아래 칸에 링크, 수업 코드, 모둠 번호를 쓰고 <b>선생님께 보내기</b>를 눌러요.'])+fi('우리 모둠 코드 공유 링크','link','https://makecode.microbit.org/_...')+fi('수업 코드 (선생님이 칠판에 적어요)','room','예: 6반')+fi('모둠 번호','sgroup','숫자만 (예: 3)')+'<div class="chips"><button class="chip" id="send-link" type="button" style="background:var(--c);color:#fff;border:0">선생님께 보내기</button></div><p class="para" id="send-st" aria-live="polite"></p>'+'<div class="chips"><a class="chip" href="'+MC+'" target="_blank" rel="noopener">MakeCode 바로가기 ↗</a></div>'+nt(['모둠마다 링크 1개를 보내요. 선생님이 링크를 열어 코드를 확인해요.']))}},
 
    {ch:6,n:'학습 목표·활동·평가 연결',h:function(){return E('평가')+T('목표 · 활동 · 평가가 이어져요')+B('<table class="tb"><tr><th>단계</th><th>하는 일</th><th>평가 요소</th><th>알게 되는 것</th></tr><tr><td><b>활동 1</b></td><td>5개 학습, 더 잘 되려면? 10개 이상 더, 테스트는 누가?</td><td>시험 결과 기록, 모둠 생각 말하기</td><td>자료는 많이, 테스트는 다른 사람이</td></tr><tr><td><b>활동 2</b></td><td>여러 사람이 쓰려면? 다른 사람 자료 넣기</td><td>더한 자료(누가·무엇을·몇 개) 기록</td><td>여러 사람의 자료가 필요함</td></tr><tr><td><b>활동 3</b></td><td>소리·이미지 코딩, 모둠 응원봉 완성, 발표</td><td>동작·반응·고친 점·알게 된 점 설명</td><td>코드는 반응, 자료는 동작 구분</td></tr><tr><td><b>정리</b></td><td>빈칸 세 문장 채우기</td><td>학습 목표 도달 확인</td><td>많이 · 참여하지 않은 · 여러</td></tr></table>'+nt(['주 성취기준 [6실05-05], 연계 [6실05-02]']))}},
    {ch:6,n:'성취 수준',h:function(){return E('평가')+T('성취 수준')+B('<div class="rows"><div class="r"><b>매우 잘함</b>시험 기록을 근거로 필요한 학습 자료(많이, 여러 사람)와 학습하지 않은 사람이 테스트해야 하는 까닭을 설명함</div><div class="r"><b>잘함</b>자료를 더 넣었을 때의 결과를 비교하고 필요한 학습 자료를 제안함</div><div class="r"><b>기초</b>안내에 따라 시험 결과를 기록하고, 더 넣을 자료의 예를 말함</div></div>'+nt(['개선 후에도 결과가 같거나 낮아도, 실제 기록을 근거로 설명하면 평가해요.']))}},
@@ -431,12 +431,23 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
     if(t.dataset.chip==='imp'){var j=S.chips.imp.indexOf(t.dataset.t); if(j>=0)S.chips.imp.splice(j,1); else S.chips.imp.push(t.dataset.t); t.setAttribute('aria-pressed',j<0?'true':'false'); save(); deps(); return}
     if(t.id==='reveal'){var an=$('#ans',book); if(an) an.style.display=(an.style.display==='none'?'block':'none'); return}
     if(t.dataset.copy){var src=$('#'+t.dataset.copy,book); if(src) copyText(src.textContent,t); return}
+    if(t.id==='send-link'){sendLink(t); return}
     if(t.id==='pdf-save'){makePdf(); return}
     if(t.id==='clear-open'){$('#clear-ask',book).style.display='block'; return}
     if(t.id==='clear-no'){$('#clear-ask',book).style.display='none'; return}
     if(t.id==='clear-yes'){S.v={};S.g={};S.chips={err:[],imp:[]};S.b=[];S.a=[]; save(); render(); return}
   });
 
+
+  function sendLink(btn){
+    var st=$('#send-st',book); function say(m,ok){st.textContent=m; st.style.color=ok?'#0d8a4a':'#d6291f'; st.style.fontWeight=700}
+    btn.disabled=true;
+    import('../ai-cheer-links/cheer-fb.js').then(function(m){
+      if(!m.enabled()){say('아직 보낼 수 없어요. 링크를 복사해서 선생님께 직접 보내요.',false); btn.disabled=false; return}
+      return m.send(V('room'),V('sgroup'),String(V('link')||'').trim()).then(function(){say('보냈어요! 선생님 화면에 들어갔어요.',true); btn.disabled=false});
+    }).catch(function(e){
+      var c=e&&e.message; say(c==='room'?'수업 코드를 써 주세요.':c==='group'?'모둠 번호를 1~12 숫자로 써 주세요.':c==='url'?'MakeCode 공유 링크(https://makecode…)를 붙여 넣어 주세요.':'보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.',false); btn.disabled=false});
+  }
 
   /* ---- PDF 출력 ---- */
   function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}

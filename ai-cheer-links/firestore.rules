@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /cheerLinks/{id} {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasOnly(['room','group','url','t'])
+        && request.resource.data.room is string && request.resource.data.room.size() <= 20
+        && request.resource.data.group is int && request.resource.data.group >= 1 && request.resource.data.group <= 12
+        && request.resource.data.url is string && request.resource.data.url.size() < 300
+        && request.resource.data.url.matches('https://makecode\\.(microbit\\.org|com)/.*')
+        && id == request.resource.data.room + '_' + string(request.resource.data.group);
+      allow delete: if false;
+    }
+  }
+}

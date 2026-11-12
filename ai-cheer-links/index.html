@@ -37,6 +37,12 @@ textarea{width:100%;min-height:120px;margin:10px 0;font:inherit;border:1.5px sol
 <h1>모둠 코드 링크 모음</h1>
 <p class="sub">AI 응원봉 만들기 · 모둠이 보낸 MakeCode 공유 링크를 모아서 열어 봐요.</p>
 
+<div class="row" id="roombox" style="grid-template-columns:84px 1fr auto;margin-bottom:16px">
+  <b style="font-size:16px">수업 코드</b>
+  <input id="room" placeholder="예: 6반 (학생들과 같은 코드)" maxlength="20" aria-label="수업 코드">
+  <button class="pri" id="live" type="button">받기 시작</button>
+  <div class="st" id="livest">수업 코드를 정하고 칠판에 적어 주세요. 학생이 같은 코드로 보내면 아래 칸에 바로 들어와요.</div>
+</div>
 <details>
 <summary>한꺼번에 붙여 넣기</summary>
 <p class="sub" style="margin:8px 0 0">메신저로 받은 글을 그대로 붙여 넣으세요. 한 줄에 "1모둠 https://makecode…" 처럼 모둠 번호와 링크가 있으면 자동으로 나눠 넣어요.</p>
@@ -53,7 +59,8 @@ textarea{width:100%;min-height:120px;margin:10px 0;font:inherit;border:1.5px sol
 <div class="grid" id="grid"></div>
 <p class="note">링크는 이 기기의 브라우저에만 저장돼요. 다른 기기에서는 보이지 않아요. "모두 열기"는 브라우저가 팝업을 막으면 한 번 허용해 주세요.</p>
 </main>
-<script>
+<script type="module">
+import {enabled,listen,cleanRoom} from "./cheer-fb.js";
 (function(){
   var N=6, KEY='cheer-links-v1', data=[];
   function load(){try{data=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){data=[]} while(data.length<N)data.push('')}
@@ -103,7 +110,25 @@ textarea{width:100%;min-height:120px;margin:10px 0;font:inherit;border:1.5px sol
     var b=this; if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='한 번 더 누르면 지워요';setTimeout(function(){b.dataset.s='';b.textContent='모두 지우기'},2500);return}
     b.dataset.s='';b.textContent='모두 지우기';data=[];load();save();render()
   };
+  var unsub=null, RK='cheer-room-v1';
+  var roomEl=document.getElementById('room'), liveSt=document.getElementById('livest');
+  try{roomEl.value=localStorage.getItem(RK)||''}catch(e){}
+  if(!enabled()){document.getElementById('live').disabled=true; liveSt.textContent='Firebase가 아직 연결되지 않았어요. 아래 칸에 직접 붙여 넣어 쓸 수 있어요.'}
+  document.getElementById('live').onclick=async function(){
+    var room=cleanRoom(roomEl.value); if(!room){liveSt.textContent='수업 코드를 먼저 적어 주세요.';liveSt.className='st bad';return}
+    try{localStorage.setItem(RK,room)}catch(e){}
+    if(unsub){unsub();unsub=null}
+    try{
+      unsub=await listen(room,function(o){
+        for(var i=0;i<N;i++){ if(o[i+1])data[i]=o[i+1]; }
+        save(); render(); var n=Object.keys(o).length;
+        liveSt.textContent='"'+room+'" 코드로 받는 중 · 지금까지 '+n+'개 모둠이 보냈어요.'; liveSt.className='st ok';
+      },function(){liveSt.textContent='불러오지 못했어요. 인터넷과 Firebase 규칙을 확인해 주세요.';liveSt.className='st bad'});
+      liveSt.textContent='"'+room+'" 코드로 연결했어요.'; liveSt.className='st ok';
+    }catch(e){liveSt.textContent='연결하지 못했어요.';liveSt.className='st bad'}
+  };
   load(); render();
+  if(enabled()&&roomEl.value)document.getElementById('live').click();
 })();
 </script>
 </body>
