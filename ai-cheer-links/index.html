@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>모둠 코드 링크 모음 · AI 응원봉</title>
+<style>
+:root{--ink:#0b0b10;--muted:#6a6a76;--line:#e3e3ea;--c:#1a73e8;--ok:#0d8a4a}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color:var(--ink);background:#f6f6fa;line-height:1.5}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:28px;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 20px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+button,a.btn{font:inherit;font-weight:700;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button.pri,a.btn.pri{background:var(--ink);color:#fff}
+button:hover,a.btn:hover{opacity:.85}
+.grid{display:grid;grid-template-columns:1fr;gap:10px}
+.row{display:grid;grid-template-columns:84px 1fr auto;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px}
+.row.has{border-color:var(--c)}
+.row b{font-size:20px}
+.row input{width:100%;font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.row input:focus{outline:2px solid var(--c);border-color:var(--c)}
+.acts{display:flex;gap:6px}
+.acts a,.acts button{padding:6px 12px;font-size:14px}
+.st{font-size:13px;color:var(--muted);grid-column:2 / 4;margin-top:-4px}
+.st.ok{color:var(--ok);font-weight:700}.st.bad{color:#d6291f;font-weight:700}
+details{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;margin:0 0 16px}
+summary{font-weight:800;cursor:pointer}
+textarea{width:100%;min-height:120px;margin:10px 0;font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:10px}
+.note{color:var(--muted);font-size:14px;margin-top:16px}
+@media(max-width:560px){.row{grid-template-columns:1fr}.st{grid-column:1}}
+</style>
+</head>
+<body>
+<main>
+<h1>모둠 코드 링크 모음</h1>
+<p class="sub">AI 응원봉 만들기 · 모둠이 보낸 MakeCode 공유 링크를 모아서 열어 봐요.</p>
+
+<details>
+<summary>한꺼번에 붙여 넣기</summary>
+<p class="sub" style="margin:8px 0 0">메신저로 받은 글을 그대로 붙여 넣으세요. 한 줄에 "1모둠 https://makecode…" 처럼 모둠 번호와 링크가 있으면 자동으로 나눠 넣어요.</p>
+<textarea id="bulk" placeholder="1모둠 https://makecode.microbit.org/_abc...&#10;2모둠 https://makecode.microbit.org/_def..."></textarea>
+<button class="pri" id="apply" type="button">나눠 넣기</button>
+</details>
+
+<div class="bar">
+  <button class="pri" id="openall" type="button">링크 있는 모둠 모두 열기</button>
+  <button id="copyall" type="button">모두 복사</button>
+  <button id="clear" type="button">모두 지우기</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<p class="note">링크는 이 기기의 브라우저에만 저장돼요. 다른 기기에서는 보이지 않아요. "모두 열기"는 브라우저가 팝업을 막으면 한 번 허용해 주세요.</p>
+</main>
+<script>
+(function(){
+  var N=6, KEY='cheer-links-v1', data=[];
+  function load(){try{data=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){data=[]} while(data.length<N)data.push('')}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}
+  function norm(u){u=(u||'').trim(); if(!u)return ''; if(!/^https?:\/\//i.test(u)&&/^[\w.-]+\.[a-z]{2,}/i.test(u))u='https://'+u; return u}
+  function valid(u){try{var x=new URL(u);return /^https?:$/.test(x.protocol)}catch(e){return false}}
+  function isMC(u){try{return /(^|\.)makecode\.(microbit\.org|com)$/i.test(new URL(u).hostname)}catch(e){return false}}
+  var grid=document.getElementById('grid');
+  function render(){
+    grid.innerHTML='';
+    for(var i=0;i<N;i++)(function(i){
+      var u=norm(data[i]), ok=u&&valid(u);
+      var r=document.createElement('div'); r.className='row'+(ok?' has':'');
+      r.innerHTML='<b>'+(i+1)+'모둠</b><input type="url" inputmode="url" placeholder="https://makecode.microbit.org/_..." aria-label="'+(i+1)+'모둠 코드 링크"><div class="acts"></div><div class="st"></div>';
+      var inp=r.querySelector('input'); inp.value=data[i]||'';
+      var acts=r.querySelector('.acts'), st=r.querySelector('.st');
+      if(ok){
+        var a=document.createElement('a'); a.className='btn pri'; a.textContent='열기 ↗'; a.href=u; a.target='_blank'; a.rel='noopener'; acts.appendChild(a);
+        var c=document.createElement('button'); c.type='button'; c.textContent='복사'; c.onclick=function(){copy(u,c)}; acts.appendChild(c);
+        st.textContent=isMC(u)?'MakeCode 링크예요':'MakeCode 주소가 아니에요. 확인해 주세요.'; st.className='st '+(isMC(u)?'ok':'bad');
+      } else if(u){ st.textContent='링크 형식이 아니에요.'; st.className='st bad' } else {st.textContent='아직 받지 않았어요.'}
+      inp.addEventListener('change',function(){data[i]=inp.value.trim(); save(); render()});
+      grid.appendChild(r);
+    })(i);
+  }
+  function copy(t,b){
+    function done(){var o=b.textContent; b.textContent='복사됨'; setTimeout(function(){b.textContent=o},1200)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fb(t,done)})}else fb(t,done)
+  }
+  function fb(t,done){var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(x);done()}
+  document.getElementById('apply').onclick=function(){
+    var lines=document.getElementById('bulk').value.split(/\n+/), n=0;
+    lines.forEach(function(l){
+      var m=/(\d+)\s*모둠/.exec(l), u=/https?:\/\/\S+/i.exec(l);
+      if(m&&u){var k=+m[1]-1; if(k>=0&&k<N){data[k]=u[0]; n++}}
+    });
+    save(); render(); document.getElementById('bulk').value=''; var b=document.getElementById('apply');b.textContent=n+'개 모둠에 넣었어요';setTimeout(function(){b.textContent='나눠 넣기'},1800);
+  };
+  document.getElementById('openall').onclick=function(){
+    data.forEach(function(d){var u=norm(d); if(u&&valid(u))window.open(u,'_blank','noopener')})
+  };
+  document.getElementById('copyall').onclick=function(){
+    var t=data.map(function(d,i){return norm(d)?(i+1)+'모둠 '+norm(d):''}).filter(Boolean).join('\n');
+    copy(t||'(링크 없음)',this)
+  };
+  document.getElementById('clear').onclick=function(){
+    var b=this; if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='한 번 더 누르면 지워요';setTimeout(function(){b.dataset.s='';b.textContent='모두 지우기'},2500);return}
+    b.dataset.s='';b.textContent='모두 지우기';data=[];load();save();render()
+  };
+  load(); render();
+})();
+</script>
+</body>
+</html>
