@@ -22,8 +22,11 @@ header{flex:none;height:64px;display:flex;justify-content:space-between;align-it
 .mini{width:28px;height:28px;border-radius:8px;background:#111;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px}
 .mini i{border-radius:50%;background:#3b1616}.mini i.on{background:#ff3b30}
 .prog{flex:1;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
-.prog .bar{width:100%;height:5px;border-radius:9px;background:rgba(11,11,16,.12);overflow:hidden}
-.prog .bar i{display:block;height:100%;background:var(--ink);border-radius:9px;transition:width .3s}
+.prog .bar{position:relative;width:100%;height:5px;border-radius:9px;background:rgba(11,11,16,.12);cursor:pointer;touch-action:none;margin:7px 0}
+.prog .bar::before{content:'';position:absolute;left:0;right:0;top:-12px;bottom:-12px}
+.prog .bar::after{content:'';position:absolute;top:50%;left:var(--p,0%);width:15px;height:15px;margin:-7.5px 0 0 -7.5px;border-radius:50%;background:#fff;border:2.5px solid var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.prog .bar:focus-visible{outline:2px solid var(--c,#1a73e8);outline-offset:6px}
+.prog .bar i{display:block;height:100%;max-width:100%;background:var(--ink);border-radius:9px;transition:width .3s}
 .ctrl{display:flex;gap:8px;align-items:center}
 .pill{border:1.5px solid var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:14px;background:transparent;color:var(--ink);transition:background .25s,color .25s;text-decoration:none;display:inline-flex;align-items:center;white-space:nowrap}
 .pill:hover:not(:disabled){background:var(--ink);color:#fff}
@@ -201,7 +204,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
 <body>
 <header>
   <a class="brand" href="https://dkent12h.github.io/dkmicrobit/" target="_blank" rel="noopener"><span class="mini" aria-hidden="true"><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i></span><span>DK microbit</span></a>
-  <div class="prog" aria-live="polite"><div id="pgno">1–2 / 28</div><div class="bar"><i id="pgbar" style="width:0"></i></div></div>
+  <div class="prog" aria-live="polite"><div id="pgno">1–2 / 28</div><div class="bar" id="pgtrack" role="slider" tabindex="0" aria-label="페이지 이동" aria-valuemin="1" aria-valuenow="1"><i id="pgbar" style="width:0"></i></div></div>
   <div class="ctrl">
     <button class="pill" id="b-timer" type="button" aria-expanded="false">타이머</button>
     <a class="pill solid" id="b-createai" href="https://createai.microbit.org/" target="_blank" rel="noopener">CreateAI ↗</a>
@@ -343,7 +346,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
     $$('.page',book).forEach(fit);
     var a=idx,b=one?idx:Math.min(idx+1,N);
     $('#pgno').textContent=(a===b?a:a+'–'+b)+' / '+N;
-    $('#pgbar').style.width=(b/N*100)+'%';
+    $('#pgbar').style.width=(b/N*100)+'%'; $('#pgtrack').style.setProperty('--p',(b/N*100)+'%'); $('#pgtrack').setAttribute('aria-valuenow',b); $('#pgtrack').setAttribute('aria-valuemax',N);
     $('#b-prev').disabled=idx<=1; $('#b-next').disabled=(one?idx>=N:idx+1>=N);
     try{history.replaceState(null,'','#p'+idx)}catch(e){}
     paintToc();
@@ -356,6 +359,16 @@ table.tb{border-collapse:collapse;width:100%;font-size:calc(var(--u)*2.8);line-h
     book.classList.add('fade'); setTimeout(function(){render(); book.classList.remove('fade')},160);
   }
   function step(d){ go(one? idx+d : (d>0? idx+2 : idx-2)); }
+  (function(){
+    var tr=$('#pgtrack'), drag=false, raf=0;
+    function pos(e){var r=tr.getBoundingClientRect(); var f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)); return Math.max(1,Math.min(N,Math.round(f*(N-1))+1))}
+    function mv(e){var t=pos(e); if(raf)cancelAnimationFrame(raf); raf=requestAnimationFrame(function(){raf=0; if(!one&&t%2===0)t--; if(t!==idx){idx=t; render()}})}
+    tr.addEventListener('pointerdown',function(e){drag=true; try{tr.setPointerCapture(e.pointerId)}catch(x){} tr.querySelector('i').style.transition='none'; mv(e); e.preventDefault()});
+    tr.addEventListener('pointermove',function(e){if(drag)mv(e)});
+    function end(){drag=false; tr.querySelector('i').style.transition=''}
+    tr.addEventListener('pointerup',end); tr.addEventListener('pointercancel',end);
+    tr.addEventListener('keydown',function(e){var d={ArrowRight:1,ArrowUp:1,ArrowLeft:-1,ArrowDown:-1}[e.key]; if(d){step(d); e.preventDefault(); e.stopPropagation()}else if(e.key==='Home'){go(1);e.preventDefault()}else if(e.key==='End'){go(N);e.preventDefault()}});
+  })();
   $('#b-prev').addEventListener('click',function(){step(-1)});
   $('#b-next').addEventListener('click',function(){step(1)});
   document.addEventListener('keydown',function(e){
